@@ -207,7 +207,7 @@ footer {
 .loader-fill {
     height: 100%;
     width: 0;
-    background: #fff;
+    background: #1A0A3D;
     border-radius: 99px;
     animation: loaderProgress 2.5s ease forwards;
 }
