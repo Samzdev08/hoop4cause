@@ -1,484 +1,520 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoop 4 A Cause — Tournoi 5x5 Basketball</title>
+    <title>Hoop 4 A Cause — Tournoi 5x5 Basketball · Genève</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
+
+    <!-- LOADER -->
     <div id="loader">
-        <img src="./img/logo.png" alt="Logo">
-        <div class="progress-bar"></div>
+        <img src="./img/logo.png" alt="Logo Hoop 4 A Cause">
+        <div class="loader-bar"><div class="loader-fill"></div></div>
     </div>
 
-    <header>
-        <div class="overlay"></div>
-        <div class="content">
-            <img src="./img/logo.png" onerror="this.style.display='none'" alt="Hoop 4 A Cause" class="logo-main">
-            <p class="banner">Tournoi 5x5 Basketball</p>
-            <p class="title">HOOP 4<br><em>A CAUSE</em></p>
-            <p class="subtitle">Rejoignez notre communauté et faites vos preuves sur le court !</p>
-            <div class="infos">
-                <div class="info">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    &nbsp; Rte de Base 24, Plan-les-Ouates
+    <!-- NAV -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">HOOP 4 <span>A CAUSE</span></a>
+            <div class="nav-links">
+                <a href="#about">À propos</a>
+                <a href="#format">Format</a>
+                <a href="#programme">Programme</a>
+                <a href="#inscription">Inscription</a>
+            </div>
+            <a href="#inscription" class="nav-cta">S'inscrire — 15.-</a>
+            <button class="nav-burger" id="burger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="nav-mobile" id="navMobile">
+            <a href="#about" class="mob-link">À propos</a>
+            <a href="#format" class="mob-link">Format</a>
+            <a href="#programme" class="mob-link">Programme</a>
+            <a href="#inscription" class="mob-link">Inscription</a>
+            <a href="#inscription" class="mob-cta">S'inscrire — 15.-</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <img src="./img/logo.png" onerror="this.style.display='none'" alt="Hoop 4 A Cause" class="hero-logo">
+            <div class="hero-badge">Tournoi 5×5 Basketball · Genève</div>
+            <h1 class="hero-title">HOOP 4<br><em>A CAUSE</em></h1>
+            <p class="hero-sub">Rejoignez-nous pour une journée de basketball intense,<br>de compétition saine et de bonne ambiance.</p>
+            <div class="hero-pills">
+                <div class="pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Rte de Base 24, Plan-les-Ouates
                 </div>
-                <div class="info">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    &nbsp; 600.- de cash prize
+                <div class="pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Juin 2026
                 </div>
-                <div class="info">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    &nbsp; Juin 2026
+                <div class="pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    600.- Cash Prize
                 </div>
             </div>
-            <button class="register" onclick="document.querySelector('.inscription').scrollIntoView({behavior:'smooth'})">
-                <span>S'inscrire maintenant</span>
-            </button>
-            <div class="arrow">↓</div>
+            <div class="hero-actions">
+                <a href="#inscription" class="btn-primary">S'inscrire maintenant</a>
+                <a href="#about" class="btn-ghost">En savoir plus</a>
+            </div>
         </div>
+        <div class="hero-stats">
+            <div class="hstat">
+                <div class="hstat-num">5v5</div>
+                <div class="hstat-label">Format</div>
+            </div>
+            <div class="hstat-sep"></div>
+            <div class="hstat">
+                <div class="hstat-num">600.-</div>
+                <div class="hstat-label">Cash Prize</div>
+            </div>
+            <div class="hstat-sep"></div>
+            <div class="hstat">
+                <div class="hstat-num">+18</div>
+                <div class="hstat-label">Ans requis</div>
+            </div>
+            <div class="hstat-sep"></div>
+            <div class="hstat">
+                <div class="hstat-num">15.-</div>
+                <div class="hstat-label">Par joueur</div>
+            </div>
+        </div>
+        <div class="hero-scroll">↓</div>
     </header>
 
 
-    <section class="about">
+    <!-- ABOUT -->
+    <section class="about" id="about">
         <div class="about-inner">
-            <div class="reveal-left">
-                <div class="about-label">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div class="about-text-col reveal-left">
+                <div class="section-label">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     Genève — Plan-les-Ouates
                 </div>
-                <h2 class="about-title">À propos de<br><span>l'événement</span></h2>
-                <p class="about-text">
-                    Hoop 4 A Cause est un tournoi de basketball 3x3 organisé à Genève avec une mission simple :
+                <h2 class="section-title-lg">À propos de<br><span class="accent">l'événement</span></h2>
+                <p class="body-text">
+                    Hoop 4 A Cause est un tournoi de basketball 5×5 organisé à Genève avec une mission simple :
                     rassembler les passionnés de basket dans un esprit de compétition saine, de fun et de solidarité.
                     Tous les niveaux sont les bienvenus — amateurs comme confirmés.
                 </p>
-                <div class="about-stats">
-                    <div class="stat">
-                        <div class="stat-num">5v5</div>
-                        <div class="stat-label">Format</div>
+                <div class="about-goals">
+                    <div class="goal-item reveal" style="transition-delay:.1s">
+                        <div class="goal-num">01</div>
+                        <div class="goal-text">
+                            <strong>Compétition 5×5</strong>
+                            <p>Des matchs intenses sur terrain plein, phase de poule + élimination directe.</p>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <div class="stat-num">600.-</div>
-                        <div class="stat-label">Cash Prize</div>
+                    <div class="goal-item reveal" style="transition-delay:.2s">
+                        <div class="goal-num">02</div>
+                        <div class="goal-text">
+                            <strong>Contests & Show</strong>
+                            <p>3PTS Contest et Dunk Contest pour les amateurs de spectacle hors match.</p>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <div class="stat-num">+18</div>
-                        <div class="stat-label">Ans requis</div>
+                    <div class="goal-item reveal" style="transition-delay:.3s">
+                        <div class="goal-num">03</div>
+                        <div class="goal-text">
+                            <strong>Esprit communautaire</strong>
+                            <p>Musique, animations et ambiance street pour une journée mémorable.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="about-images reveal-right">
-                <div class="about-img">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#1A0A3D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/><path d="M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10"/><path d="M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10"/></svg>
+            <div class="about-visual reveal-right">
+                <div class="about-card ac1">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/><path d="M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10"/><path d="M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10"/></svg>
+                    <span>5×5 Full Court</span>
                 </div>
-                <div class="about-img">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#1A0A3D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                <div class="about-card ac2">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <span>Dunk Contest</span>
                 </div>
-                <div class="about-img">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#1A0A3D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                <div class="about-card ac3">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    <span>3PTS Contest</span>
                 </div>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="main">
-        <div class="main-inside">
-            <h2 class="section-title reveal">C'est <span class="accent">quoi ?</span></h2>
-            <div class="card-display">
-                <div class="card reveal" style="transition-delay:0.1s">
-                    <p class="card-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/><path d="M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10"/><path d="M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10"/></svg>
-                        Tournoi 3x3
-                    </p>
-                    <p class="card-description">Tournoi de basket 3 contre 3, format complet terrain plein. Des matchs intenses, du jeu collectif, et du spectacle à chaque action. Ouvert à tous les niveaux.</p>
-                </div>
-                <div class="card reveal" style="transition-delay:0.2s">
-                    <p class="card-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                        Règles
-                    </p>
-                    <p class="card-description">Matchs en 21 points ou à la fin du temps réglementaire. En prolongation, la première équipe à +2 points gagne. Intensité maximale, zéro temps mort.</p>
-                </div>
-                <div class="card reveal" style="transition-delay:0.3s">
-                    <p class="card-title">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        L'ambiance
-                    </p>
-                    <p class="card-description">Musique non-stop, énergie street et public au rendez-vous. Animations, émotions et suspense jusqu'au dernier panier. Un événement aussi fun à vivre qu'à regarder.</p>
+                <div class="about-card ac4">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                    <span>600.- Prize</span>
                 </div>
             </div>
         </div>
     </section>
 
 
-    <section class="information">
-        <h2 class="section-title reveal">Informations <span class="accent">pratiques</span></h2>
-        <div class="card-display-information">
-            <div class="card-information reveal" style="transition-delay:0.1s">
-                <p class="card-title-information">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    Horaires
-                </p>
-                <p class="card-description-information">10h — 18h</p>
+    <!-- FORMAT -->
+    <section class="format" id="format">
+        <div class="format-inner">
+            <div class="section-header reveal">
+                <div class="section-label light">Le tournoi</div>
+                <h2 class="section-title-lg light">Le <span class="accent">format</span></h2>
             </div>
-            <div class="card-information reveal" style="transition-delay:0.2s">
-                <p class="card-title-information">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    Date
-                </p>
-                <p class="card-description-information">Juin 2026</p>
-            </div>
-            <div class="card-information reveal" style="transition-delay:0.3s">
-                <p class="card-title-information">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    Lieu
-                </p>
-                <p class="card-description-information">Rte de Base 24, 1228 Plan-les-Ouates</p>
-            </div>
-            <div class="card-information reveal" style="transition-delay:0.4s">
-                <p class="card-title-information">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Cash Prize
-                </p>
-                <p class="card-description-information">600.- à gagner</p>
+            <div class="format-grid">
+                <div class="fcard reveal" style="transition-delay:.1s">
+                    <div class="fcard-tag">Règles officielles</div>
+                    <h3>Format de jeu</h3>
+                    <p>Tournoi 5 contre 5 sur terrain complet. Matchs en 21 points ou à la fin du temps réglementaire. En cas d'égalité, prolongation mort-subite avec +2 points requis.</p>
+                </div>
+                <div class="fcard reveal" style="transition-delay:.2s">
+                    <div class="fcard-tag">Phase de groupes</div>
+                    <h3>Déroulement</h3>
+                    <p>Phase de poule le matin, phase éliminatoire l'après-midi. Chaque équipe joue au minimum 3 matchs. Classement par victoires, puis différence de points.</p>
+                </div>
+                <div class="fcard reveal" style="transition-delay:.3s">
+                    <div class="fcard-tag">Dress code</div>
+                    <h3>Équipement</h3>
+                    <p>Tenue de sport obligatoire. Chaussures de basketball recommandées. Maillots de même couleur par équipe. Dossards fournis par l'organisation.</p>
+                </div>
+                <div class="fcard reveal" style="transition-delay:.4s">
+                    <div class="fcard-tag">Fair-play</div>
+                    <h3>Esprit du tournoi</h3>
+                    <p>Respect des adversaires et arbitres obligatoire. Comportement antisportif = disqualification immédiate. On joue dur, mais on joue fair.</p>
+                </div>
             </div>
         </div>
     </section>
 
 
-    <section class="inscription">
-        <h2 class="section-title reveal">Inscription</h2>
-        <div class="warning-banner reveal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3B30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <p class="warning-text">Places limitées — Inscris-toi rapidement pour ne pas manquer l'événement !</p>
-        </div>
-        <h3 class="reveal" style="font-family:var(--font-heading);font-size:1.8rem;text-transform:uppercase;text-align:center;margin-bottom:2rem;color:rgba(255,255,255,0.8);letter-spacing:0.05em;">
-            Conditions d'inscription
-        </h3>
-        <div class="card-display-inscription">
-            <div class="card-inscription reveal" style="transition-delay:0.1s">
-                <p class="card-title-inscription">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Âge
-                </p>
-                <p class="card-description-inscription">Les joueurs doivent avoir au moins 18 ans.</p>
+    <!-- CONTESTS -->
+    <section class="contests" id="contests">
+        <div class="contests-inner">
+            <div class="section-header reveal">
+                <div class="section-label">Les extras</div>
+                <h2 class="section-title-lg">Les <span class="accent">Contests</span></h2>
             </div>
-            <div class="card-inscription reveal" style="transition-delay:0.2s">
-                <p class="card-title-inscription">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    Équipe
-                </p>
-                <p class="card-description-inscription">5 joueurs + remplaçant(s)</p>
-            </div>
-            <div class="card-inscription reveal" style="transition-delay:0.3s">
-                <p class="card-title-inscription">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    Deadline
-                </p>
-                <p class="card-description-inscription">Inscriptions closes le 15 juin 2026.</p>
-            </div>
-            <div class="card-inscription reveal" style="transition-delay:0.4s">
-                <p class="card-title-inscription">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Frais
-                </p>
-                <p class="card-description-inscription">15.- par joueur, à payer lors de l'inscription.</p>
-            </div>
-        </div>
-        <div class="cta-center reveal">
-            <a href="#" class="btn-cta">S'inscrire maintenant →</a>
-        </div>
-    </section>
-
-
-    <section class="format-section">
-        <h2 class="section-title reveal" style="color:var(--primary-dark)">Le <span class="accent">format</span> 3×3</h2>
-        <div class="format-grid">
-            <div class="format-card reveal" style="transition-delay:0.1s">
-                <div class="format-tag">Règles officielles</div>
-                <h3>Le format de jeu</h3>
-                <p>Tournoi 3 contre 3 sur terrain complet. Matchs en 21 points ou à la fin du temps réglementaire. En cas d'égalité, prolongation en mort-subite avec une avance de 2 points requis.</p>
-            </div>
-            <div class="format-card reveal" style="transition-delay:0.2s">
-                <div class="format-tag">Phase de groupes</div>
-                <h3>Déroulement</h3>
-                <p>Phase de poule le matin, phase éliminatoire l'après-midi. Chaque équipe est garantie de jouer au minimum 3 matchs. Classement par victoires, puis différence de points.</p>
-            </div>
-            <div class="format-card reveal" style="transition-delay:0.3s">
-                <div class="format-tag">Dress code</div>
-                <h3>Équipement</h3>
-                <p>Tenue de sport obligatoire. Chaussures de basketball recommandées. Les équipes doivent porter des maillots de la même couleur. Dossards fournis par l'organisation.</p>
-            </div>
-            <div class="format-card reveal" style="transition-delay:0.4s">
-                <div class="format-tag">Fair-play</div>
-                <h3>Esprit du tournoi</h3>
-                <p>Respect des adversaires et des arbitres obligatoire. Tout comportement antisportif entraîne une disqualification immédiate. On joue dur, mais on joue fair.</p>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="contests">
-        <h2 class="section-title reveal">Les <span class="accent">contests</span></h2>
-        <div class="contest-grid">
-
-            <div class="contest-card reveal-left">
-                <div class="contest-header">
-                    <div class="contest-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <div class="contests-grid">
+                <div class="ccard reveal-left">
+                    <div class="ccard-head">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                        <div>
+                            <div class="ccard-tag">Contest</div>
+                            <h3>3PTS Contest</h3>
+                        </div>
                     </div>
-                    <h3 class="contest-title">3PTS <span>Contest!</span></h3>
-                </div>
-                <div class="contest-body">
-                    <p class="contest-subtitle">Conditions d'inscription</p>
-                    <ul class="contest-list">
-                        <li><span class="check">✓</span> La compétition se tient entre chaque tableau</li>
-                        <li><span class="check">✓</span> Nouvelle tête de série entre chaque quart de finale</li>
-                        <li><span class="check">✓</span> 5 tirs maximum, 3 postes différents</li>
-                        <li><span class="check">✓</span> 1 seul "Money Ball" par poste</li>
-                        <li><span class="check">✓</span> Classement selon le total de points marqués</li>
+                    <ul class="clist">
+                        <li><span>✓</span> Tenu entre chaque tableau</li>
+                        <li><span>✓</span> 5 tirs max, 3 postes différents</li>
+                        <li><span>✓</span> 1 seul "Money Ball" par poste</li>
+                        <li><span>✓</span> Classement par total de points</li>
+                        <li><span>✓</span> Shoot-out en cas d'égalité</li>
                     </ul>
-                    <div class="contest-note">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        En cas d'égalité entre deux tireurs ayant le même score, un shoot-out d'un seul panier détermine le vainqueur. Le tireur qui marque le plus vite remporte la mise.
+                    <div class="ccard-note">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Égalité ? Un shoot-out : le tireur qui marque le plus vite remporte la mise.
                     </div>
                 </div>
-            </div>
-
-            <div class="contest-card reveal-right">
-                <div class="contest-header">
-                    <div class="contest-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <div class="ccard reveal-right">
+                    <div class="ccard-head">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <div>
+                            <div class="ccard-tag">Contest</div>
+                            <h3>Dunk Contest</h3>
+                        </div>
                     </div>
-                    <h3 class="contest-title">DUNK <span>Contest!</span></h3>
-                </div>
-                <div class="contest-body">
-                    <p class="contest-subtitle">Conditions d'inscription</p>
-                    <ul class="contest-list">
-                        <li><span class="check">✓</span> Vous pouvez pratiquer pour la musique du dunk contest</li>
-                        <li><span class="check">✓</span> Définir à l'avance votre slam ainsi que vos assistants</li>
-                        <li><span class="check">✓</span> Choisir la durée de votre prestation</li>
-                        <li><span class="check">✓</span> 1 "Ultimate Slam" uniquement</li>
-                        <li><span class="check">✓</span> Nombre de joueurs BYOB</li>
+                    <ul class="clist">
+                        <li><span>✓</span> Pratiquez la musique du dunk contest</li>
+                        <li><span>✓</span> Définissez votre slam + assistants</li>
+                        <li><span>✓</span> Choisissez la durée de votre prestation</li>
+                        <li><span>✓</span> 1 "Ultimate Slam" uniquement</li>
+                        <li><span>✓</span> Nombre de joueurs BYOB</li>
                     </ul>
-                    <div class="contest-note">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        En cas d'égalité entre deux slammeurs ayant le même score, un slam-off d'un seul dunk détermine le vainqueur. Le public vote pour son préféré.
+                    <div class="ccard-note">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Égalité ? Le public vote pour son slammeur préféré en slam-off.
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
 
-    <section class="programme">
-        <h2 class="section-title reveal" style="color:var(--primary-dark)">Programme <span class="accent">de la journée</span></h2>
-        <div class="timeline">
-            <div class="timeline-item reveal" style="transition-delay:0.05s">
-                <div class="timeline-time">9h00</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Accueil & Échauffements</div>
-                    <div class="timeline-desc">Accueil des équipes, vérification des inscriptions, warm-up</div>
-                </div>
+    <!-- PROGRAMME -->
+    <section class="programme" id="programme">
+        <div class="programme-inner">
+            <div class="section-header reveal">
+                <div class="section-label">La journée</div>
+                <h2 class="section-title-lg">Programme <span class="accent">du jour</span></h2>
             </div>
-            <div class="timeline-item reveal" style="transition-delay:0.1s">
-                <div class="timeline-time">10h00</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Phase de Poule — Matin</div>
-                    <div class="timeline-desc">Matchs de groupe, chaque équipe joue 2-3 matchs garantis</div>
+            <div class="timeline">
+                <div class="titem reveal" style="transition-delay:.05s">
+                    <div class="ttime">9h00</div>
+                    <div class="tdot"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Accueil & Échauffements</div>
+                        <div class="tdesc">Accueil des équipes, vérification des inscriptions, warm-up</div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item reveal" style="transition-delay:0.15s">
-                <div class="timeline-time">12h00</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Pause Déjeuner</div>
-                    <div class="timeline-desc">Restauration sur place, animations, 3PTS Contest</div>
+                <div class="titem reveal" style="transition-delay:.1s">
+                    <div class="ttime">10h00</div>
+                    <div class="tdot"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Phase de Poule — Matin</div>
+                        <div class="tdesc">Matchs de groupe, chaque équipe joue 2-3 matchs garantis</div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item reveal" style="transition-delay:0.2s">
-                <div class="timeline-time">13h30</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Phase de Poule — Suite</div>
-                    <div class="timeline-desc">Derniers matchs de poule, classements finaux</div>
+                <div class="titem reveal" style="transition-delay:.15s">
+                    <div class="ttime">12h00</div>
+                    <div class="tdot"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Pause Déjeuner</div>
+                        <div class="tdesc">Restauration sur place, animations, 3PTS Contest</div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item reveal" style="transition-delay:0.25s">
-                <div class="timeline-time">15h00</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Quarts & Demi-Finales</div>
-                    <div class="timeline-desc">Phase éliminatoire directe, montée en intensité !</div>
+                <div class="titem reveal" style="transition-delay:.2s">
+                    <div class="ttime">13h30</div>
+                    <div class="tdot"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Phase de Poule — Suite</div>
+                        <div class="tdesc">Derniers matchs de poule, classements finaux</div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item reveal" style="transition-delay:0.3s">
-                <div class="timeline-time">16h30</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Dunk Contest</div>
-                    <div class="timeline-desc">Show des slammeurs avant la grande finale</div>
+                <div class="titem reveal" style="transition-delay:.25s">
+                    <div class="ttime">15h00</div>
+                    <div class="tdot"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Quarts & Demi-Finales</div>
+                        <div class="tdesc">Phase éliminatoire directe, montée en intensité</div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item reveal" style="transition-delay:0.35s">
-                <div class="timeline-time">17h00</div>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Finale</div>
-                    <div class="timeline-desc">Le match ultime pour le cash prize de 600.-</div>
+                <div class="titem reveal" style="transition-delay:.3s">
+                    <div class="ttime">16h30</div>
+                    <div class="tdot"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Dunk Contest</div>
+                        <div class="tdesc">Show des slammeurs avant la grande finale</div>
+                    </div>
                 </div>
-            </div>
-            <div class="timeline-item reveal" style="transition-delay:0.4s">
-                <div class="timeline-time">17h45</div>
-                <div class="timeline-dot" style="background:var(--orange)"></div>
-                <div class="timeline-content">
-                    <div class="timeline-event">Cérémonie de remise des prix</div>
-                    <div class="timeline-desc">Distribution du cash prize, photos, célébrations</div>
+                <div class="titem reveal" style="transition-delay:.35s">
+                    <div class="ttime">17h00</div>
+                    <div class="tdot"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Finale</div>
+                        <div class="tdesc">Le match ultime pour le cash prize de 600.-</div>
+                    </div>
+                </div>
+                <div class="titem reveal" style="transition-delay:.4s">
+                    <div class="ttime">17h45</div>
+                    <div class="tdot gold"></div>
+                    <div class="tcontent">
+                        <div class="tevent">Remise des Prix</div>
+                        <div class="tdesc">Distribution du cash prize, photos, célébrations</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
 
-    <section class="prize-section">
-        <h2 class="section-title reveal">Cash <span class="accent">Prize</span></h2>
-        <div class="prize-display">
-            <div class="prize-place prize-2 reveal" style="transition-delay:0.2s">
-                <div class="prize-medal">
-                    <svg width="52" height="62" viewBox="0 0 52 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 8 L10 28 L22 24 Z" fill="#6B9FD4"/>
-                        <path d="M34 8 L42 28 L30 24 Z" fill="#4A7DB5"/>
-                        <circle cx="26" cy="38" r="20" fill="#C0C0C0" opacity="0.15"/>
-                        <circle cx="26" cy="38" r="20" fill="none" stroke="#C0C0C0" stroke-width="2"/>
-                        <circle cx="26" cy="38" r="15" fill="#A8A8A8" opacity="0.3"/>
-                        <text x="26" y="44" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="18" fill="#D0D0D0">2</text>
-                    </svg>
-                </div>
-                <div class="prize-position">2ème place</div>
-                <div class="prize-amount">200.-</div>
-                <div class="prize-sub">CHF</div>
+    <!-- CASH PRIZE -->
+    <section class="prize" id="prize">
+        <div class="prize-inner">
+            <div class="section-header reveal">
+                <div class="section-label light">Récompenses</div>
+                <h2 class="section-title-lg light">Cash <span class="accent">Prize</span></h2>
             </div>
-            <div class="prize-place prize-1 reveal" style="transition-delay:0.1s">
-                <div class="prize-medal">
-                    <svg width="52" height="62" viewBox="0 0 52 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 8 L10 28 L22 24 Z" fill="#6B9FD4"/>
-                        <path d="M34 8 L42 28 L30 24 Z" fill="#4A7DB5"/>
-                        <circle cx="26" cy="38" r="20" fill="#FFD700" opacity="0.2"/>
-                        <circle cx="26" cy="38" r="20" fill="none" stroke="#FFD700" stroke-width="2.5"/>
-                        <circle cx="26" cy="38" r="15" fill="#FFC200" opacity="0.35"/>
-                        <text x="26" y="44" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="18" fill="#FFD700">1</text>
-                    </svg>
+            <div class="prize-podium">
+                <div class="pcard p2 reveal" style="transition-delay:.2s">
+                    <div class="prank">2ème</div>
+                    <div class="pmedal silver">2</div>
+                    <div class="pamount">200.-</div>
+                    <div class="pcur">CHF</div>
                 </div>
-                <div class="prize-position">1ère place</div>
-                <div class="prize-amount">350.-</div>
-                <div class="prize-sub">CHF</div>
+                <div class="pcard p1 reveal" style="transition-delay:.1s">
+                    <div class="pcrown">🏆</div>
+                    <div class="prank">1ère place</div>
+                    <div class="pmedal gold">1</div>
+                    <div class="pamount">350.-</div>
+                    <div class="pcur">CHF</div>
+                </div>
+                <div class="pcard p3 reveal" style="transition-delay:.3s">
+                    <div class="prank">3ème</div>
+                    <div class="pmedal bronze">3</div>
+                    <div class="pamount">50.-</div>
+                    <div class="pcur">CHF</div>
+                </div>
             </div>
-            <div class="prize-place prize-3 reveal" style="transition-delay:0.3s">
-                <div class="prize-medal">
-                    <svg width="52" height="62" viewBox="0 0 52 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 8 L10 28 L22 24 Z" fill="#6B9FD4"/>
-                        <path d="M34 8 L42 28 L30 24 Z" fill="#4A7DB5"/>
-                        <circle cx="26" cy="38" r="20" fill="#CD7F32" opacity="0.15"/>
-                        <circle cx="26" cy="38" r="20" fill="none" stroke="#CD7F32" stroke-width="2"/>
-                        <circle cx="26" cy="38" r="15" fill="#B8682A" opacity="0.3"/>
-                        <text x="26" y="44" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="18" fill="#CD7F32">3</text>
-                    </svg>
-                </div>
-                <div class="prize-position">3ème place</div>
-                <div class="prize-amount">50.-</div>
-                <div class="prize-sub">CHF</div>
-            </div>
-        </div>
-        <div class="prize-note reveal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            La distribution exacte du cash prize peut varier selon le nombre d'équipes inscrites. Le total garanti est de <strong>600 CHF</strong>.
-        </div>
-    </section>
-
-
-    <section class="social">
-        <h2 class="section-title reveal" style="color:var(--primary-dark)">Réseaux <span class="accent">&amp; Contacts</span></h2>
-        <p class="social-sub reveal">Suivez-nous pour ne rater aucune news !</p>
-        <div class="social-cards">
-
-            
-            <a href="https://www.instagram.com/h4ac_tournament/"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="social-card reveal"
-               style="transition-delay:0.1s">
-                <div class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2D1B69" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5"/>
-                        <circle cx="12" cy="12" r="4"/>
-                        <circle cx="17.5" cy="6.5" r="1" fill="#2D1B69" stroke="none"/>
-                    </svg>
-                </div>
-                <div class="social-name">Instagram</div>
-                <div class="social-handle">@hoops4bg</div>
-            </a>
-
-        </div>
-    </section>
-
-
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-logo">HOOP 4 <span>A CAUSE</span></div>
-            <p class="footer-tagline">Un projet sportif, humain & communautaire.</p>
-            <p class="footer-address">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Rte de Base 24, 1228 Plan-les-Ouates, Genève
+            <p class="prize-note reveal">
+                La distribution exacte peut varier selon le nombre d'équipes inscrites. Total garanti : <strong>600 CHF</strong>.
             </p>
-            <p class="footer-copy">© 2026 Hoop 4 A Cause. Tous droits réservés.</p>
         </div>
+    </section>
+
+
+    <!-- INSCRIPTION -->
+    <section class="inscription" id="inscription">
+        <div class="inscription-inner">
+            <div class="section-header reveal">
+                <div class="section-label">Rejoignez-nous</div>
+                <h2 class="section-title-lg">Inscription</h2>
+            </div>
+            <div class="warning reveal">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF3B30" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Places limitées — Inscris-toi rapidement !
+            </div>
+            <div class="insc-grid">
+                <div class="icard reveal" style="transition-delay:.1s">
+                    <div class="icard-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <h4>Âge</h4>
+                    <p>18 ans minimum requis pour participer.</p>
+                </div>
+                <div class="icard reveal" style="transition-delay:.2s">
+                    <div class="icard-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h4>Équipe</h4>
+                    <p>5 joueurs + remplaçant(s) autorisés.</p>
+                </div>
+                <div class="icard reveal" style="transition-delay:.3s">
+                    <div class="icard-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <h4>Deadline</h4>
+                    <p>Inscriptions closes le 15 juin 2026.</p>
+                </div>
+                <div class="icard reveal" style="transition-delay:.4s">
+                    <div class="icard-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <h4>Frais</h4>
+                    <p>15.- CHF par joueur à l'inscription.</p>
+                </div>
+            </div>
+            <div class="insc-cta reveal">
+                <a href="#" class="btn-primary">S'inscrire maintenant →</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- SOCIAL -->
+    <section class="social" id="social">
+        <div class="social-inner">
+            <div class="section-header reveal">
+                <div class="section-label">Suivez-nous</div>
+                <h2 class="section-title-lg">Réseaux <span class="accent">&amp; Contacts</span></h2>
+            </div>
+            <p class="social-sub reveal">Ne ratez aucune news sur l'événement !</p>
+            <div class="social-cards reveal" style="transition-delay:.2s">
+                <a href="https://www.instagram.com/h4ac_tournament/" target="_blank" rel="noopener noreferrer" class="scard">
+                    <div class="scard-icon">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2D1B69" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#2D1B69" stroke="none"/></svg>
+                    </div>
+                    <div class="scard-name">Instagram</div>
+                    <div class="scard-handle">@h4ac_tournament</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- REJOINDRE SECTION -->
+    <section class="join">
+        <div class="join-inner">
+            <h2 class="join-title reveal">Rejoignez le mouvement</h2>
+            <p class="join-sub reveal">Inscription, bénévolat ou simple partage : chaque geste compte.</p>
+            <div class="join-actions reveal" style="transition-delay:.2s">
+                <a href="#inscription" class="btn-primary">S'inscrire</a>
+                <a href="https://www.instagram.com/h4ac_tournament/" target="_blank" class="btn-ghost-dark">Nous suivre</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-bar"></div>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <div class="footer-logo">HOOP 4 <span>A CAUSE</span></div>
+                <p class="footer-tagline">Un projet sportif, humain & communautaire.</p>
+            </div>
+            <div class="footer-col">
+                <div class="footer-heading">Liens rapides</div>
+                <a href="#about" class="footer-link">À propos</a>
+                <a href="#format" class="footer-link">Format</a>
+                <a href="#programme" class="footer-link">Programme</a>
+                <a href="#inscription" class="footer-link">Inscription</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-heading">Contact</div>
+                <a href="https://www.instagram.com/h4ac_tournament/" target="_blank" class="footer-link">Instagram</a>
+                <p class="footer-link" style="cursor:default">Rte de Base 24, 1228 Plan-les-Ouates</p>
+            </div>
+        </div>
+        <div class="footer-copy">© 2026 Hoop 4 A Cause. Tous droits réservés.</div>
     </footer>
 
-
+    <!-- STICKY CTA -->
     <div class="sticky-cta" id="stickyCta">
-        <button class="sticky-cta-btn" onclick="document.querySelector('.inscription').scrollIntoView({behavior:'smooth'})">
+        <a href="#inscription" class="sticky-btn">
             S'inscrire — 15.-
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/><path d="M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10"/><path d="M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10"/></svg>
-        </button>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
     </div>
 
     <script>
-        window.addEventListener('scroll', () => {
-            document.getElementById('stickyCta').classList.toggle('show', window.scrollY > 100)
-        })
-
-        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right')
-        const revealOnScroll = () => {
-            const triggerBottom = window.innerHeight * 0.9
-            revealElements.forEach(el => {
-                el.classList.toggle('visible', el.getBoundingClientRect().top < triggerBottom)
-            })
-        }
-        window.addEventListener('scroll', revealOnScroll)
-        revealOnScroll()
-
-        window.addEventListener("load", () => {
-            const loader = document.getElementById("loader");
-            const header = document.querySelector("header");
-
+        // LOADER
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
             setTimeout(() => {
-                loader.style.opacity = "0";
-                loader.style.pointerEvents = "none";
-                header.style.display = "flex";
-                loader.classList.add("hidden");
-            }, 4000);
+                loader.classList.add('hidden');
+            }, 2800);
+        });
+
+        // NAVBAR scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+            document.getElementById('stickyCta').classList.toggle('show', window.scrollY > 300);
+        });
+
+        // BURGER
+        const burger = document.getElementById('burger');
+        const navMobile = document.getElementById('navMobile');
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('open');
+            navMobile.classList.toggle('open');
+        });
+        document.querySelectorAll('.mob-link, .mob-cta').forEach(l => {
+            l.addEventListener('click', () => {
+                burger.classList.remove('open');
+                navMobile.classList.remove('open');
+            });
+        });
+
+        // REVEAL
+        const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+        const onScroll = () => {
+            const trigger = window.innerHeight * 0.88;
+            reveals.forEach(el => {
+                if (el.getBoundingClientRect().top < trigger) el.classList.add('visible');
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // SMOOTH SCROLL
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
         });
     </script>
-
 </body>
 </html>
