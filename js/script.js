@@ -289,7 +289,7 @@ function validateStep3() {
     }
 
 
-    /* for (let i = 0; i < remplacants.length; i++) {
+    for (let i = 0; i < remplacants.length; i++) {
          const r = remplacants[i];
          const nameRegex = /^[a-zA-ZÀ-ÿ\s-]{2,50}$/;
          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -323,7 +323,7 @@ function validateStep3() {
              return false;
          }
      }
-         */
+         
 
     return true;
 }
@@ -338,18 +338,20 @@ function isOldEnough(birth) {
 }
 
 function showNotif(mess, type) {
-
     const message = document.querySelector('.message');
 
-    message.classList.remove("error", "success");
-
-    message.classList.add(type);
-    message.classList.add('anime');
+    
+    message.classList.remove('anime', 'error', 'success', 'warning');
     message.textContent = mess;
 
-    setTimeout(() => {
-        message.classList.remove(type);
-        message.classList.remove('anime');
+    
+    void message.offsetWidth;
+
+    message.classList.add(type, 'anime');
+
+    clearTimeout(message._timer);
+    message._timer = setTimeout(() => {
+        message.classList.remove('anime', type);
     }, 4000);
 }
 
@@ -542,14 +544,18 @@ function chargerRemplacants() {
     saved.forEach(r => remplacants.push(r));
     renderRem();
 }
+
 function toggleRemSection() {
     const section = document.getElementById('replacements-section');
-    const isVisible = section.style.display === 'block';
-    section.style.display = isVisible ? 'none' : 'block';
-
+    const toggle = document.getElementById('rem-toggle');
     const remCount = document.getElementById('rem-count');
-    remCount.style.display = isVisible ? 'none' : 'flex';
+
+    const isOpen = section.classList.contains('open');
+    section.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('active', !isOpen);
+    remCount.style.display = isOpen ? 'none' : 'flex';
 }
+
 chargerRemplacants();
 
 chargerJoueurs();
@@ -568,7 +574,8 @@ function buildSummary() {
 
     const allPlayers = [
         { obj: capitaine, role: 'cap', label: 'Capitaine' },
-        ...joueurs.map(p => ({ obj: p, role: 'tit', label: 'Titulaire' }))
+        ...joueurs.map(p => ({ obj: p, role: 'tit', label: 'Titulaire' })),
+         ...remplacants.map(p => ({ obj: p, role: 'remp', label: 'Remplacant' }))
     ];
 
     document.getElementById('summary').innerHTML = `
