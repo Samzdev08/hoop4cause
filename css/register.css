@@ -1055,3 +1055,42 @@ hr {
         padding: 0.85rem 1rem;
     }
 }
+/* ── PILLS MAILLOT — grille propre sans trous ── */
+#c-jersey {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+}
+
+#c-jersey .pill {
+    flex: unset;
+    min-width: unset;
+    width: 100%;
+}
+
+/* ── PANEL 2 — comble les côtés ── */
+#step2 .row {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Le select niveau prend toute la largeur de sa colonne */
+#c-level {
+    width: 100%;
+}
+
+/* La colonne maillot prend toute la largeur disponible */
+#step2 .row .field:last-child {
+    width: 100%;
+}
+
+/* ── MOBILE panel 2 ── */
+@media (max-width: 520px) {
+    #c-jersey {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.4rem;
+    }
+
+    #step2 .row {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
