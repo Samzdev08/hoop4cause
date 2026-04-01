@@ -329,10 +329,21 @@ function validateStep3() {
 }
 
 function isOldEnough(birth) {
-    const today = new Date();
-    const birthDate = new Date(birth);
+    if (!birth) return false;
 
-    const age = today.getFullYear() - birthDate.getFullYear();
+   
+    const [year, month, day] = birth.split('-').map(Number);
+    if (!year || !month || !day) return false;
+
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const notYetThisYear =
+        today.getMonth() < birthDate.getMonth() ||
+        (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate());
+
+    if (notYetThisYear) age--;
 
     return age >= 15;
 }
