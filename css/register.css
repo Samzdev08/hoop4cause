@@ -975,6 +975,10 @@ hr {
     .row {
         grid-template-columns: 1fr 1fr;
         gap: 0.65rem;
+    } 
+    
+    .row .field:has(.pills) {
+        grid-column: 1 / -1;
     }
 
     input, select {

@@ -95,36 +95,21 @@ const changeView = (index) => {
 }
 
 function goStep(i) {
-    const currentStep = [...steps].findIndex(s => s.classList.contains('active'));
 
-  
-    if (i < currentStep) {
-        if (i === 3) buildSummary();
-        changeView(i);
-        return;
-    }
-
-    
-    if (i === currentStep) return;
-
-    
     const validators = {
-        0: validateStep1,
-        1: validateStep2,
-        2: validateStep3
+        1: validateStep1,
+        2: validateStep2,
+        3: validateStep3
     };
 
-    for (let step = currentStep; step < i; step++) {
-        if (validators[step]) {
-            const ok = validators[step]();
-            if (!ok) {
-                showNotif(`Complète l'étape ${step + 1} avant de continuer`, "warning");
-                return;
-            }
-        }
+    if (validators[i]) {
+        const ok = validators[i]();
+        if (!ok) return;
     }
-
     if (i === 3) buildSummary();
+
+
+
     changeView(i);
 }
 
