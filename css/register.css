@@ -3,27 +3,16 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 :root {
-    color-scheme: dark; /* ← force le dark partout */
-}
-
-
-input,
-select {
     color-scheme: dark;
-}
-
-:root {
     --color-primary: #2D1B69;
     --color-primary-dark: #1A0A3D;
     --color-accent: #E91E8C;
     --color-accent-hover: #C4177A;
     --color-orange: #FF6B00;
-    --color-bg-light: #EDE8FF;
-    --color-bg-white: #FFFFFF;
     --color-warning: #FF3B30;
     --color-text-light: #FFFFFF;
-    --color-text-dark: #1A1A2E;
     --color-text-muted: #6B6B8A;
     --font-heading: 'Impact', 'Arial Black', sans-serif;
     --font-body: 'Inter', 'Arial', sans-serif;
@@ -31,11 +20,10 @@ select {
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-full: 999px;
-    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.12);
     --shadow-btn: 0 4px 15px rgba(233, 30, 140, 0.4);
-    --transition: 0.25s ease;
 }
 
+/* ── BASE ── */
 body {
     font-family: var(--font-body);
     background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 60%, #3a1f80 100%);
@@ -44,7 +32,12 @@ body {
     overflow-x: hidden;
 }
 
+input,
+select {
+    color-scheme: dark;
+}
 
+/* ── HEADER ── */
 .page-header {
     text-align: center;
     padding: 3.5rem 1.5rem 2.5rem;
@@ -68,15 +61,8 @@ body {
 }
 
 @keyframes pulse-warn {
-
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.35);
-    }
-
-    50% {
-        box-shadow: 0 0 0 8px rgba(255, 59, 48, 0);
-    }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.35); }
+    50%       { box-shadow: 0 0 0 8px rgba(255, 59, 48, 0); }
 }
 
 .page-title {
@@ -108,13 +94,14 @@ body {
     font-size: 0.92rem;
 }
 
-/* ── STEPPER ── */
+/* ── CONTAINER ── */
 .container {
     max-width: 760px;
     margin: 0 auto;
     padding: 0 1.25rem 5rem;
 }
 
+/* ── STEPPER ── */
 .step-nav {
     display: flex;
     margin-bottom: 2rem;
@@ -140,6 +127,7 @@ body {
     gap: 0.4rem;
     position: relative;
     z-index: 1;
+    cursor: pointer;
 }
 
 .step-circle {
@@ -177,13 +165,8 @@ body {
     transition: color 0.3s;
 }
 
-.step-ind.active .step-lbl {
-    color: var(--color-accent);
-}
-
-.step-ind.done .step-lbl {
-    color: rgba(255, 255, 255, 0.5);
-}
+.step-ind.active .step-lbl { color: var(--color-accent); }
+.step-ind.done .step-lbl   { color: rgba(255, 255, 255, 0.5); }
 
 /* ── CARD ── */
 .form-card {
@@ -206,7 +189,7 @@ body {
     gap: 0.5rem;
 }
 
-/* ── FIELDS ── */
+/* ── GRID ROWS ── */
 .row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -218,12 +201,7 @@ body {
     grid-template-columns: 1fr;
 }
 
-@media (max-width: 520px) {
-    .row {
-        grid-template-columns: 1fr;
-    }
-}
-
+/* ── FIELDS ── */
 .field {
     display: flex;
     flex-direction: column;
@@ -292,7 +270,7 @@ select option {
     pointer-events: none;
 }
 
-/* ── RADIO PILLS ── */
+/* ── PILLS ── */
 .pills {
     display: flex;
     gap: 0.5rem;
@@ -302,12 +280,12 @@ select option {
 .pill {
     flex: 1;
     min-width: 52px;
-    padding: 0.55rem 0.4rem;
+    padding: 0.75rem 0.5rem;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.05);
     color: rgba(255, 255, 255, 0.45);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
     text-align: center;
     cursor: pointer;
@@ -326,6 +304,34 @@ select option {
     border-color: var(--color-accent);
     background: rgba(233, 30, 140, 0.18);
     color: #fff;
+}
+
+/* ── GENRE PILLS — 3 colonnes égales ── */
+#c-gender {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    width: 100%;
+}
+
+#c-gender .pill {
+    flex: unset;
+    min-width: unset;
+    width: 100%;
+}
+
+/* ── MAILLOT PILLS — 5 colonnes égales ── */
+#c-jersey {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+    width: 100%;
+}
+
+#c-jersey .pill {
+    flex: unset;
+    min-width: unset;
+    width: 100%;
 }
 
 /* ── DIVIDER ── */
@@ -355,6 +361,7 @@ hr {
     margin-top: 1px;
 }
 
+/* ── PLAYER CARDS ── */
 .player-card {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -436,7 +443,7 @@ hr {
     background: rgba(255, 59, 48, 0.28);
 }
 
-/* ── SECTION TOGGLE ── */
+/* ── SECTION TOGGLE (remplaçants) ── */
 .section-toggle {
     width: 100%;
     display: flex;
@@ -476,6 +483,7 @@ hr {
     transform: rotate(45deg);
 }
 
+/* ── ADD BUTTON ── */
 .add-btn {
     width: 100%;
     padding: 0.8rem;
@@ -571,21 +579,14 @@ hr {
     box-shadow: var(--shadow-btn);
 }
 
-.btn-next:hover {
-    background: var(--color-accent-hover);
-    transform: translateY(-1px);
-}
+.btn-next:hover  { background: var(--color-accent-hover); transform: translateY(-1px); }
+.btn-next:active { transform: scale(0.98); }
 
-.btn-next:active {
-    transform: scale(0.98);
-}
+/* ── STEP PANELS ── */
+.panel        { display: none; }
+.panel.active { display: block; }
 
-/* ═══════════════════════════════════════════
-   STEP 4 — RÉSUMÉ & PAIEMENT (mobile-first)
-   Remplace / complète les règles existantes
-═══════════════════════════════════════════ */
-
-/* ── CARTE ÉQUIPE HERO ── */
+/* ── STEP 4 — RÉSUMÉ ── */
 .team-hero {
     display: flex;
     align-items: center;
@@ -620,7 +621,6 @@ hr {
     margin-top: 3px;
 }
 
-/* ── CHIPS DE MÉTA-INFO ── */
 .meta-row {
     display: flex;
     gap: 0.5rem;
@@ -645,7 +645,6 @@ hr {
     font-weight: 600;
 }
 
-/* ── LISTE DES JOUEURS ── */
 .summary-players {
     display: flex;
     flex-direction: column;
@@ -660,7 +659,6 @@ hr {
     padding: 0.55rem 0.75rem;
     background: rgba(255, 255, 255, 0.04);
     border-radius: 10px;
-    /* reset de l'ancienne règle justify-content:space-between */
     justify-content: flex-start;
 }
 
@@ -679,15 +677,8 @@ hr {
     flex-shrink: 0;
 }
 
-.player-avatar.cap {
-    background: rgba(233, 30, 140, 0.2);
-    color: #E91E8C;
-}
-
-.player-avatar.rem {
-    background: rgba(255, 107, 0, 0.18);
-    color: #FF9A50;
-}
+.player-avatar.cap { background: rgba(233, 30, 140, 0.2); color: #E91E8C; }
+.player-avatar.rem { background: rgba(255, 107, 0, 0.18); color: #FF9A50; }
 
 .player-info {
     flex: 1;
@@ -710,9 +701,9 @@ hr {
     margin-top: 1px;
 }
 
-.player-role-badge.cap  { color: #E91E8C; }
-.player-role-badge.tit  { color: rgba(255, 255, 255, 0.38); }
-.player-role-badge.rem  { color: #FF9A50; }
+.player-role-badge.cap { color: #E91E8C; }
+.player-role-badge.tit { color: rgba(255, 255, 255, 0.38); }
+.player-role-badge.rem { color: #FF9A50; }
 
 .player-price {
     font-size: 0.78rem;
@@ -721,7 +712,7 @@ hr {
     margin-left: auto;
 }
 
-/* ── BLOC TOTAL ── */
+/* ── TOTAL BOX ── */
 .total-box {
     background: rgba(233, 30, 140, 0.1);
     border: 1px solid rgba(233, 30, 140, 0.22);
@@ -783,8 +774,6 @@ hr {
     color: rgba(255, 255, 255, 0.5);
     line-height: 1.55;
     cursor: pointer;
-    /* supprime l'ancien margin-top:1.5rem */
-    margin-top: 0;
 }
 
 .chk-box {
@@ -829,13 +818,9 @@ hr {
     margin-bottom: 0.65rem;
 }
 
-.stripe-btn:hover  { background: var(--color-accent-hover); transform: translateY(-1px); }
-.stripe-btn:active { transform: scale(0.98); }
-.stripe-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
+.stripe-btn:hover    { background: var(--color-accent-hover); transform: translateY(-1px); }
+.stripe-btn:active   { transform: scale(0.98); }
+.stripe-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 /* ── NOTE SÉCURITÉ ── */
 .secure-note {
@@ -849,7 +834,7 @@ hr {
     margin-bottom: 1.5rem;
 }
 
-/* ── NOTIF TOAST (mobile centré) ── */
+/* ── TOAST ── */
 .message {
     position: fixed;
     top: 16px;
@@ -875,43 +860,10 @@ hr {
     text-align: center;
 }
 
-.message.anime {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-.message.error {
-    border-color: rgba(255, 59, 48, 0.5);
-    background: rgba(255, 59, 48, 0.2);
-    color: #FF9A94;
-}
-
-.message.success {
-    border-color: rgba(29, 158, 117, 0.5);
-    background: rgba(29, 158, 117, 0.2);
-    color: #7CFFD4;
-}
-
-.message.warning {
-    border-color: rgba(255, 107, 0, 0.5);
-    background: rgba(255, 107, 0, 0.2);
-    color: #FFB37A;
-}
-
-/* ── MOBILE ── */
-@media (max-width: 520px) {
-    .team-title   { font-size: 1.1rem; }
-    .total-amount { font-size: 1.7rem; }
-    .stripe-btn   { font-size: 0.93rem; padding: 0.95rem; }
-}
-/* ── STEP PANELS ── */
-.panel {
-    display: none;
-}
-
-.panel.active {
-    display: block;
-}
+.message.anime   { opacity: 1; transform: translateX(-50%) translateY(0); }
+.message.error   { border-color: rgba(255, 59, 48, 0.5);   background: rgba(255, 59, 48, 0.2);   color: #FF9A94; }
+.message.success { border-color: rgba(29, 158, 117, 0.5);  background: rgba(29, 158, 117, 0.2);  color: #7CFFD4; }
+.message.warning { border-color: rgba(255, 107, 0, 0.5);   background: rgba(255, 107, 0, 0.2);   color: #FFB37A; }
 
 /* ── SUCCESS ── */
 .success-box {
@@ -959,7 +911,7 @@ hr {
     color: rgba(255, 255, 255, 0.65);
 }
 
-/* ── COUNTER ── */
+/* ── COUNTER PILL ── */
 .count-pill {
     display: inline-flex;
     align-items: center;
@@ -978,21 +930,27 @@ hr {
     font-weight: 700;
 }
 
-/* ── MOBILE ── */
+/* ════════════════════════════
+   RESPONSIVE MOBILE
+════════════════════════════ */
 @media (max-width: 600px) {
-    .form-card {
-        padding: 1.4rem 1.1rem;
-    }
-
     .page-header {
         padding: 2.5rem 1rem 1.5rem;
     }
-}
-/* ── STEPPER MOBILE COMPACT ── */
-@media (max-width: 600px) {
+
+    .form-card {
+        padding: 1.4rem 1.1rem;
+        border-radius: 16px;
+    }
+
+    /* Stepper compact */
     .step-nav {
         gap: 0;
         margin-bottom: 1.5rem;
+    }
+
+    .step-nav::before {
+        top: 16px;
     }
 
     .step-circle {
@@ -1006,22 +964,17 @@ hr {
         letter-spacing: 0.04em;
     }
 
-    .step-nav::before {
-        top: 16px;
-    }
+    /* Résumé */
+    .team-title   { font-size: 1.1rem; }
+    .total-amount { font-size: 1.7rem; }
+    .stripe-btn   { font-size: 0.93rem; padding: 0.95rem; }
 }
 
-/* ── PANEL 1 MOBILE — layout 50/50 amélioré ── */
 @media (max-width: 520px) {
+    /* Toutes les rows en 2 colonnes sur mobile */
     .row {
-        grid-template-columns: 1fr 1fr !important;
+        grid-template-columns: 1fr 1fr;
         gap: 0.65rem;
-    }
-
-    /* Champs qui doivent rester full width */
-    .row .field:has(input[type="email"]),
-    .row .field:has(input[type="tel"]) {
-        grid-column: span 1;
     }
 
     input, select {
@@ -1040,11 +993,6 @@ hr {
         border-radius: 8px;
     }
 
-    .form-card {
-        padding: 1.2rem 1rem;
-        border-radius: 16px;
-    }
-
     .sec-label {
         font-size: 0.82rem;
         margin-bottom: 1rem;
@@ -1054,43 +1002,15 @@ hr {
         font-size: 0.9rem;
         padding: 0.85rem 1rem;
     }
-}
-/* ── PILLS MAILLOT — grille propre sans trous ── */
-#c-jersey {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.5rem;
-}
 
-#c-jersey .pill {
-    flex: unset;
-    min-width: unset;
-    width: 100%;
-}
-
-/* ── PANEL 2 — comble les côtés ── */
-#step2 .row {
-    grid-template-columns: 1fr 1fr;
-}
-
-/* Le select niveau prend toute la largeur de sa colonne */
-#c-level {
-    width: 100%;
-}
-
-/* La colonne maillot prend toute la largeur disponible */
-#step2 .row .field:last-child {
-    width: 100%;
-}
-
-/* ── MOBILE panel 2 ── */
-@media (max-width: 520px) {
-    #c-jersey {
-        grid-template-columns: repeat(5, 1fr);
+    /* Pills genre et maillot restent en grille fixe */
+    #c-gender {
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.4rem;
     }
 
-    #step2 .row {
-        grid-template-columns: 1fr 1fr !important;
+    #c-jersey {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.4rem;
     }
 }
