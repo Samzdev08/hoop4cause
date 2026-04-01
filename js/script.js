@@ -477,7 +477,7 @@ function toggleCard(bodyId, header) {
     const arrow = header.querySelector('.accordion-arrow');
     const isOpen = body.style.display === 'block';
     body.style.display = isOpen ? 'none' : 'block';
-    arrow.textContent = isOpen ? '▶' : '▼';
+    arrow.textContent = isOpen ? '›' : '⌄';
 }
 
 function updateCardHeader(type, idx) {

@@ -408,6 +408,19 @@ hr {
     transition: transform 0.25s;
     display: inline-block;
 }
+input[type="date"] {
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    color: #fff;
+}
 
 .player-name {
     font-weight: 600;
