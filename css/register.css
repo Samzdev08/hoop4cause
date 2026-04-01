@@ -882,6 +882,10 @@ hr {
     justify-content: center;
     margin: 0 auto 1.5rem;
 }
+.player-body .row .field:has(input[type="email"]),
+.player-body .row .field:has(input[type="date"]) {
+    grid-column: 1 / -1;
+}
 
 .success-title {
     font-family: var(--font-heading);
