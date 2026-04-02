@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="color-scheme" content="dark">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - Hoop4cause</title>
+    <title>Inscription — Hoop 4 A Cause</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,700&family=Barlow:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./css/register.css">
 </head>
 
 <body>
-    <div class="message"></div>
+
+    <div class="toast" id="toast"></div>
+
     <div class="page-header">
         <div class="warning-pill">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -19,298 +25,299 @@
                 <line x1="12" y1="9" x2="12" y2="13" />
                 <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
-            Places limitées — Deadline 15 juin 2026
+            Places limitées — Deadline avant les vacances d'été 2026
         </div>
         <div class="page-title">Inscription<br><em>Hoop 4 A Cause</em></div>
-        <p class="page-sub">Tournoi 3×3 — Juin 2026 — Rte de Base 24, Plan-les-Ouates</p>
+        <p class="page-sub">Tournoi 5×5 — Juin 2026 — Chem. Le-Sapay 10, Plan-les-Ouates</p>
     </div>
 
     <div class="container">
 
-        <!-- STEPPER -->
-        <div class="step-nav">
-            <div class="step-ind active" id="si-1" >
-                <div class="step-circle">1</div>
-                <div class="step-lbl">Capitaine</div>
-            </div>
-            <div class="step-ind " id="si-2" >
-                <div class="step-circle">2</div>
-                <div class="step-lbl">Equipe</div>
-            </div>
-            <div class="step-ind" id="si-3" >
-                <div class="step-circle">3</div>
-                <div class="step-lbl">Joueurs</div>
-            </div>
-            <div class="step-ind" id="si-4" >
-                <div class="step-circle">4</div>
-                <div class="step-lbl">Résumé</div>
+        <!-- ── MODE SELECTION ── -->
+        <div id="mode-screen">
+            <div class="mode-title">Comment tu t'inscris ?</div>
+            <div class="mode-grid">
+                <div class="mode-card" onclick="chooseMode('equipe')">
+                    <span class="mode-card-arrow">→</span>
+                    <div class="mode-card-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="mode-card-label">Inscription équipe</div>
+                        <div class="mode-card-name">Mon équipe</div>
+                    </div>
+                    <div class="mode-card-desc">Tu as déjà ton équipe de 5 joueurs minimum. Inscription groupée, un seul
+                        paiement.</div>
+                    <div class="mode-card-price">
+                        <span class="mode-price-big">100.–</span>
+                        <span class="mode-price-label">CHF / équipe</span>
+                    </div>
+                </div>
+                <div class="mode-card solo" onclick="chooseMode('solo')">
+                    <span class="mode-card-arrow">→</span>
+                    <div class="mode-card-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="mode-card-label">Inscription solo</div>
+                        <div class="mode-card-name">Tout seul</div>
+                    </div>
+                    <div class="mode-card-desc">Tu viens seul ? Pas de problème. On t'intègre dans une équipe selon ton
+                        profil.</div>
+                    <div class="mode-card-price">
+                        <span class="mode-price-big" style="color:var(--orange)">20.–</span>
+                        <span class="mode-price-label">CHF / joueur</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="form-card">
+        <!-- ── FORM ── -->
+        <div id="form-screen">
+            <button class="back-mode" onclick="backToMode()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Changer de mode
+            </button>
+            <div id="mode-badge-wrap"></div>
 
+            <!-- STEPPER -->
+            <div class="step-nav" id="step-nav"></div>
 
-            <div class="panel active" id="step1">
+            <div class="form-card">
 
-                <div class="sec-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    Informations du capitaine
-                </div>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Prénom <span class="req">*</span></label>
-                        <input type="text" id="c-first" placeholder="Jordan" />
+                <!-- STEP 1 : CAPITAINE / JOUEUR SOLO -->
+                <div class="panel active" id="step1">
+                    <div class="sec-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span id="step1-label">Informations du capitaine</span>
                     </div>
-                    <div class="field">
-                        <label>Nom <span class="req">*</span></label>
-                        <input type="text" id="c-last" placeholder="Lebrun" />
+                    <div class="row">
+                        <div class="field"><label>Prénom <span class="req">*</span></label><input type="text"
+                                id="c-first" placeholder="Jordan" /></div>
+                        <div class="field"><label>Nom <span class="req">*</span></label><input type="text" id="c-last"
+                                placeholder="Lebrun" /></div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Email <span class="req">*</span></label>
-                        <input type="email" id="c-email" placeholder="capitaine@email.com" />
+                    <div class="row">
+                        <div class="field"><label>Email <span class="req">*</span></label><input type="email"
+                                id="c-email" placeholder="capitaine@email.com" /></div>
+                        <div class="field"><label>Téléphone</label><input type="tel" id="c-phone"
+                                placeholder="+41 078 000 00 00" /></div>
                     </div>
-                    <div class="field">
-                        <label>Téléphone</label>
-                        <input type="tel" id="c-phone" placeholder="+41 078 000 00 00" />
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Date de naissance <span class="req">*</span></label>
-                        <input type="date" id="c-birth" max="2010-12-31" />
-                    </div>
-                    <div class="field">
-                        <label>Genre <span class="req">*</span></label>
-                        <div class="pills" id="c-gender">
-                            <div class="pill" data-v="male" onclick="selPill('c-gender', this)">Homme</div>
-                            <div class="pill" data-v="female" onclick="selPill('c-gender', this)">Femme</div>
-                            <div class="pill" data-v="other" onclick="selPill('c-gender', this)">Autre</div>
+                    <div class="row">
+                        <div class="field"><label>Date de naissance <span class="req">*</span></label><input type="date"
+                                id="c-birth" max="2010-12-31" /></div>
+                        <div class="field">
+                            <label>Genre <span class="req">*</span></label>
+                            <div class="pills" id="c-gender">
+                                <div class="pill" data-v="male" onclick="selPill('c-gender',this)">Homme</div>
+                                <div class="pill" data-v="female" onclick="selPill('c-gender',this)">Femme</div>
+                                <div class="pill" data-v="other" onclick="selPill('c-gender',this)">Autre</div>
+                            </div>
                         </div>
                     </div>
+                    
+                    <div class="nav-btns">
+                        <button class="btn-next" onclick="goStep(1)">Suivant →</button>
+                    </div>
                 </div>
 
-                <hr>
-                <div class="nav-btns">
-                    <button class="btn-next" onclick="goStep(1)">Suivant</button>
-                </div>
-            </div>
-
-            <div class="panel" id="step2">
-
-                <div class="sec-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14" />
-                        <path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14" />
-                        <path d="M2 12h20" />
-                    </svg>
-                    Profil basketball
-                </div>
-
-                <div class="row">
-                    <div class="field">
-                        <label>Niveau <span class="req">*</span></label>
-                        <div class="sel-wrap">
-                            <select id="c-level">
-                                <option value="" disabled selected>Choisir…</option>
-                                <option value="beginner">Débutant</option>
-                                <option value="intermediate">Intermédiaire</option>
-                                <option value="advanced">Avancé</option>
-                                <option value="elite">Élite</option>
-                            </select>
+                <!-- STEP 2 : PROFIL BASKET + NOM ÉQUIPE (équipe) / PROFIL SEUL (solo) -->
+                <div class="panel" id="step2">
+                    <div class="sec-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14" />
+                            <path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14" />
+                            <path d="M2 12h20" />
+                        </svg>
+                        Profil basketball
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label>Niveau <span class="req">*</span></label>
+                            <div class="sel-wrap">
+                                <select id="c-level">
+                                    <option value="" disabled selected>Choisir…</option>
+                                    <option value="beginner">Débutant</option>
+                                    <option value="intermediate">Intermédiaire</option>
+                                    <option value="advanced">Avancé</option>
+                                    <option value="elite">Élite</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Taille maillot <span class="req">*</span></label>
+                            <div class="pills" id="c-jersey">
+                                <div class="pill" data-v="S" onclick="selPill('c-jersey',this)">S</div>
+                                <div class="pill" data-v="M" onclick="selPill('c-jersey',this)">M</div>
+                                <div class="pill" data-v="L" onclick="selPill('c-jersey',this)">L</div>
+                                <div class="pill" data-v="XL" onclick="selPill('c-jersey',this)">XL</div>
+                                <div class="pill" data-v="XXL" onclick="selPill('c-jersey',this)">XXL</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="field">
-                        <label>Taille maillot <span class="req">*</span></label>
-                        <div class="pills" id="c-jersey">
-                            <div class="pill" data-v="S" onclick="selPill('c-jersey',this)">S</div>
-                            <div class="pill" data-v="M" onclick="selPill('c-jersey',this)">M</div>
-                            <div class="pill" data-v="L" onclick="selPill('c-jersey',this)">L</div>
-                            <div class="pill" data-v="XL" onclick="selPill('c-jersey',this)">XL</div>
-                            <div class="pill" data-v="XXL" onclick="selPill('c-jersey',this)">XXL</div>
-                        </div>
-                    </div>
-                </div>
 
-                <hr>
-
-                <div class="sec-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                    Nom de l'équipe
-                </div>
-
-                <div class="row single">
-                    <div class="field">
-                        <label>Nom de l'équipe <span class="req">*</span></label>
-                        <input type="text" id="team-name" placeholder="Ex: Les Snipers de Carouge" />
-                    </div>
-                </div>
-                <hr>
-                <div class="nav-btns">
-                    <button class="btn-prev" onclick="goStep(0)">← Retour</button>
-                    <button class="btn-next" onclick="goStep(2)">Suivant — Joueurs →</button>
-                </div>
-            </div>
-
-            <div class="panel" id="step3">
-
-                <div class="info-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="16" x2="12" y2="12" />
-                        <line x1="12" y1="8" x2="12.01" y2="8" />
-                    </svg>
-                    <span>Format <strong style="color:#E91E8C;">5×5</strong> — Ajoutez <strong style="color:#fff;">4
-                            joueurs</strong> (hors capitaine). Vous pouvez ensuite ajouter des remplaçants (optionnel).
-                        Chaque joueur doit avoir <strong style="color:#fff;">15 ans min.</strong>. Frais : <strong
-                            style="color:var(--color-accent);">20.– CHF / joueur</strong> (remplaçants inclus).</span>
-                </div>
-
-                <!-- Titulaires -->
-                <div class="sec-label">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                    </svg>
-                    Joueurs titulaires
-                    <div class="count-pill" id="tit-count"><strong id="tit-n">0</strong>/4</div>
-                </div>
-
-                <div id="tit-list">
-
-                </div>
-
-                <button class="add-btn" id="add-tit-btn" onclick="addTitulaire()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                    Ajouter un titulaire
-                </button>
-
-                <hr>
-
-
-                <!-- Remplaçants toggle -->
-                <button class="section-toggle" id="rem-toggle" onclick="toggleRemSection()">
-                    <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                    Ajouter des remplaçants <span
-                        style="margin-left:0.25rem;font-size:0.73rem;color:rgba(255,150,80,0.7);">(optionnel)</span>
-                    <div class="count-pill" id="rem-count" style="margin-left:auto;display:none;"><strong
-                            id="rem-n">0</strong> remplaçant(s)</div>
-                </button>
-
-                <div id="replacements-section">
-                    <div class="rem-inner">
-                        <div class="rem-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF9A50"
+                    <!-- Nom équipe — seulement en mode équipe -->
+                    <div id="team-name-section" style="display:none;">
+                        <hr>
+                        <div class="sec-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="17 1 21 5 17 9" />
-                                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                                <polyline points="7 23 3 19 7 15" />
-                                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                             </svg>
-                            Remplaçants
+                            Nom de l'équipe
                         </div>
-                        <div id="rem-list"></div>
-                        <button class="add-btn" id="add-rem-btn" onclick="addRemplacant()"
-                            style="border-color:rgba(255,107,0,0.25);color:rgba(255,150,80,0.55);">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                            </svg>
-                            Ajouter un remplaçant
-                        </button>
+                        <div class="row single">
+                            <div class="field"><label>Nom de l'équipe <span class="req">*</span></label><input
+                                    type="text" id="team-name" placeholder="Ex: Les Snipers de Carouge" /></div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="nav-btns">
+                        <button class="btn-prev" onclick="goStep(0)">← Retour</button>
+                        <button class="btn-next" id="step2-next" onclick="goStep(2)">Suivant →</button>
                     </div>
                 </div>
 
-                <div class="errors" id="err2"></div>
-
-                <div class="nav-btns">
-                    <button class="btn-prev" onclick="goStep(1)">← Retour</button>
-                    <button class="btn-next" onclick="goStep(3)">Résumé & Paiement →</button>
+                <!-- STEP 3 : JOUEURS (équipe seulement) -->
+                <div class="panel" id="step3">
+                    <div class="info-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <span>Format <strong style="color:#E91E8C;">5×5</strong> — Ajoutez <strong style="color:#fff;">4
+                                titulaires</strong> minimum (hors capitaine). Vous pouvez ensuite ajouter jusqu'à
+                            <strong style="color:#fff;">2 remplaçants</strong> (optionnel). Chaque joueur doit avoir
+                            <strong style="color:#fff;">15 ans min.</strong></span>
+                    </div>
+                    <div class="sec-label">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                        </svg>
+                        Joueurs titulaires
+                        <div class="count-pill" id="tit-count"><strong id="tit-n">0</strong>/4</div>
+                    </div>
+                    <div id="tit-list"></div>
+                    <button class="add-btn" id="add-tit-btn" onclick="addTitulaire()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Ajouter un titulaire
+                    </button>
+                    <hr>
+                    <button class="section-toggle" id="rem-toggle" onclick="toggleRemSection()">
+                        <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Ajouter des remplaçants <span
+                            style="margin-left:.25rem;font-size:.73rem;color:rgba(255,150,80,.7)">(optionnel — max
+                            2)</span>
+                        <div class="count-pill" id="rem-count" style="display:none;"><strong id="rem-n">0</strong>
+                            remplaçant(s)</div>
+                    </button>
+                    <div id="replacements-section">
+                        <div class="rem-inner">
+                            <div class="rem-label">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF9A50"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="17 1 21 5 17 9" />
+                                    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                                    <polyline points="7 23 3 19 7 15" />
+                                    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                                </svg>
+                                Remplaçants
+                            </div>
+                            <div id="rem-list"></div>
+                            <button class="add-btn" id="add-rem-btn" onclick="addRemplacant()"
+                                style="border-color:rgba(255,107,0,.25);color:rgba(255,150,80,.55);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                                Ajouter un remplaçant
+                            </button>
+                        </div>
+                    </div>
+                    <div class="nav-btns">
+                        <button class="btn-prev" onclick="goStep(1)">← Retour</button>
+                        <button class="btn-next" onclick="goStep(3)">Résumé & Paiement →</button>
+                    </div>
                 </div>
+
+                <!-- STEP 4 : RÉSUMÉ -->
+                <div class="panel" id="step4">
+                    <div class="sec-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                        Résumé de l'inscription
+                    </div>
+                    <div id="summary"></div>
+                    <div class="total-box" id="total-box"></div>
+                    <div class="cgu-line" onclick="toggleCgu()">
+                        <div class="chk-box" id="cgu-chk"></div>
+                        <span>J'accepte les conditions d'inscription : comportement sportif exigé, frais non
+                            remboursables, règlement du tournoi respecté.</span>
+                    </div>
+                    <button class="stripe-btn" onclick="submitForm()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                        Payer & Confirmer l'inscription
+                    </button>
+                    <div class="secure-note">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Paiement sécurisé via Stripe
+                    </div>
+                    <div class="nav-btns" style="margin-top:0">
+                        <button class="btn-prev" id="step4-back" onclick="goStep(2)">← Modifier</button>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="panel" id="step4">
-
-                <div class="sec-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                    </svg>
-                    Résumé de l'inscription
-                </div>
-
-                <div id="summary"></div>
-
-                <div class="total-box">
-                    <span>Total à payer</span>
-                    <span class="total-amount" id="total-amt">—</span>
-                </div>
-
-                <div class="cgu-line" onclick="toggleCgu()">
-                    <div class="chk-box" id="cgu-chk"></div>
-                    <span>J'accepte les conditions d'inscription :comportement sportif
-                        exigé, frais non remboursables, règlement du tournoi respecté.</span>
-                </div>
-
-                <div class="errors" id="err3"></div>
-
-                <button class="stripe-btn" onclick="submitForm()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="1" x2="12" y2="23" />
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
-                    Payer & Confirmer l'inscription
-                </button>
-
-                <div class="secure-note">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    Paiement sécurisé via Stripe
-                </div>
-
-                <div class="nav-btns" style="margin-top:1.25rem;">
-                    <button class="btn-prev" onclick="goStep(2)">← Modifier l'équipe</button>
-                </div>
-            </div>
-
         </div>
-
     </div>
 </body>
-
 <script src="./js/script.js"></script>
-
 
 </html>

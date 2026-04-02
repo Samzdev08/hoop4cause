@@ -1,432 +1,413 @@
-const panels = document.querySelectorAll('.panel');
-const steps = document.querySelectorAll('.step-ind');
-
+let mode = null;
 let capitaine = {};
 const joueurs = [];
 const remplacants = [];
-let titulaires = [];
 let cguOn = false;
 
-document.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", saveFormToLocalStorage);
-});
+const STEPS_EQUIPE = [
+    { label: 'Capitaine' },
+    { label: 'Équipe' },
+    { label: 'Joueurs' },
+    { label: 'Résumé' }
+];
+const STEPS_SOLO = [
+    { label: 'Profil' },
+    { label: 'Basket' },
+    { label: 'Résumé' }
+];
 
-document.querySelector("select").addEventListener("change", saveFormToLocalStorage);
-
-
-document.getElementById("c-phone").addEventListener("input", formatPhone);
-
-
-function formatPhone(e) {
-    let value = e.target.value;
-    value = value.replace(/\D/g, "");
-
-    value = value.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4");
-
-    e.target.value = value.trim();
+function saveAll() {
+    localStorage.setItem('h4ac_mode', mode || '');
+    localStorage.setItem('h4ac_capitaine', JSON.stringify(capitaine));
+    localStorage.setItem('h4ac_joueurs', JSON.stringify(joueurs));
+    localStorage.setItem('h4ac_remplacants', JSON.stringify(remplacants));
 }
 
-document.getElementById("c-phone").addEventListener("input", formatPhone);
+function loadAll() {
+    try {
+        const savedMode = localStorage.getItem('h4ac_mode');
+        const savedCap = localStorage.getItem('h4ac_capitaine');
+        const savedJoueurs = localStorage.getItem('h4ac_joueurs');
+        const savedRem = localStorage.getItem('h4ac_remplacants');
 
-function loadFormFromLocalStorage() {
+        if (savedCap) Object.assign(capitaine, JSON.parse(savedCap));
+        if (savedJoueurs) {
+            const arr = JSON.parse(savedJoueurs);
+            joueurs.length = 0;
+            arr.forEach(j => joueurs.push(j));
+        }
+        if (savedRem) {
+            const arr = JSON.parse(savedRem);
+            remplacants.length = 0;
+            arr.forEach(r => remplacants.push(r));
+        }
+        return savedMode || null;
+    } catch (e) {
+        console.warn('Erreur chargement localStorage', e);
+        return null;
+    }
+}
 
-    const data = JSON.parse(localStorage.getItem("formUser"));
+function restoreFormFields() {
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+    setVal('c-first', capitaine.firstName);
+    setVal('c-last', capitaine.lastName);
+    setVal('c-email', capitaine.email);
+    setVal('c-phone', capitaine.phone);
+    setVal('c-birth', capitaine.birth);
 
-
-    if (!data) return;
-
-    document.getElementById('c-first').value = data.firstName || "";
-    document.getElementById('c-last').value = data.lastName || "";
-    document.getElementById('c-email').value = data.email || "";
-    document.getElementById('c-phone').value = data.phone || "";
-    document.getElementById('c-birth').value = data.birth || "";
-    const levelEl = document.getElementById('c-level');
-    if (levelEl) levelEl.value = data.level || "";
-
-    const teamNameEl = document.getElementById('team-name');
-    if (teamNameEl) teamNameEl.value = data.TeamName || "";
-
-
-
-    document.querySelector('#c-gender').querySelectorAll('.pill').forEach(p => {
-        p.classList.remove('sel');
-    });
-
-    document.querySelector('#c-jersey').querySelectorAll('.pill').forEach(p => {
-        p.classList.remove('sel');
-    });
-
-
-    const pillGender = document.querySelector(`.pill[data-v="${data.sexe}"]`);
-
-    if (pillGender) {
-        pillGender.classList.add('sel');
+    if (capitaine.sexe) {
+        const pill = document.querySelector(`#c-gender .pill[data-v="${capitaine.sexe}"]`);
+        if (pill) {
+            document.querySelectorAll('#c-gender .pill').forEach(p => p.classList.remove('sel'));
+            pill.classList.add('sel');
+        }
     }
 
-    const pillJersey = document.querySelector(`.pill[data-v="${data.jerseySize}"]`);
+    setVal('c-level', capitaine.level);
+    setVal('team-name', capitaine.TeamName);
 
-
-    if (pillJersey) {
-        pillJersey.classList.add('sel');
+    if (capitaine.jerseySize) {
+        const pill = document.querySelector(`#c-jersey .pill[data-v="${capitaine.jerseySize}"]`);
+        if (pill) {
+            document.querySelectorAll('#c-jersey .pill').forEach(p => p.classList.remove('sel'));
+            pill.classList.add('sel');
+        }
     }
 
-    console.log(data)
+    syncContestCheckbox('cap-3pts', capitaine.contest3pts);
+    syncContestCheckbox('cap-dunk', capitaine.contestDunk);
 }
 
-loadFormFromLocalStorage();
-
-const changeSteps = (index) => {
-    steps.forEach((step, i) => {
-
-        step.classList.remove('active');
-        if (index == i) step.classList.add('active');
-
-    })
+function syncContestCheckbox(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('on', !!value);
 }
 
-const changeView = (index) => {
-    panels.forEach((panel, i) => {
+function chooseMode(m) {
+    mode = m;
+    saveAll();
+    document.getElementById('mode-screen').style.display = 'none';
+    document.getElementById('form-screen').style.display = 'block';
 
-        panel.classList.remove('active');
-        if (index == i) panel.classList.add('active');
+    const badge = document.getElementById('mode-badge-wrap');
+    if (m === 'equipe') {
+        badge.innerHTML = `<div class="mode-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Mode Équipe — 100.– CHF
+        </div>`;
+        document.getElementById('step1-label').textContent = 'Informations du capitaine';
+        document.getElementById('team-name-section').style.display = 'block';
+        document.getElementById('step2-next').textContent = 'Suivant — Joueurs →';
+    } else {
+        badge.innerHTML = `<div class="mode-badge solo">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Mode Solo — 20.– CHF
+        </div>`;
+        document.getElementById('step1-label').textContent = 'Vos informations';
+        document.getElementById('team-name-section').style.display = 'none';
+        document.getElementById('step2-next').textContent = 'Résumé & Paiement →';
+    }
 
-        changeSteps(index);
-    })
+    buildStepper();
+    injectCapContests();
+    restoreFormFields();
+    renderTit();
+    renderRem();
+    goStep(0);
+}
+
+function backToMode() {
+    document.getElementById('mode-screen').style.display = 'block';
+    document.getElementById('form-screen').style.display = 'none';
+    mode = null;
+    resetForm();
+}
+
+function resetForm() {
+    joueurs.length = 0;
+    remplacants.length = 0;
+    cguOn = false;
+    capitaine = {};
+    saveAll();
+    document.getElementById('cgu-chk')?.classList.remove('on');
+}
+
+function buildStepper() {
+    const steps = mode === 'equipe' ? STEPS_EQUIPE : STEPS_SOLO;
+    const nav = document.getElementById('step-nav');
+    nav.innerHTML = steps.map((s, i) => `
+        <div class="step-ind" id="si-${i}">
+            <div class="step-circle">${i + 1}</div>
+            <div class="step-lbl">${s.label}</div>
+        </div>
+    `).join('');
+}
+
+function updateStepper(currentIdx) {
+    const total = mode === 'equipe' ? 4 : 3;
+    for (let i = 0; i < total; i++) {
+        const el = document.getElementById(`si-${i}`);
+        if (!el) continue;
+        el.classList.remove('active', 'done');
+        if (i < currentIdx) el.classList.add('done');
+        else if (i === currentIdx) el.classList.add('active');
+    }
 }
 
 function goStep(i) {
+    const prevIdx = currentStepIdx();
 
-    const validators = {
-        1: validateStep1,
-        2: validateStep2,
-        3: validateStep3
-    };
-
-    if (validators[i]) {
-        const ok = validators[i]();
-        if (!ok) return;
+    if (i > prevIdx) {
+        if (i >= 1 && !validateStep1()) return;
+        if (i >= 2 && !validateStep2()) return;
+        if (i === 3 && mode === 'equipe' && !validateStep3()) return;
     }
-    if (i === 3) buildSummary();
 
-
-
-    changeView(i);
-}
-
-
-function selPill(group = 'c-gender', target) {
-
-
-    document.querySelector(`#${group}`).querySelectorAll('.pill').forEach(pill => {
-        pill.classList.remove('sel');
+    const panelIdx = getPanelIdx(i);
+    document.querySelectorAll('.panel').forEach((p, pi) => {
+        p.classList.toggle('active', pi === panelIdx);
     });
+    updateStepper(i);
 
-    target.classList.add('sel');
-    if (group === 'c-gender') {
-        capitaine.sexe = target.dataset.v;
-        saveFormToLocalStorage();
+    if (panelIdx === 3) {
+        buildSummary();
+        document.getElementById('step4-back').onclick = () => goStep(mode === 'equipe' ? 2 : 1);
     }
-    else {
-
-        capitaine.jerseySize = target.dataset.v;
-
-        saveFormToLocalStorage();
-    }
-
-
 }
 
+function getPanelIdx(stepIdx) {
+    if (mode === 'solo') return stepIdx === 2 ? 3 : stepIdx;
+    return stepIdx;
+}
+
+function currentStepIdx() {
+    const panels = document.querySelectorAll('.panel');
+    let activePanel = 0;
+    panels.forEach((p, i) => { if (p.classList.contains('active')) activePanel = i; });
+    if (mode === 'solo') return activePanel === 3 ? 2 : activePanel;
+    return activePanel;
+}
+
+function selPill(group, target) {
+    document.querySelector(`#${group}`).querySelectorAll('.pill').forEach(p => p.classList.remove('sel'));
+    target.classList.add('sel');
+    if (group === 'c-gender') capitaine.sexe = target.dataset.v;
+    else capitaine.jerseySize = target.dataset.v;
+    saveAll();
+}
+
+function toggleCapContest(field, el) {
+    capitaine[field] = !capitaine[field];
+    el.classList.toggle('on', !!capitaine[field]);
+    saveAll();
+}
+
+function injectCapContests() {
+    const step1 = document.getElementById('step1');
+    if (!step1) return;
+
+    const existing = document.getElementById('cap-contests-section');
+    if (existing) existing.remove();
+    const existingHr = document.getElementById('cap-contests-hr');
+    if (existingHr) existingHr.remove();
+
+    const hr = document.createElement('hr');
+    hr.id = 'cap-contests-hr';
+    const section = document.createElement('div');
+    section.id = 'cap-contests-section';
+    section.innerHTML = `
+        <div class="contest-row">
+            <div class="contest-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                Contests (optionnel)
+            </div>
+            <div class="contest-checks">
+                <div class="contest-check" onclick="toggleCapContest('contest3pts',document.getElementById('cap-3pts'))">
+                    <div class="chk-box" id="cap-3pts"></div>
+                    <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    <span>3-pts Contest</span>
+                </div>
+                <div class="contest-check" onclick="toggleCapContest('contestDunk',document.getElementById('cap-dunk'))">
+                    <div class="chk-box" id="cap-dunk"></div>
+                    <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/></svg>
+                    <span>Dunk Contest</span>
+                </div>
+            </div>
+        </div>`;
+
+    const navBtns = step1.querySelector('.nav-btns');
+    step1.insertBefore(hr, navBtns);
+    step1.insertBefore(section, navBtns);
+}
 
 function validateStep1() {
+    const first = document.getElementById('c-first')?.value.trim();
+    const last = document.getElementById('c-last')?.value.trim();
+    const email = document.getElementById('c-email')?.value.trim();
+    const phone = document.getElementById('c-phone')?.value.trim();
+    const birth = document.getElementById('c-birth')?.value;
+    const sexe = document.querySelector('#c-gender .pill.sel')?.dataset?.v || null;
+    const nameRx = /^[a-zA-ZÀ-ÿ\s-]{2,50}$/;
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!first || !nameRx.test(first)) return showNotif('Prénom invalide', 'error'), false;
+    if (!last || !nameRx.test(last)) return showNotif('Nom invalide', 'error'), false;
+    if (!email || !emailRx.test(email)) return showNotif('Email invalide', 'error'), false;
+    if (!phone || !/^[0-9+\s]{6,}$/.test(phone)) return showNotif('Téléphone invalide', 'error'), false;
+    if (!birth) return showNotif('Date de naissance requise', 'error'), false;
+    if (!isOldEnough(birth)) return showNotif('Tu dois avoir au moins 15 ans', 'error'), false;
+    if (!sexe) return showNotif('Sélectionne un genre', 'error'), false;
 
-    try {
+    const cap3pts = document.getElementById('cap-3pts')?.classList.contains('on') || false;
+    const capDunk = document.getElementById('cap-dunk')?.classList.contains('on') || false;
 
-        const firstName = document.getElementById('c-first')?.value.trim();
-        const lastName = document.getElementById('c-last')?.value.trim();
-        const email = document.getElementById('c-email')?.value.trim();
-        const phone = document.getElementById('c-phone')?.value.trim();
-        const birth = document.getElementById('c-birth')?.value;
-
-        const pillSelected = document.querySelector('.pill.sel');
-        const sexe = pillSelected?.dataset?.v || null;
-
-        const nameRegex = /^[a-zA-ZÀ-ÿ\s-]{2,50}$/;
-
-
-        if (!firstName || !nameRegex.test(firstName)) {
-            showNotif("Prénom invalide (lettres uniquement)", "error");
-            return false;
-        }
-
-
-        if (!lastName || !nameRegex.test(lastName)) {
-            showNotif("Nom invalide (lettres uniquement)", "error");
-            return false;
-        }
-
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email || !emailRegex.test(email)) {
-            showNotif("Email invalide", "error");
-            return false;
-        }
-
-
-        if (!phone || !/^[0-9+\s]{6,}$/.test(phone)) {
-            showNotif("Téléphone invalide", "error");
-            return false;
-        }
-
-        if (!isOldEnough(birth)) {
-            showNotif("Tu dois avoir au moins 15 ans", "error");
-            return false;
-        }
-
-
-        if (!birth) {
-            showNotif("Date de naissance requise", "error");
-            return false;
-        }
-
-
-        if (!sexe) {
-            showNotif("Sélectionne un sexe", "error");
-            return false;
-        }
-        return true;
-
-    } catch (err) {
-        console.error(err);
-        showNotif("Une erreur inattendue est survenue", "error");
-        return false;
-    }
+    Object.assign(capitaine, {
+        firstName: first, lastName: last, email, phone, birth, sexe,
+        statut: mode === 'solo' ? 'solo' : 'capitaine',
+        contest3pts: cap3pts,
+        contestDunk: capDunk
+    });
+    saveAll();
+    return true;
 }
 
-
 function validateStep2() {
-
-    try {
-
-        const level = document.getElementById('c-level')?.value;
-        const jersey = document.querySelector('#c-jersey .pill.sel')?.dataset?.v || null;
+    const level = document.getElementById('c-level')?.value;
+    const jersey = document.querySelector('#c-jersey .pill.sel')?.dataset?.v || null;
+    if (!level) return showNotif('Sélectionne ton niveau', 'error'), false;
+    if (!jersey) return showNotif('Choisis une taille de maillot', 'error'), false;
+    capitaine.level = level;
+    capitaine.jerseySize = jersey;
+    if (mode === 'equipe') {
         const teamName = document.getElementById('team-name')?.value.trim();
-
-
-        if (!level) {
-            showNotif("Sélectionne ton niveau", "error");
-            return false;
-        }
-
-
-        if (!jersey) {
-            showNotif("Choisis une taille de maillot", "error");
-            return false;
-        }
-
-
-        const teamRegex = /^[a-zA-ZÀ-ÿ0-9\s-]{3,60}$/;
-
-        if (!teamName || !teamRegex.test(teamName)) {
-            showNotif("Nom d'équipe invalide", "error");
-            return false;
-        }
-
-        capitaine.level = level;
-        capitaine.jerseySize = jersey;
-        capitaine.TeamName = teamName ?? 'Inscription seule';
-        saveFormToLocalStorage();
-
-        return true;
-
-    } catch (err) {
-        console.error(err);
-        showNotif("Erreur inattendue", "error");
-        return false;
+        const teamRx = /^[a-zA-ZÀ-ÿ0-9\s-]{3,60}$/;
+        if (!teamName || !teamRx.test(teamName)) return showNotif("Nom d'équipe invalide", 'error'), false;
+        capitaine.TeamName = teamName;
     }
+    saveAll();
+    return true;
 }
 
 function validateStep3() {
-
-    if (joueurs.length < 4) {
-        showNotif(`Il manque ${4 - joueurs.length} titulaire(s)`, "error");
-        return false;
-    }
-
-
+    if (joueurs.length < 4) return showNotif(`Il manque ${4 - joueurs.length} titulaire(s)`, 'error'), false;
+    const nameRx = /^[a-zA-ZÀ-ÿ\s-]{2,50}$/;
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     for (let i = 0; i < joueurs.length; i++) {
         const j = joueurs[i];
-        const nameRegex = /^[a-zA-ZÀ-ÿ\s-]{2,50}$/;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!j.firstName || !nameRegex.test(j.firstName)) {
-            showNotif(`Titulaire ${i + 1} — Prénom invalide`, "error");
-            return false;
-        }
-        if (!j.lastName || !nameRegex.test(j.lastName)) {
-            showNotif(`Titulaire ${i + 1} — Nom invalide`, "error");
-            return false;
-        }
-        if (!j.email || !emailRegex.test(j.email)) {
-            showNotif(`Titulaire ${i + 1} — Email invalide`, "error");
-            return false;
-        }
-        if (!j.sexe) {
-            showNotif(`Titulaire ${i + 1} — Sexe requis`, "error");
-            return false;
-        }
-        if (!j.birth) {
-            showNotif(`Titulaire ${i + 1} — Date de naissance requise`, "error");
-            return false;
-        }
-        if (!isOldEnough(j.birth)) {
-            showNotif(`Titulaire ${i + 1} — Doit avoir au moins 15 ans`, "error");
-            return false;
-        }
-        if (!j.jerseySize) {
-            showNotif(`Titulaire ${i + 1} — Taille de maillot requise`, "error");
-            return false;
-        }
+        if (!j.firstName || !nameRx.test(j.firstName)) return showNotif(`Titulaire ${i + 1} — Prénom invalide`, 'error'), false;
+        if (!j.lastName || !nameRx.test(j.lastName)) return showNotif(`Titulaire ${i + 1} — Nom invalide`, 'error'), false;
+        if (!j.email || !emailRx.test(j.email)) return showNotif(`Titulaire ${i + 1} — Email invalide`, 'error'), false;
+        if (!j.sexe) return showNotif(`Titulaire ${i + 1} — Genre requis`, 'error'), false;
+        if (!j.birth) return showNotif(`Titulaire ${i + 1} — Date de naissance requise`, 'error'), false;
+        if (!isOldEnough(j.birth)) return showNotif(`Titulaire ${i + 1} — Doit avoir au moins 15 ans`, 'error'), false;
+        if (!j.jerseySize) return showNotif(`Titulaire ${i + 1} — Taille maillot requise`, 'error'), false;
     }
-
-
     for (let i = 0; i < remplacants.length; i++) {
-         const r = remplacants[i];
-         const nameRegex = /^[a-zA-ZÀ-ÿ\s-]{2,50}$/;
-         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
- 
-         if (!r.firstName || !nameRegex.test(r.firstName)) {
-             showNotif(`Remplaçant ${i + 1} — Prénom invalide`, "error");
-             return false;
-         }
-         if (!r.lastName || !nameRegex.test(r.lastName)) {
-             showNotif(`Remplaçant ${i + 1} — Nom invalide`, "error");
-             return false;
-         }
-         if (!r.email || !emailRegex.test(r.email)) {
-             showNotif(`Remplaçant ${i + 1} — Email invalide`, "error");
-             return false;
-         }
-         if (!r.sexe) {
-             showNotif(`Remplaçant ${i + 1} — Sexe requis`, "error");
-             return false;
-         }
-         if (!r.birth) {
-             showNotif(`Remplaçant ${i + 1} — Date de naissance requise`, "error");
-             return false;
-         }
-         if (!isOldEnough(r.birth)) {
-             showNotif(`Remplaçant ${i + 1} — Doit avoir au moins 15 ans`, "error");
-             return false;
-         }
-         if (!r.jerseySize) {
-             showNotif(`Remplaçant ${i + 1} — Taille de maillot requise`, "error");
-             return false;
-         }
-     }
-         
-
+        const r = remplacants[i];
+        if (!r.firstName || !nameRx.test(r.firstName)) return showNotif(`Remplaçant ${i + 1} — Prénom invalide`, 'error'), false;
+        if (!r.lastName || !nameRx.test(r.lastName)) return showNotif(`Remplaçant ${i + 1} — Nom invalide`, 'error'), false;
+        if (!r.email || !emailRx.test(r.email)) return showNotif(`Remplaçant ${i + 1} — Email invalide`, 'error'), false;
+        if (!r.sexe) return showNotif(`Remplaçant ${i + 1} — Genre requis`, 'error'), false;
+        if (!r.birth) return showNotif(`Remplaçant ${i + 1} — Date de naissance requise`, 'error'), false;
+        if (!isOldEnough(r.birth)) return showNotif(`Remplaçant ${i + 1} — Doit avoir au moins 15 ans`, 'error'), false;
+        if (!r.jerseySize) return showNotif(`Remplaçant ${i + 1} — Taille maillot requise`, 'error'), false;
+    }
     return true;
 }
 
 function isOldEnough(birth) {
     if (!birth) return false;
-
-   
-    const [year, month, day] = birth.split('-').map(Number);
-    if (!year || !month || !day) return false;
-
+    const [y, m, d] = birth.split('-').map(Number);
     const today = new Date();
-    const birthDate = new Date(year, month - 1, day);
-
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const notYetThisYear =
-        today.getMonth() < birthDate.getMonth() ||
-        (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate());
-
-    if (notYetThisYear) age--;
-
+    let age = today.getFullYear() - y;
+    if (today.getMonth() < m - 1 || (today.getMonth() === m - 1 && today.getDate() < d)) age--;
     return age >= 15;
-}
-
-function showNotif(mess, type) {
-    const message = document.querySelector('.message');
-
-    
-    message.classList.remove('anime', 'error', 'success', 'warning');
-    message.textContent = mess;
-
-    
-    void message.offsetWidth;
-
-    message.classList.add(type, 'anime');
-
-    clearTimeout(message._timer);
-    message._timer = setTimeout(() => {
-        message.classList.remove('anime', type);
-    }, 4000);
-}
-
-
-function sauvegarderJoueurs() {
-    localStorage.setItem("joueurs", JSON.stringify(joueurs));
-}
-
-function chargerJoueurs() {
-    const data = localStorage.getItem("joueurs");
-    if (!data) return;
-    const saved = JSON.parse(data);
-    joueurs.length = 0;
-    saved.forEach(j => joueurs.push(j));
-    renderTit();
 }
 
 function addTitulaire() {
     if (joueurs.length >= 4) return;
-    const titulaire = {
+    joueurs.push({
         id: joueurs.length + 1,
-        firstName: "",
-        lastName: "",
-        email: "",
-        statut: "titulaire",
-        birth: "",
-        sexe: "",
-        TeamName: capitaine["TeamName"],
-        jerseySize: ""
-    };
-    joueurs.push(titulaire);
-    sauvegarderJoueurs();
+        firstName: '', lastName: '', email: '',
+        statut: 'titulaire', birth: '', sexe: '', jerseySize: '',
+        contest3pts: false, contestDunk: false
+    });
+    saveAll();
     renderTit();
 }
 
 function renderTit() {
-    document.getElementById('tit-list').innerHTML = joueurs.map((p, i) => playerCard(p, i, 'tit')).join('');
+    const list = document.getElementById('tit-list');
+    if (!list) return;
+    list.innerHTML = joueurs.map((p, i) => playerCard(p, i, 'tit')).join('');
     document.getElementById('tit-n').textContent = joueurs.length;
-    const addBtn = document.getElementById('add-tit-btn');
-    addBtn.style.display = joueurs.length >= 4 ? 'none' : 'flex';
+    document.getElementById('add-tit-btn').style.display = joueurs.length >= 4 ? 'none' : 'flex';
+}
+
+function addRemplacant() {
+    if (remplacants.length >= 2) return;
+    remplacants.push({
+        id: remplacants.length + 1,
+        firstName: '', lastName: '', email: '',
+        statut: 'remplacant', birth: '', sexe: '', jerseySize: '',
+        contest3pts: false, contestDunk: false
+    });
+    saveAll();
+    renderRem();
+}
+
+function renderRem() {
+    const list = document.getElementById('rem-list');
+    if (!list) return;
+    list.innerHTML = remplacants.map((p, i) => playerCard(p, i, 'rem')).join('');
+    document.getElementById('rem-n').textContent = remplacants.length;
+    document.getElementById('add-rem-btn').style.display = remplacants.length >= 2 ? 'none' : 'flex';
+    const remCount = document.getElementById('rem-count');
+    if (remCount) remCount.style.display = remplacants.length > 0 ? 'flex' : 'none';
+}
+
+function contestFieldsHtml(type, idx, p) {
+    return `
+    <div class="contest-row">
+        <div class="contest-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            Contests (optionnel)
+        </div>
+        <div class="contest-checks">
+            <div class="contest-check" onclick="togglePlayerContest('${type}',${idx},'contest3pts',this)">
+                <div class="chk-box ${p.contest3pts ? 'on' : ''}"></div>
+                <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                <span>3-pts Contest</span>
+            </div>
+            <div class="contest-check" onclick="togglePlayerContest('${type}',${idx},'contestDunk',this)">
+                <div class="chk-box ${p.contestDunk ? 'on' : ''}"></div>
+                <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/></svg>
+                <span>Dunk Contest</span>
+            </div>
+        </div>
+    </div>`;
 }
 
 function playerCard(p, idx, type) {
-    const isRemplacant = type === 'rem';
-    const badgeClass = isRemplacant ? 'badge-rem' : 'badge-tit';
-    const badgeText = isRemplacant ? 'Remplaçant' : 'Titulaire';
-    const listFn = isRemplacant ? 'updateRem' : 'updateTit';
-    const removeFn = isRemplacant ? 'removeRem' : 'removeTit';
-
+    const isRem = type === 'rem';
+    const updateFn = isRem ? 'updateRem' : 'updateTit';
+    const removeFn = isRem ? 'removeRem' : 'removeTit';
     const isComplete = p.firstName && p.lastName && p.email && p.sexe && p.birth && p.jerseySize;
     const statusIcon = isComplete
         ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
         : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9A50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>`;
-    const displayName = p.firstName || p.lastName
-        ? `${p.firstName} ${p.lastName}`.trim()
-        : `Joueur ${idx + 1}`;
+    const displayName = p.firstName || p.lastName ? `${p.firstName} ${p.lastName}`.trim() : `Joueur ${idx + 1}`;
 
     return `
     <div class="player-card" id="${type}-card-${idx}">
-        <div class="player-accordion-header" onclick="toggleCard('${type}-body-${idx}', this)">
+        <div class="player-accordion-header" onclick="toggleCard('${type}-body-${idx}',this)">
             <div class="player-header-left">
-                <span class="accordion-arrow">▶</span>
+                <span class="accordion-arrow">›</span>
                 <span class="player-name">${displayName}</span>
-                <span class="type-badge ${badgeClass}">${badgeText}</span>
             </div>
             <div class="player-header-right">
                 <span class="status-icon">${statusIcon}</span>
@@ -435,39 +416,30 @@ function playerCard(p, idx, type) {
         </div>
         <div class="player-body" id="${type}-body-${idx}" style="display:none;">
             <div class="row">
-                <div class="field">
-                    <label>Prénom <span class="req">*</span></label>
-                    <input type="text" placeholder="Prénom" value="${p.firstName}" oninput="${listFn}(${idx},'firstName',this.value);updateCardHeader('${type}',${idx})" />
-                </div>
-                <div class="field">
-                    <label>Nom <span class="req">*</span></label>
-                    <input type="text" placeholder="Nom" value="${p.lastName}" oninput="${listFn}(${idx},'lastName',this.value);updateCardHeader('${type}',${idx})" />
-                </div>
+                <div class="field"><label>Prénom <span class="req">*</span></label><input type="text" placeholder="Prénom" value="${p.firstName}" oninput="${updateFn}(${idx},'firstName',this.value);updateCardHeader('${type}',${idx})"/></div>
+                <div class="field"><label>Nom <span class="req">*</span></label><input type="text" placeholder="Nom" value="${p.lastName}" oninput="${updateFn}(${idx},'lastName',this.value);updateCardHeader('${type}',${idx})"/></div>
+            </div>
+            <div class="row">
+                <div class="field"><label>Email <span class="req">*</span></label><input type="email" placeholder="email@exemple.com" value="${p.email}" oninput="${updateFn}(${idx},'email',this.value)"/></div>
+                <div class="field"><label>Date de naissance <span class="req">*</span></label><input type="date" max="2010-12-31" value="${p.birth}" oninput="${updateFn}(${idx},'birth',this.value)"/></div>
             </div>
             <div class="row">
                 <div class="field">
-                    <label>Email <span class="req">*</span></label>
-                    <input type="email" placeholder="email@exemple.com" value="${p.email}" oninput="${listFn}(${idx},'email',this.value);updateCardHeader('${type}',${idx})" />
-                </div>
-                <div class="field">
-                    <label>Sexe <span class="req">*</span></label>
+                    <label>Genre <span class="req">*</span></label>
                     <div class="pills">
-                        <div class="pill ${p.sexe === 'male' ? 'sel' : ''}" onclick="${listFn}(${idx},'sexe','male');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">Homme</div>
-                        <div class="pill ${p.sexe === 'female' ? 'sel' : ''}" onclick="${listFn}(${idx},'sexe','female');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">Femme</div>
-                        <div class="pill ${p.sexe === 'other' ? 'sel' : ''}" onclick="${listFn}(${idx},'sexe','other');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">Autre</div>
+                        <div class="pill ${p.sexe === 'male' ? 'sel' : ''}" onclick="${updateFn}(${idx},'sexe','male');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">Homme</div>
+                        <div class="pill ${p.sexe === 'female' ? 'sel' : ''}" onclick="${updateFn}(${idx},'sexe','female');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">Femme</div>
+                        <div class="pill ${p.sexe === 'other' ? 'sel' : ''}" onclick="${updateFn}(${idx},'sexe','other');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">Autre</div>
                     </div>
                 </div>
                 <div class="field">
-                    <label>Date de naissance <span class="req">*</span></label>
-                    <input type="date" max="2010-12-31" value="${p.birth}" oninput="${listFn}(${idx},'birth',this.value);updateCardHeader('${type}',${idx})" />
+                    <label>Taille maillot</label>
+                    <div class="pills">
+                        ${['S', 'M', 'L', 'XL', 'XXL'].map(s => `<div class="pill ${p.jerseySize === s ? 'sel' : ''}" onclick="${updateFn}(${idx},'jerseySize','${s}');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">${s}</div>`).join('')}
+                    </div>
                 </div>
             </div>
-            <div class="field" style="margin-top:0.5rem;">
-                <label>Taille maillot</label>
-                <div class="pills">
-                    ${['S', 'M', 'L', 'XL', 'XXL'].map(s => `<div class="pill ${p.jerseySize === s ? 'sel' : ''}" onclick="${listFn}(${idx},'jerseySize','${s}');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">${s}</div>`).join('')}
-                </div>
-            </div>
+            ${contestFieldsHtml(type, idx, p)}
         </div>
     </div>`;
 }
@@ -485,131 +457,84 @@ function updateCardHeader(type, idx) {
     const p = list[idx];
     const card = document.getElementById(`${type}-card-${idx}`);
     if (!card) return;
-
     const isComplete = p.firstName && p.lastName && p.email && p.sexe && p.birth && p.jerseySize;
-
     card.querySelector('.status-icon').innerHTML = isComplete
         ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
         : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9A50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>`;
-
-    card.querySelector('.player-name').textContent = p.firstName || p.lastName
-        ? `${p.firstName} ${p.lastName}`.trim()
-        : `Joueur ${idx + 1}`;
+    card.querySelector('.player-name').textContent = p.firstName || p.lastName ? `${p.firstName} ${p.lastName}`.trim() : `Joueur ${idx + 1}`;
 }
 
-function removeTit(idx) {
-    joueurs.splice(idx, 1);
-    sauvegarderJoueurs();
-    renderTit();
+function togglePlayerContest(type, idx, field, clickedEl) {
+    const list = type === 'rem' ? remplacants : joueurs;
+    if (!list[idx]) return;
+    list[idx][field] = !list[idx][field];
+    const chk = clickedEl.querySelector('.chk-box');
+    if (chk) chk.classList.toggle('on', !!list[idx][field]);
+    saveAll();
 }
 
-function updateTit(idx, field, val) {
-    joueurs[idx][field] = val;
-    sauvegarderJoueurs();
-}
-function addRemplacant() {
-    if (remplacants.length >= 3) return;
-    const remplacant = {
-        id: remplacants.length + 1,
-        firstName: "",
-        lastName: "",
-        email: "",
-        statut: "remplacant",
-        birth: "",
-        sexe: "",
-        TeamName: capitaine.TeamName,
-        jerseySize: ""
-    };
-    remplacants.push(remplacant);
-    sauvegarderRemplacants();
-    renderRem();
-}
-
-function renderRem() {
-    document.getElementById('rem-list').innerHTML = remplacants.map((p, i) => playerCard(p, i, 'rem')).join('');
-    document.getElementById('rem-n').textContent = remplacants.length;
-    const addBtn = document.getElementById('add-rem-btn');
-    addBtn.style.display = remplacants.length >= 3 ? 'none' : 'flex';
-}
-
-function removeRem(idx) {
-    remplacants.splice(idx, 1);
-    sauvegarderRemplacants();
-    renderRem();
-}
-
-function updateRem(idx, field, val) {
-    remplacants[idx][field] = val;
-    sauvegarderRemplacants();
-}
-
-function sauvegarderRemplacants() {
-    localStorage.setItem("remplacants", JSON.stringify(remplacants));
-}
-
-function chargerRemplacants() {
-    const data = localStorage.getItem("remplacants");
-    if (!data) return;
-    const saved = JSON.parse(data);
-    remplacants.length = 0;
-    saved.forEach(r => remplacants.push(r));
-    renderRem();
-}
+function removeTit(idx) { joueurs.splice(idx, 1); saveAll(); renderTit(); }
+function updateTit(idx, field, val) { joueurs[idx][field] = val; saveAll(); }
+function removeRem(idx) { remplacants.splice(idx, 1); saveAll(); renderRem(); }
+function updateRem(idx, field, val) { remplacants[idx][field] = val; saveAll(); }
 
 function toggleRemSection() {
     const section = document.getElementById('replacements-section');
     const toggle = document.getElementById('rem-toggle');
-    const remCount = document.getElementById('rem-count');
-
     const isOpen = section.classList.contains('open');
     section.classList.toggle('open', !isOpen);
     toggle.classList.toggle('active', !isOpen);
-    remCount.style.display = isOpen ? 'none' : 'flex';
 }
 
-chargerRemplacants();
-
-chargerJoueurs();
 function buildSummary() {
     const lvlEl = document.getElementById('c-level');
     const level = lvlEl.options[lvlEl.selectedIndex]?.text || '—';
-    const total = (1 + joueurs.length + remplacants.length) * 20;
-
-    const initials = (p) => {
-        const f = p.firstName?.[0] || '';
-        const l = p.lastName?.[0] || '';
-        return (f + l).toUpperCase() || '?';
+    const initials = p => ((p.firstName?.[0] || '') + (p.lastName?.[0] || '')).toUpperCase() || '?';
+    const jerseyLabel = p => p.jerseySize ? ` · Maillot ${p.jerseySize}` : '';
+    const contestLabel = p => {
+        const tags = [];
+        if (p.contest3pts) tags.push(`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 3-pts`);
+        if (p.contestDunk) tags.push(`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/></svg> Dunk`);
+        return tags.length ? `<span class="contest-tag">${tags.join(' · ')}</span>` : '';
     };
 
-    const jerseyLabel = (p) => p.jerseySize ? ` · Maillot ${p.jerseySize}` : '';
+    let allPlayers, total, totalDetail, teamName;
 
-    const allPlayers = [
-        { obj: capitaine, role: 'cap', label: 'Capitaine' },
-        ...joueurs.map(p => ({ obj: p, role: 'tit', label: 'Titulaire' })),
-         ...remplacants.map(p => ({ obj: p, role: 'remp', label: 'Remplacant' }))
-    ];
+    if (mode === 'equipe') {
+        allPlayers = [
+            { obj: capitaine, role: 'cap', label: 'Capitaine' },
+            ...joueurs.map(p => ({ obj: p, role: 'tit', label: 'Titulaire' })),
+            ...remplacants.map(p => ({ obj: p, role: 'rem', label: 'Remplaçant' }))
+        ];
+        total = 100;
+        totalDetail = `Équipe forfait — prix fixe`;
+        teamName = capitaine.TeamName || '—';
+    } else {
+        allPlayers = [{ obj: capitaine, role: 'cap', label: 'Joueur Solo' }];
+        total = 20;
+        totalDetail = `Inscription individuelle`;
+        teamName = 'Inscription Solo';
+    }
 
     document.getElementById('summary').innerHTML = `
         <div class="team-hero">
             <div class="team-avatar">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="8" r="4"/>
-                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                    <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
                 </svg>
             </div>
             <div>
-                <div class="team-title">${capitaine.TeamName || '—'}</div>
+                <div class="team-title">${teamName}</div>
                 <div class="team-subtitle">Tournoi 5×5 · Juin 2026 · Plan-les-Ouates</div>
             </div>
         </div>
         <div class="meta-row">
             <div class="meta-chip"><strong>${level}</strong></div>
             <div class="meta-chip">Format <strong>5×5</strong></div>
-            <div class="meta-chip"><strong>${allPlayers.length}</strong> joueurs</div>
+            <div class="meta-chip"><strong>${allPlayers.length}</strong> joueur${allPlayers.length > 1 ? 's' : ''}</div>
+            <div class="meta-chip">Mode <strong>${mode === 'equipe' ? 'Équipe' : 'Solo'}</strong></div>
         </div>
-
         <hr>
-
         <div class="summary-players">
             ${allPlayers.map(({ obj: p, role, label }) => `
                 <div class="summary-player-row">
@@ -617,19 +542,20 @@ function buildSummary() {
                     <div class="player-info">
                         <div class="player-full-name">${(p.firstName + ' ' + p.lastName).trim() || '—'}</div>
                         <div class="player-role-badge ${role}">${label}${jerseyLabel(p)}</div>
+                        ${contestLabel(p)}
                     </div>
-                    <div class="player-price">20.–</div>
+                    ${mode === 'solo' ? `<div class="player-price">20.–</div>` : ''}
                 </div>
             `).join('')}
         </div>
     `;
 
-    document.getElementById('total-amt').innerHTML = `
-        <div class="total-box-left">
+    document.getElementById('total-box').innerHTML = `
+        <div class="total-left">
             <div class="total-label">Total à payer</div>
-            <div class="total-detail">${allPlayers.length} joueurs × 20.– CHF</div>
+            <div class="total-detail">${totalDetail}</div>
         </div>
-        <div class="total-box-right">
+        <div>
             <div class="total-amount">${total}.–</div>
             <div class="total-currency">CHF</div>
         </div>
@@ -642,48 +568,37 @@ function toggleCgu() {
 }
 
 function submitForm() {
-    if (!cguOn) {
-        showNotif("Veuillez accepter les conditions d'inscription", "error");
-        return;
-    }
-
+    if (!cguOn) return showNotif("Veuillez accepter les conditions d'inscription", 'error');
     const btn = document.querySelector('.stripe-btn');
     btn.disabled = true;
-    btn.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 6v6l4 2"/>
-        </svg>
-        Redirection vers Stripe…`;
-
-    setTimeout(() => {
-
-        showNotif('T broke mais azz ', 'success');
-    }, 5000)
-
-
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Redirection vers Stripe…`;
+    setTimeout(() => showNotif('Paiement en cours de configuration…', 'warning'), 2000);
 }
-function saveFormToLocalStorage() {
-    const pillGender = document.querySelector('#c-gender .pill.sel');
-    const pillJersey = document.querySelector('#c-jersey .pill.sel');
 
+function showNotif(msg, type) {
+    const t = document.getElementById('toast');
+    t.classList.remove('show', 'error', 'success', 'warning');
+    t.textContent = msg;
+    void t.offsetWidth;
+    t.classList.add('show', type);
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show', type), 4000);
+}
 
-    Object.assign(capitaine, {
-        firstName: document.getElementById('c-first')?.value || "",
-        lastName: document.getElementById('c-last')?.value || "",
-        email: document.getElementById('c-email')?.value || "",
-        phone: document.getElementById('c-phone')?.value || "",
-        birth: document.getElementById('c-birth')?.value || "",
-        sexe: pillGender?.dataset?.v || capitaine.sexe || null,
-        level: document.getElementById('c-level')?.value,
-        TeamName: document.getElementById('team-name')?.value.trim() || capitaine.TeamName || "",
-        jerseySize: pillJersey?.dataset?.v || capitaine.jerseySize || "",
-        statut: 'capitaine'
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('c-phone')?.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        v = v.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+        e.target.value = v.trim();
     });
 
-    console.log(capitaine)
+    document.querySelectorAll('#step1 input, #step2 input, #step2 select').forEach(el => {
+        el.addEventListener('input', saveAll);
+        el.addEventListener('change', saveAll);
+    });
 
-
-
-    localStorage.setItem("formUser", JSON.stringify(capitaine));
-}
+    const savedMode = loadAll();
+    if (savedMode === 'equipe' || savedMode === 'solo') {
+        chooseMode(savedMode);
+    }
+});
