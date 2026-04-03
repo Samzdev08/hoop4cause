@@ -111,7 +111,9 @@ footer {
 
 /* ===================== BUTTONS ===================== */
 .btn-primary {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: .95rem 2.8rem;
     background: var(--accent);
     color: #fff;
@@ -126,6 +128,7 @@ footer {
     border-radius: var(--radius-full);
     box-shadow: 0 6px 24px rgba(233, 30, 140, .4);
     transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    line-height: 1;
 }
 
 .btn-primary:hover {
@@ -135,7 +138,9 @@ footer {
 }
 
 .btn-ghost {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: .95rem 2.4rem;
     background: transparent;
     color: #fff;
@@ -148,6 +153,7 @@ footer {
     border: 2px solid rgba(255, 255, 255, .35);
     border-radius: var(--radius-full);
     transition: border-color var(--transition), background var(--transition);
+    line-height: 1;
 }
 
 .btn-ghost:hover {
@@ -156,7 +162,9 @@ footer {
 }
 
 .btn-ghost-dark {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: .95rem 2.4rem;
     background: var(--primary-dark);
     color: #fff;
@@ -169,6 +177,7 @@ footer {
     border: 2px solid rgba(45, 27, 105, .3);
     border-radius: var(--radius-full);
     transition: .4s;
+    line-height: 1;
 }
 
 .btn-ghost-dark:hover {
@@ -180,6 +189,7 @@ footer {
 .btn-disabled {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     background: rgba(255, 255, 255, .06);
     color: rgba(255, 255, 255, .35);
@@ -196,6 +206,7 @@ footer {
     border: 1px solid rgba(255, 255, 255, .12);
     position: relative;
     overflow: hidden;
+    line-height: 1;
 }
 
 /* Strikethrough shimmer effect */
@@ -213,8 +224,6 @@ footer {
     pointer-events: none;
 }
 
-/* On dark backgrounds (hero, join, nav) — default style above works well.
-   On light/lavender backgrounds (inscription, sticky), adjust contrast. */
 .inscription .btn-disabled,
 .contests .btn-disabled {
     background: rgba(45, 27, 105, .07);
@@ -233,7 +242,6 @@ footer {
     );
 }
 
-/* Sticky CTA disabled state */
 .sticky-cta .btn-disabled {
     background: #444;
     color: #888;
@@ -243,7 +251,6 @@ footer {
     font-size: 1rem;
 }
 
-/* Nav CTA disabled */
 .nav-cta.btn-disabled,
 .mob-cta.btn-disabled {
     background: rgba(255, 255, 255, .08);
@@ -258,17 +265,20 @@ footer {
 .open-date-badge {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: .4rem;
     background: rgba(233, 30, 140, .1);
     color: var(--accent);
     border: 1px solid rgba(233, 30, 140, .3);
     border-radius: var(--radius-full);
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: .85rem;
+    font-size: 1.05rem;
     font-weight: 700;
     letter-spacing: .08em;
     text-transform: uppercase;
-    padding: .45rem 1rem;
+    /* Same vertical padding as btn-ghost / btn-primary so heights match */
+    padding: .95rem 1.6rem;
+    line-height: 1;
     animation: badgePulse 3s ease-in-out infinite;
 }
 
@@ -276,10 +286,6 @@ footer {
     0%, 100% { box-shadow: 0 0 0 0 rgba(233, 30, 140, .15); }
     50%       { box-shadow: 0 0 0 6px rgba(233, 30, 140, 0); }
 }
-
-/* On dark backgrounds the badge looks great as-is.
-   On the inscription (light) section, keep same palette — it works there too. */
-
 
 /* ===================== LOADER ===================== */
 #loader {
@@ -581,6 +587,7 @@ footer {
     border-radius: var(--radius-full);
 }
 
+/* ===================== HERO ACTIONS ===================== */
 .hero-actions {
     display: flex;
     gap: 1rem;
@@ -590,6 +597,7 @@ footer {
     margin-top: .5rem;
 }
 
+/* ===================== HERO STATS ===================== */
 .hero-stats {
     position: relative;
     z-index: 2;
@@ -1684,12 +1692,18 @@ footer {
     }
 
     .open-date-badge {
-        font-size: .78rem;
+        font-size: .85rem;
+        padding: .8rem 1.2rem;
     }
 
     .insc-cta {
         flex-direction: column;
         align-items: center;
         text-align: center;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
     }
 }
