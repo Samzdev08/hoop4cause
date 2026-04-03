@@ -10,6 +10,37 @@
         href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,700&family=Barlow:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .btn-disabled {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #333;
+            color: #888;
+            padding: .75rem 1.6rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: .95rem;
+            cursor: not-allowed;
+            pointer-events: none;
+            text-decoration: none;
+            border: 1px solid #444;
+            letter-spacing: .03em;
+        }
+        .open-date-badge {
+            display: inline-block;
+            background: rgba(233,30,140,.12);
+            color: #E91E8C;
+            border: 1px solid rgba(233,30,140,.35);
+            border-radius: 4px;
+            font-size: .82rem;
+            font-weight: 600;
+            padding: .3rem .75rem;
+            margin-left: 8px;
+            vertical-align: middle;
+            letter-spacing: .04em;
+        }
+    </style>
 </head>
 
 <body>
@@ -32,7 +63,7 @@
                 <a href="#programme">Programme</a>
                 <a href="#inscription">Inscription</a>
             </div>
-            <a href="#inscription" class="nav-cta">S'inscrire — dès 20.-</a>
+            <span class="nav-cta btn-disabled">Inscriptions dès le 20 avril</span>
             <button class="nav-burger" id="burger" aria-label="Menu">
                 <span></span><span></span><span></span>
             </button>
@@ -42,7 +73,7 @@
             <a href="#format" class="mob-link">Format</a>
             <a href="#programme" class="mob-link">Programme</a>
             <a href="#inscription" class="mob-link">Inscription</a>
-            <a href="#inscription" class="mob-cta">S'inscrire — dès 20.-</a>
+            <span class="mob-cta btn-disabled">Inscriptions dès le 20 avril</span>
         </div>
     </nav>
 
@@ -81,8 +112,11 @@
                 </div>
             </div>
             <div class="hero-actions">
-                <a href="#inscription" class="btn-primary">S'inscrire maintenant</a>
-                <a href="#about" class="btn-ghost">En savoir plus</a>
+                <span class="btn-disabled">
+                    Inscriptions fermées pour l'instant
+                </span>
+                <span class="open-date-badge">🗓 Ouverture le 20 avril</span>
+                <a href="#about" class="btn-ghost" style="margin-top:.5rem">En savoir plus</a>
             </div>
         </div>
         <div class="hero-stats">
@@ -498,7 +532,8 @@
                 </div>
             </div>
             <div class="insc-cta reveal">
-                <a href="register.html" class="btn-primary">S'inscrire maintenant →</a>
+                <span class="btn-disabled">Inscriptions fermées pour l'instant</span>
+                <span class="open-date-badge">🗓 Ouverture le 20 avril 2026</span>
             </div>
         </div>
     </section>
@@ -536,7 +571,7 @@
             <h2 class="join-title reveal">Rejoignez le mouvement</h2>
             <p class="join-sub reveal">Inscription, bénévolat ou simple partage : chaque geste compte.</p>
             <div class="join-actions reveal" style="transition-delay:.2s">
-                <a href="register.html" class="btn-primary">S'inscrire — dès 20.-</a>
+                <span class="btn-disabled">Inscriptions dès le 20 avril</span>
                 <a href="https://www.instagram.com/h4ac_tournament/" target="_blank" class="btn-ghost-dark">Nous
                     suivre</a>
             </div>
@@ -572,13 +607,9 @@
 
     <!-- STICKY CTA -->
     <div class="sticky-cta" id="stickyCta">
-        <a href="#inscription" class="sticky-btn">
-            S'inscrire — dès 20.-
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-            </svg>
-        </a>
+        <span class="sticky-btn btn-disabled" style="pointer-events:none;opacity:.7">
+            Inscriptions dès le 20 avril
+        </span>
     </div>
 
     <script>

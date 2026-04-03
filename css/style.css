@@ -176,6 +176,110 @@ footer {
     box-shadow: 0 10px 32px rgba(233, 30, 140, .55);
 }
 
+/* ===================== DISABLED BUTTON ===================== */
+.btn-disabled {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, .06);
+    color: rgba(255, 255, 255, .35);
+    padding: .95rem 2.8rem;
+    border-radius: var(--radius-full);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, .12);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Strikethrough shimmer effect */
+.btn-disabled::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 6px,
+        rgba(255, 255, 255, .03) 6px,
+        rgba(255, 255, 255, .03) 12px
+    );
+    pointer-events: none;
+}
+
+/* On dark backgrounds (hero, join, nav) — default style above works well.
+   On light/lavender backgrounds (inscription, sticky), adjust contrast. */
+.inscription .btn-disabled,
+.contests .btn-disabled {
+    background: rgba(45, 27, 105, .07);
+    color: rgba(45, 27, 105, .35);
+    border-color: rgba(45, 27, 105, .15);
+}
+
+.inscription .btn-disabled::after,
+.contests .btn-disabled::after {
+    background: repeating-linear-gradient(
+        -55deg,
+        transparent,
+        transparent 6px,
+        rgba(45, 27, 105, .03) 6px,
+        rgba(45, 27, 105, .03) 12px
+    );
+}
+
+/* Sticky CTA disabled state */
+.sticky-cta .btn-disabled {
+    background: #444;
+    color: #888;
+    border-color: rgba(255, 255, 255, .1);
+    box-shadow: none;
+    padding: .8rem 1.75rem;
+    font-size: 1rem;
+}
+
+/* Nav CTA disabled */
+.nav-cta.btn-disabled,
+.mob-cta.btn-disabled {
+    background: rgba(255, 255, 255, .08);
+    color: rgba(255, 255, 255, .3);
+    border: 1px solid rgba(255, 255, 255, .15);
+    padding: .55rem 1.5rem;
+    font-size: .95rem;
+    border-radius: var(--radius-full);
+}
+
+/* ===================== OPEN DATE BADGE ===================== */
+.open-date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    background: rgba(233, 30, 140, .1);
+    color: var(--accent);
+    border: 1px solid rgba(233, 30, 140, .3);
+    border-radius: var(--radius-full);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .45rem 1rem;
+    animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(233, 30, 140, .15); }
+    50%       { box-shadow: 0 0 0 6px rgba(233, 30, 140, 0); }
+}
+
+/* On dark backgrounds the badge looks great as-is.
+   On the inscription (light) section, keep same palette — it works there too. */
+
 
 /* ===================== LOADER ===================== */
 #loader {
@@ -213,25 +317,13 @@ footer {
 }
 
 @keyframes loaderProgress {
-    0% {
-        width: 0
-    }
-
-    100% {
-        width: 100%
-    }
+    0% { width: 0 }
+    100% { width: 100% }
 }
 
 @keyframes loaderPulse {
-
-    0%,
-    100% {
-        opacity: 1
-    }
-
-    50% {
-        opacity: .6
-    }
+    0%, 100% { opacity: 1 }
+    50%       { opacity: .6 }
 }
 
 #loader.hidden {
@@ -381,7 +473,6 @@ footer {
     color: #fff;
 }
 
-
 .mob-cta {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 1rem;
@@ -495,6 +586,7 @@ footer {
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     margin-top: .5rem;
 }
 
@@ -546,7 +638,6 @@ footer {
     position: relative;
     z-index: 2;
     display: none;
-    /* hidden on mobile */
     color: rgba(255, 255, 255, .4);
     font-size: 1.5rem;
     animation: bounce 2.5s ease-in-out infinite;
@@ -773,7 +864,7 @@ footer {
     border-bottom: 1px solid rgba(45, 27, 105, .07);
 }
 
-.ccard-head>div {
+.ccard-head > div {
     display: flex;
     flex-direction: column;
     gap: .25rem;
@@ -1106,6 +1197,24 @@ footer {
     animation: pulse 3s ease-in-out infinite;
 }
 
+.warning-text {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.warning-prices {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    color: #FF3B30;
+}
+
+.warning-dot {
+    opacity: .5;
+}
+
 .insc-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1159,6 +1268,11 @@ footer {
 
 .insc-cta {
     margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 /* ===================== SOCIAL ===================== */
@@ -1278,6 +1392,7 @@ footer {
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     margin-top: .5rem;
 }
 
@@ -1397,39 +1512,18 @@ footer {
 
 /* ===================== ANIMATIONS ===================== */
 @keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0)
-    }
-
-    50% {
-        transform: translateY(-10px)
-    }
+    0%, 100% { transform: translateY(0) }
+    50%       { transform: translateY(-10px) }
 }
 
 @keyframes glow {
-
-    0%,
-    100% {
-        box-shadow: 0 6px 24px rgba(233, 30, 140, .4)
-    }
-
-    50% {
-        box-shadow: 0 10px 40px rgba(233, 30, 140, .75)
-    }
+    0%, 100% { box-shadow: 0 6px 24px rgba(233, 30, 140, .4) }
+    50%       { box-shadow: 0 10px 40px rgba(233, 30, 140, .75) }
 }
 
 @keyframes pulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 59, 48, .2)
-    }
-
-    50% {
-        box-shadow: 0 0 0 6px rgba(255, 59, 48, .05)
-    }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, .2) }
+    50%       { box-shadow: 0 0 0 6px rgba(255, 59, 48, .05) }
 }
 
 /* ===================== REVEAL ===================== */
@@ -1566,8 +1660,7 @@ footer {
         font-size: 1.8rem;
         width: 38px;
     }
-}
-@media (max-width: 600px) {
+
     .warning {
         flex-direction: column;
         align-items: center;
@@ -1583,5 +1676,20 @@ footer {
         width: 22px;
         height: 22px;
         flex-shrink: 0;
+    }
+
+    .btn-disabled {
+        padding: .8rem 1.8rem;
+        font-size: .95rem;
+    }
+
+    .open-date-badge {
+        font-size: .78rem;
+    }
+
+    .insc-cta {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
 }
