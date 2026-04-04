@@ -1187,40 +1187,80 @@ footer {
     border-color: rgba(233, 30, 140, .25);
 }
 
+
 .warning {
     display: flex;
     align-items: center;
-    gap: .6rem;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: .95rem;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: #FF3B30;
-    background: rgba(255, 59, 48, .1);
-    border: 1px solid rgba(255, 59, 48, .3);
-    padding: .75rem 1.5rem;
-    border-radius: var(--radius-full);
-    margin-bottom: 3rem;
+    gap: 1rem;
+    background: rgba(255, 59, 48, .07);
+    border: 1.5px solid rgba(255, 59, 48, .3);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.5rem;
+    margin: 0 auto 3rem;
+    width: fit-content;       /* ← remplace width: 100% */
+    max-width: 560px;
+    align-self: center;       /* ← ajout */
     animation: pulse 3s ease-in-out infinite;
 }
 
-.warning-text {
+.warning-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 10px;
+    background: rgba(255, 59, 48, .12);
     display: flex;
     align-items: center;
-    gap: .75rem;
-    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.warning-body {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.warning-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: #FF3B30;
+    line-height: 1.2;
+    white-space: nowrap;      /* ← garde le titre sur une ligne */
 }
 
 .warning-prices {
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    color: #FF3B30;
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
 }
 
-.warning-dot {
-    opacity: .5;
+.wprice {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #FF3B30;
+    background: rgba(255, 59, 48, .1);
+    border: 1px solid rgba(255, 59, 48, .25);
+    border-radius: var(--radius-full);
+    padding: .3rem .85rem;
+}
+
+@media (max-width: 600px) {
+    .warning {
+        width: calc(100% - 2rem); /* pleine largeur sur mobile */
+        white-space: normal;
+    }
+    .warning-title {
+        white-space: normal;
+    }
 }
 
 .insc-grid {
