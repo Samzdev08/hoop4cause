@@ -5,6 +5,21 @@ const { createClient } = require("@supabase/supabase-js");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 
+const app = express();
+
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type"]
+}));
+
+app.use(express.json());
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -12,16 +27,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// Supabase (clé privée côté serveur)
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 app.post("/api/waitlist", async (req, res) => {
   const { email, website } = req.body;
@@ -36,7 +41,6 @@ app.post("/api/waitlist", async (req, res) => {
       return res.json({ success: false, message: "Email invalide" });
     }
 
-    // 🔍 CHECK SI EMAIL EXISTE DÉJÀ
     const { data: existing } = await supabase
       .from("waitlist")
       .select("email")
@@ -44,50 +48,31 @@ app.post("/api/waitlist", async (req, res) => {
       .maybeSingle();
 
     if (existing) {
-      return res.json({
-        success: true,
-        message: "Déjà inscrit 🔥"
-      });
-      
+      return res.json({ success: true, message: "Déjà inscrit 🔥" });
     }
 
-    // 🔥 INSERT
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("waitlist")
-      .insert([{ email }])
-      .select();
+      .insert([{ email }]);
 
     if (error) {
-      console.log("SUPABASE ERROR:", error);
-
-      return res.json({
-        success: false,
-        message: "Erreur serveur"
-      });
+      return res.json({ success: false, message: "Erreur serveur" });
     }
 
-    // 📧 EMAIL
     await transporter.sendMail({
       from: `"Hoop4Cause" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "🔥 Bienvenue",
-      html: `<p>Tu es inscrit 🔥</p>`
+      subject: "🔥 Bienvenue sur Hoop4Cause",
+      html: `<p>Tu es bien inscrit 🔥</p>`
     });
 
-    return res.json({
-      success: true,
-      message: "Inscrit 🔥"
-    });
+    return res.json({ success: true, message: "Inscrit 🔥" });
 
   } catch (err) {
-    return res.json({
-      success: false,
-      message: "Erreur serveur"
-    });
+    return res.json({ success: false, message: "Erreur serveur" });
   }
 });
 
-// lancer serveur
-app.listen(process.env.PORT, () => {
-  console.log(`🔥 Server running on port ${process.env.PORT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`🔥 Server running`);
 });
