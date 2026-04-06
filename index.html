@@ -51,7 +51,19 @@
     <header id="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <div class="hero-badge hero-enter" style="--d:.1s">Tournoi 5×5 · Genève · Juin 2026</div>
+            <div class="hero-badge hero-enter" style="--d:.1s">
+                <span>Tournoi 5×5</span>
+                <span class="badge-sep">·</span>
+                <span>21 Juin 2026</span>
+                <span class="badge-sep">|</span>
+                <span class="badge-loc">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Chem. Le-Sapay 10, Plan-les-Ouates
+                </span>
+            </div>
             <h1 class="hero-title hero-enter" style="--d:.3s">HOOP 4<br><em>A CAUSE</em></h1>
             <p class="hero-sub hero-enter" style="--d:.55s">Basketball intense, compétition saine, bonne ambiance.<br>Tous les bénéfices reversés à l'Association d'aide aux paraplégiques d'Afrique.</p>
             <div class="hero-actions hero-enter" style="--d:.75s">
@@ -76,6 +88,11 @@
             <div class="hstat">
                 <div class="hstat-num">100.-</div>
                 <div class="hstat-label">CHF par équipe</div>
+            </div>
+            <div class="hstat-sep"></div>
+            <div class="hstat">
+                <div class="hstat-num">21 Juin</div>
+                <div class="hstat-label">Date de l'événement</div>
             </div>
             <div class="hstat-sep"></div>
             <div class="hstat">
@@ -128,6 +145,7 @@
                 </div>
             </div>
             <div class="about-visual reveal-right">
+                <!-- ac1 : pleine largeur -->
                 <div class="about-card ac1">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5">
                         <circle cx="12" cy="12" r="10" />
@@ -139,12 +157,14 @@
                     </svg>
                     <span>5×5 Full Court</span>
                 </div>
+                <!-- ac2 -->
                 <div class="about-card ac2">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5">
                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                     </svg>
                     <span>Dunk Contest</span>
                 </div>
+                <!-- ac3 -->
                 <div class="about-card ac3">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5">
                         <circle cx="12" cy="12" r="10" />
@@ -153,6 +173,7 @@
                     </svg>
                     <span>3PTS Contest</span>
                 </div>
+                <!-- ac4 -->
                 <div class="about-card ac4">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5">
                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
@@ -163,6 +184,16 @@
                         <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" />
                     </svg>
                     <span>1000.- Prize</span>
+                </div>
+                <!-- ac5 : 5e carte, comble le trou -->
+                <div class="about-card ac5">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="1.5">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>90 Participants</span>
                 </div>
             </div>
         </div>
@@ -546,9 +577,10 @@
                 <a href="#inscription" class="footer-link">Inscription</a>
             </div>
             <div class="footer-col">
-                <div class="footer-heading">Contact</div>
+                <div class="footer-heading">Contact & Lieu</div>
                 <a href="https://www.instagram.com/h4ac_tournament/" target="_blank" class="footer-link">Instagram</a>
-                <p class="footer-link" style="cursor:default">Chem. Le-Sapay 10, 1228 Plan-les-Ouates</p>
+                <p class="footer-link" style="cursor:default">📅 21 Juin 2026</p>
+                <p class="footer-link" style="cursor:default">📍 Chem. Le-Sapay 10, 1228 Plan-les-Ouates</p>
             </div>
         </div>
         <div class="footer-copy">© 2026 Hoop 4 A Cause. Tous droits réservés. — Un projet de maturité gymnasiale de Noah
@@ -610,46 +642,30 @@
             for (const pct in scrollMilestones) {
                 if (!scrollMilestones[pct] && scrolled >= pct) {
                     scrollMilestones[pct] = true;
-                    gtag('event', 'scroll_depth', {
-                        event_category: 'engagement',
-                        event_label: pct + '%',
-                        value: parseInt(pct)
-                    });
+                    gtag('event', 'scroll_depth', { event_category: 'engagement', event_label: pct + '%', value: parseInt(pct) });
                 }
             }
         }, { passive: true });
 
         setTimeout(() => {
-            gtag('event', 'time_on_page', {
-                event_category: 'engagement',
-                event_label: '15_secondes'
-            });
+            gtag('event', 'time_on_page', { event_category: 'engagement', event_label: '15_secondes' });
         }, 15000);
 
         document.querySelectorAll('a[href*="instagram.com"]').forEach(link => {
             link.addEventListener('click', () => {
-                gtag('event', 'click_instagram', {
-                    event_category: 'social',
-                    event_label: link.href
-                });
+                gtag('event', 'click_instagram', { event_category: 'social', event_label: link.href });
             });
         });
 
         document.querySelectorAll('.btn-disabled').forEach(btn => {
             btn.addEventListener('click', () => {
-                gtag('event', 'intention_inscription', {
-                    event_category: 'conversion',
-                    event_label: 'bouton_desactive_clique'
-                });
+                gtag('event', 'intention_inscription', { event_category: 'conversion', event_label: 'bouton_desactive_clique' });
             });
         });
 
         document.querySelectorAll('a[href^="#"]').forEach(a => {
             a.addEventListener('click', () => {
-                gtag('event', 'nav_click', {
-                    event_category: 'navigation',
-                    event_label: a.getAttribute('href')
-                });
+                gtag('event', 'nav_click', { event_category: 'navigation', event_label: a.getAttribute('href') });
             });
         });
     </script>

@@ -286,12 +286,18 @@ footer {
 }
 
 /* ===================== NAVBAR ===================== */
+@keyframes navSlideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+}
+
 #navbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    animation: navSlideDown .7s cubic-bezier(.22, .61, .36, 1) forwards;
     transition: background var(--transition), box-shadow var(--transition);
 }
 
@@ -319,6 +325,11 @@ footer {
     color: #fff;
     text-decoration: none;
     flex-shrink: 0;
+    transition: opacity .2s;
+}
+
+.nav-logo:hover {
+    opacity: .85;
 }
 
 .nav-logo span {
@@ -339,10 +350,28 @@ footer {
     text-decoration: none;
     letter-spacing: .04em;
     transition: color var(--transition);
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width .3s ease;
 }
 
 .nav-links a:hover {
     color: #fff;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
 }
 
 .nav-cta {
@@ -420,10 +449,12 @@ footer {
     text-transform: uppercase;
     color: rgba(255, 255, 255, .8);
     text-decoration: none;
+    transition: color .2s, transform .2s;
 }
 
 .mob-link:hover {
     color: #fff;
+    transform: translateX(4px);
 }
 
 .mob-cta {
@@ -440,6 +471,14 @@ footer {
 }
 
 /* ===================== HERO ===================== */
+@keyframes heroBgDrift {
+    0%   { background-position: 50% 50%; background-size: 100%; }
+    25%  { background-position: 52% 48%; background-size: 106%; }
+    50%  { background-position: 48% 54%; background-size: 108%; }
+    75%  { background-position: 53% 47%; background-size: 105%; }
+    100% { background-position: 50% 50%; background-size: 100%; }
+}
+
 #hero {
     position: relative;
     width: 100%;
@@ -450,6 +489,7 @@ footer {
     align-items: center;
     justify-content: center;
     padding-top: 80px;
+    animation: heroBgDrift 20s ease-in-out infinite;
 }
 
 .hero-overlay {
@@ -481,8 +521,25 @@ footer {
     color: var(--accent);
     background: rgba(233, 30, 140, .12);
     border: 1px solid rgba(233, 30, 140, .4);
-    padding: .4rem 1.2rem;
+    padding: .5rem 1.4rem;
     border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hero-badge .badge-sep {
+    opacity: .4;
+    font-weight: 300;
+}
+
+.hero-badge .badge-loc {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    opacity: .85;
 }
 
 .hero-title {
@@ -565,7 +622,6 @@ footer {
 }
 
 /* ===================== HERO REVEAL ANIMATIONS ===================== */
-/* Au chargement de la page — pas au scroll, c'est above the fold */
 @keyframes heroFadeUp {
     from {
         opacity: 0;
@@ -645,6 +701,7 @@ footer {
     line-height: 1.6;
 }
 
+/* ===================== ABOUT VISUAL — 5 CARDS GRID ===================== */
 .about-visual {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -679,6 +736,7 @@ footer {
     text-align: center;
 }
 
+/* ac1 : pleine largeur en haut */
 .ac1 {
     grid-column: span 2;
     flex-direction: row;
@@ -689,6 +747,16 @@ footer {
 .ac1 span {
     font-size: 1rem;
 }
+
+/* ac2 & ac3 : 2e ligne (1 colonne chacune) — naturel */
+
+/* ac4 & ac5 : 3e ligne, centrées ensemble */
+.ac4,
+.ac5 {
+    grid-column: span 1;
+}
+
+/* Astuce pour centrer la 4e et 5e rangée si elles sont les 2 dernières */
 
 /* ===================== FORMAT ===================== */
 .format {
@@ -1670,5 +1738,11 @@ footer {
     .hero-actions {
         flex-direction: column;
         align-items: center;
+    }
+
+    .hero-badge {
+        font-size: .75rem;
+        padding: .45rem 1rem;
+        gap: .3rem;
     }
 }
