@@ -209,7 +209,6 @@ footer {
     line-height: 1;
 }
 
-/* Strikethrough shimmer effect */
 .btn-disabled::after {
     content: '';
     position: absolute;
@@ -276,7 +275,6 @@ footer {
     font-weight: 700;
     letter-spacing: .08em;
     text-transform: uppercase;
-    /* Same vertical padding as btn-ghost / btn-primary so heights match */
     padding: .95rem 1.6rem;
     line-height: 1;
     animation: badgePulse 3s ease-in-out infinite;
@@ -285,57 +283,6 @@ footer {
 @keyframes badgePulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(233, 30, 140, .15); }
     50%       { box-shadow: 0 0 0 6px rgba(233, 30, 140, 0); }
-}
-
-/* ===================== LOADER ===================== */
-#loader {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    background: var(--accent);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    transition: opacity .8s ease, visibility .8s ease;
-}
-
-#loader img {
-    width: 110px;
-    animation: loaderPulse 1.5s ease-in-out infinite;
-}
-
-.loader-bar {
-    width: 200px;
-    height: 3px;
-    background: rgba(255, 255, 255, .25);
-    border-radius: 99px;
-    overflow: hidden;
-}
-
-.loader-fill {
-    height: 100%;
-    width: 0;
-    background: #2D1B69;
-    border-radius: 99px;
-    animation: loaderProgress 2.5s ease forwards;
-}
-
-@keyframes loaderProgress {
-    0% { width: 0 }
-    100% { width: 100% }
-}
-
-@keyframes loaderPulse {
-    0%, 100% { opacity: 1 }
-    50%       { opacity: .6 }
-}
-
-#loader.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
 }
 
 /* ===================== NAVBAR ===================== */
@@ -519,15 +466,10 @@ footer {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 1.2rem;
+    gap: 1.4rem;
     padding: 2rem 1.5rem;
     flex: 1;
     justify-content: center;
-}
-
-.hero-logo {
-    width: 80px;
-    margin-bottom: .5rem;
 }
 
 .hero-badge {
@@ -561,30 +503,10 @@ footer {
 }
 
 .hero-sub {
-    font-size: clamp(.9rem, 2.2vw, 1.1rem);
-    color: rgba(255, 255, 255, .75);
-    line-height: 1.6;
-    max-width: 520px;
-}
-
-.hero-pills {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: .75rem;
-    margin-top: .5rem;
-}
-
-.pill {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    font-size: .85rem;
-    color: rgba(255, 255, 255, .85);
-    background: rgba(255, 255, 255, .08);
-    border: 1px solid rgba(255, 255, 255, .15);
-    padding: .5rem 1.1rem;
-    border-radius: var(--radius-full);
+    font-size: clamp(.9rem, 2.2vw, 1.05rem);
+    color: rgba(255, 255, 255, .65);
+    line-height: 1.65;
+    max-width: 460px;
 }
 
 /* ===================== HERO ACTIONS ===================== */
@@ -594,7 +516,7 @@ footer {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin-top: .5rem;
+    margin-top: .25rem;
 }
 
 /* ===================== HERO STATS ===================== */
@@ -642,14 +564,23 @@ footer {
     background: rgba(255, 255, 255, .12);
 }
 
-.hero-scroll {
-    position: relative;
-    z-index: 2;
-    display: none;
-    color: rgba(255, 255, 255, .4);
-    font-size: 1.5rem;
-    animation: bounce 2.5s ease-in-out infinite;
-    padding-bottom: 1rem;
+/* ===================== HERO REVEAL ANIMATIONS ===================== */
+/* Au chargement de la page — pas au scroll, c'est above the fold */
+@keyframes heroFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-enter {
+    opacity: 0;
+    animation: heroFadeUp .7s cubic-bezier(.22, .61, .36, 1) forwards;
+    animation-delay: var(--d, 0s);
 }
 
 /* ===================== ABOUT ===================== */
@@ -1187,7 +1118,6 @@ footer {
     border-color: rgba(233, 30, 140, .25);
 }
 
-
 .warning {
     display: flex;
     align-items: center;
@@ -1197,9 +1127,9 @@ footer {
     border-radius: var(--radius);
     padding: 1.1rem 1.5rem;
     margin: 0 auto 3rem;
-    width: fit-content;       /* ← remplace width: 100% */
+    width: fit-content;
     max-width: 560px;
-    align-self: center;       /* ← ajout */
+    align-self: center;
     animation: pulse 3s ease-in-out infinite;
 }
 
@@ -1228,7 +1158,7 @@ footer {
     text-transform: uppercase;
     color: #FF3B30;
     line-height: 1.2;
-    white-space: nowrap;      /* ← garde le titre sur une ligne */
+    white-space: nowrap;
 }
 
 .warning-prices {
@@ -1251,16 +1181,6 @@ footer {
     border: 1px solid rgba(255, 59, 48, .25);
     border-radius: var(--radius-full);
     padding: .3rem .85rem;
-}
-
-@media (max-width: 600px) {
-    .warning {
-        width: calc(100% - 2rem); /* pleine largeur sur mobile */
-        white-space: normal;
-    }
-    .warning-title {
-        white-space: normal;
-    }
 }
 
 .insc-grid {
@@ -1574,7 +1494,7 @@ footer {
     50%       { box-shadow: 0 0 0 6px rgba(255, 59, 48, .05) }
 }
 
-/* ===================== REVEAL ===================== */
+/* ===================== REVEAL (scroll-based — sections) ===================== */
 .reveal {
     opacity: 0;
     transform: translateY(32px);
@@ -1718,6 +1638,11 @@ footer {
         gap: .75rem;
         font-size: .82rem;
         line-height: 1.5;
+        width: calc(100% - 2rem);
+    }
+
+    .warning-title {
+        white-space: normal;
     }
 
     .warning svg {
