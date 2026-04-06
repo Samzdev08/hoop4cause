@@ -3,24 +3,26 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://samzdev08.github.io/hoop4cause",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "gh-pages -d public"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samzdev08/hoop4cause.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.101.0",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "resend": "^6.10.0",
-    "stripe": "^21.0.1",
-    "zod": "^4.3.6"
+  "bugs": {
+    "url": "https://github.com/Samzdev08/hoop4cause/issues"
   },
-  "devDependencies": {
-    "gh-pages": "^6.3.0"
+  "homepage": "https://github.com/Samzdev08/hoop4cause#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.101.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "nodemailer": "^8.0.4"
   }
 }
