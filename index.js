@@ -82,7 +82,7 @@ app.post("/api/waitlist", async (req, res) => {
             <meta name="color-scheme" content="dark">
             <meta name="supported-color-schemes" content="dark">
 
-            <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#1A0A3D;padding:2rem;border-radius:16px;color:#ffffff;">
+            <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#1A0A3D !important;padding:2rem;border-radius:16px;color:#ffffff;">
             
             <h2 style="color:#E91E8C;font-family:Arial,sans-serif;margin:0 0 .5rem">HOOP 4 A CAUSE 🏀</h2>
             
