@@ -37,6 +37,9 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS,
     }
 });
+app.get("/api/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 app.post("/api/waitlist", async (req, res) => {
     const { email, website } = req.body;
