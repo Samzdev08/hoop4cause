@@ -1,0 +1,189 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    color-scheme: dark;
+    --accent: #E91E8C;
+    --accent-hover: #C4177A;
+    --primary-dark: #1A0A3D;
+    --primary: #2D1B69;
+    --shadow-btn: 0 4px 15px rgba(233, 30, 140, 0.4);
+    --radius-full: 999px;
+}
+
+body {
+    font-family: 'Barlow', Arial, sans-serif;
+    background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 60%, #3a1f80 100%);
+    min-height: 100vh;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    background: rgba(233, 30, 140, .15);
+    border: 1px solid rgba(233, 30, 140, .3);
+    color: var(--accent);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    padding: .38rem 1rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 1.4rem;
+}
+
+.pill-badge svg {
+    flex-shrink: 0;
+}
+
+h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: .02em;
+    margin-bottom: .6rem;
+}
+
+h1 em {
+    color: var(--accent);
+    font-style: normal;
+}
+
+.sub {
+    font-size: .88rem;
+    color: rgba(255, 255, 255, .5);
+    line-height: 1.55;
+    margin-bottom: 2rem;
+}
+
+.input-row {
+    display: flex;
+    gap: .6rem;
+    margin-bottom: 1rem;
+}
+
+.input-row input[type="email"] {
+    flex: 1;
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 12px;
+    padding: .75rem 1rem;
+    color: #fff;
+    font-size: .9rem;
+    font-family: 'Barlow', sans-serif;
+    outline: none;
+    transition: border-color .2s, background .2s;
+    min-width: 0;
+}
+
+.input-row input[type="email"]::placeholder {
+    color: rgba(255, 255, 255, .28);
+}
+
+.input-row input[type="email"]:focus {
+    border-color: var(--accent);
+    background: rgba(233, 30, 140, .08);
+}
+
+.btn-submit {
+    flex-shrink: 0;
+    padding: .75rem 1.25rem;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    box-shadow: var(--shadow-btn);
+    white-space: nowrap;
+}
+
+.btn-submit:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+.btn-submit:active {
+    transform: scale(.97);
+}
+
+.btn-submit:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#msg {
+    font-size: .82rem;
+    min-height: 1.2em;
+    transition: color .2s;
+}
+
+#msg.success {
+    color: #7CFFD4;
+}
+
+#msg.error {
+    color: #FF9A94;
+}
+
+.note {
+    margin-top: 1.5rem;
+    font-size: .72rem;
+    color: rgba(255, 255, 255, .28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+/* ===================== REVEAL ===================== */
+.card { opacity: 0; transform: translateY(32px); animation: revealCard .7s cubic-bezier(.22,.61,.36,1) .1s forwards; }
+.pill-badge { opacity: 0; transform: translateY(16px); animation: revealCard .6s cubic-bezier(.22,.61,.36,1) .2s forwards; }
+h1 { opacity: 0; transform: translateY(16px); animation: revealCard .6s cubic-bezier(.22,.61,.36,1) .35s forwards; }
+.sub { opacity: 0; transform: translateY(16px); animation: revealCard .6s cubic-bezier(.22,.61,.36,1) .45s forwards; }
+.input-row { opacity: 0; transform: translateY(16px); animation: revealCard .6s cubic-bezier(.22,.61,.36,1) .55s forwards; }
+.note { opacity: 0; animation: revealCard .6s ease .7s forwards; }
+
+@keyframes revealCard {
+    to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 420px) {
+    .input-row {
+        flex-direction: column;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: .85rem;
+    }
+}

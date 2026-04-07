@@ -34,6 +34,52 @@ body {
     --transition: .25s ease;
     --container: 1100px;
 }
+/* ===================== BTN WAITLIST ===================== */
+.btn-waitlist {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .95rem 2rem;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1.5px solid var(--accent);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    line-height: 1;
+    box-shadow: 0 4px 18px rgba(233, 30, 140, .4);
+    animation: glow 3s ease-in-out infinite;
+    transition: background var(--transition),
+                transform var(--transition),
+                box-shadow var(--transition);
+}
+
+.btn-waitlist:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 32px rgba(233, 30, 140, .6);
+}
+
+/* Variante nav */
+.nav-cta.btn-waitlist {
+    padding: .55rem 1.5rem;
+    font-size: .95rem;
+    animation: none;
+    box-shadow: none;
+}
+
+/* Variante sticky */
+.sticky-btn.btn-waitlist {
+    padding: .8rem 1.75rem;
+    font-size: 1rem;
+}
 
 /* ===================== USER-SELECT NONE ===================== */
 header, nav, .about, .format, .contests,
