@@ -67,13 +67,6 @@ body {
     box-shadow: 0 10px 32px rgba(233, 30, 140, .6);
 }
 
-/* Variante nav */
-.nav-cta.btn-waitlist {
-    padding: .55rem 1.5rem;
-    font-size: .95rem;
-    animation: none;
-    box-shadow: none;
-}
 
 /* Variante sticky */
 .sticky-btn.btn-waitlist {
