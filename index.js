@@ -124,7 +124,7 @@ app.post("/api/waitlist", async (req, res) => {
         }).then(() => {
             console.log("Email envoyé :", email);
         }).catch((err) => {
-            console.error("Email error :", err.message);
+            console.error("Email error :", err);
         });
 
     } catch (err) {
