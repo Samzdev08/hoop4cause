@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const { createClient } = require("@supabase/supabase-js");
 const cors = require("cors");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
@@ -30,15 +30,10 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 app.get("/api/health", (req, res) => {
-  res.status(200).send("OK");
+    res.status(200).send("OK");
 });
 
 app.post("/api/waitlist", async (req, res) => {
@@ -64,23 +59,21 @@ app.post("/api/waitlist", async (req, res) => {
             return res.json({ success: true, message: "Déjà inscrit 🔥" });
         }
 
-        const { error } = await supabase
+        const { error: dbError } = await supabase
             .from("waitlist")
             .insert([{ email }]);
 
-        if (error) {
+        if (dbError) {
+            console.error("[DB] ❌ Erreur insertion :", dbError.message);
             return res.json({ success: false, message: "Erreur serveur." });
         }
 
-        console.log("Nouvel inscrit :", email);
+        console.log(`[WAITLIST] Nouvel inscrit : ${email}`);
 
-        res.json({ success: true, message: "Inscrit 🔥 Check tes emails !" });
-
-        transporter.sendMail({
-            from: `"Hoop 4 A Cause" <${process.env.EMAIL_USER}>`,
+        const { error: emailError } = await resend.emails.send({
+            from: "Hoop 4 A Cause <onboarding@resend.dev>",
             to: email,
             subject: "🏀 Tu es sur la liste — Hoop 4 A Cause",
-
             html: `
             <meta name="color-scheme" content="dark">
             <meta name="supported-color-schemes" content="dark">
@@ -123,13 +116,18 @@ app.post("/api/waitlist", async (req, res) => {
 
             </div>
             `
-        }).then(() => {
-            console.log("Email envoyé :", email);
-        }).catch((err) => {
-            console.error("Email error :", err.message);
         });
 
+        if (emailError) {
+            console.error(`[EMAIL] ❌ Échec pour ${email} :`, emailError.message);
+            return res.json({ success: true, message: "Inscrit ✓ mais email non envoyé, réessaie." });
+        }
+
+        console.log(`[EMAIL] ✅ Envoyé à ${email}`);
+        return res.json({ success: true, message: "Inscrit 🔥 Check tes emails !" });
+
     } catch (err) {
+        console.error("[SERVER] ❌ Erreur inattendue :", err.message);
         return res.json({ success: false, message: "Erreur serveur." });
     }
 });
