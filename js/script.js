@@ -102,7 +102,7 @@ function chooseMode(m) {
     } else {
         badge.innerHTML = `<div class="mode-badge solo">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Mode Solo — 20.– CHF
+            Mode Solo — 15.– CHF
         </div>`;
         document.getElementById('step1-label').textContent = 'Vos informations';
         document.getElementById('team-name-section').style.display = 'none';
@@ -511,7 +511,7 @@ function buildSummary() {
         teamName = capitaine.TeamName || '—';
     } else {
         allPlayers = [{ obj: capitaine, role: 'cap', label: 'Joueur Solo' }];
-        total = 20;
+        total = 15;
         totalDetail = `Inscription individuelle`;
         teamName = 'Inscription Solo';
     }
@@ -567,14 +567,39 @@ function toggleCgu() {
     document.getElementById('cgu-chk').classList.toggle('on', cguOn);
 }
 
-function submitForm() {
+async function submitForm() {
     if (!cguOn) return showNotif("Veuillez accepter les conditions d'inscription", 'error');
+
     const btn = document.querySelector('.stripe-btn');
     btn.disabled = true;
     btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Redirection vers Stripe…`;
-    setTimeout(() => showNotif('Paiement en cours de configuration…', 'warning'), 2000);
-}
 
+    try {
+        const res = await fetch('http://localhost:3001/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode, capitaine, joueurs, remplacants }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            showNotif(data.error || "Erreur lors de l'inscription", 'error');
+            btn.disabled = false;
+            btn.innerHTML = 'Payer maintenant';
+            return;
+        }
+
+        
+        window.location.href = data.checkoutUrl;
+
+    } catch (err) {
+        console.error('Erreur réseau:', err);
+        showNotif('Impossible de contacter le serveur', 'error');
+        btn.disabled = false;
+        btn.innerHTML = 'Payer maintenant';
+    }
+}
 function showNotif(msg, type) {
     const t = document.getElementById('toast');
     t.classList.remove('show', 'error', 'success', 'warning');
