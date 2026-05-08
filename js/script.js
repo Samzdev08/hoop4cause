@@ -3,6 +3,7 @@ let capitaine = {};
 const joueurs = [];
 const remplacants = [];
 let cguOn = false;
+let selectedPayment = null; // 'twint' | 'iban'
 
 const STEPS_EQUIPE = [
     { label: 'Capitaine' },
@@ -29,23 +30,11 @@ function loadAll() {
         const savedCap = localStorage.getItem('h4ac_capitaine');
         const savedJoueurs = localStorage.getItem('h4ac_joueurs');
         const savedRem = localStorage.getItem('h4ac_remplacants');
-
         if (savedCap) Object.assign(capitaine, JSON.parse(savedCap));
-        if (savedJoueurs) {
-            const arr = JSON.parse(savedJoueurs);
-            joueurs.length = 0;
-            arr.forEach(j => joueurs.push(j));
-        }
-        if (savedRem) {
-            const arr = JSON.parse(savedRem);
-            remplacants.length = 0;
-            arr.forEach(r => remplacants.push(r));
-        }
+        if (savedJoueurs) { const arr = JSON.parse(savedJoueurs); joueurs.length = 0; arr.forEach(j => joueurs.push(j)); }
+        if (savedRem) { const arr = JSON.parse(savedRem); remplacants.length = 0; arr.forEach(r => remplacants.push(r)); }
         return savedMode || null;
-    } catch (e) {
-        console.warn('Erreur chargement localStorage', e);
-        return null;
-    }
+    } catch (e) { console.warn('Erreur chargement localStorage', e); return null; }
 }
 
 function restoreFormFields() {
@@ -55,26 +44,16 @@ function restoreFormFields() {
     setVal('c-email', capitaine.email);
     setVal('c-phone', capitaine.phone);
     setVal('c-birth', capitaine.birth);
-
     if (capitaine.sexe) {
         const pill = document.querySelector(`#c-gender .pill[data-v="${capitaine.sexe}"]`);
-        if (pill) {
-            document.querySelectorAll('#c-gender .pill').forEach(p => p.classList.remove('sel'));
-            pill.classList.add('sel');
-        }
+        if (pill) { document.querySelectorAll('#c-gender .pill').forEach(p => p.classList.remove('sel')); pill.classList.add('sel'); }
     }
-
     setVal('c-level', capitaine.level);
     setVal('team-name', capitaine.TeamName);
-
     if (capitaine.jerseySize) {
         const pill = document.querySelector(`#c-jersey .pill[data-v="${capitaine.jerseySize}"]`);
-        if (pill) {
-            document.querySelectorAll('#c-jersey .pill').forEach(p => p.classList.remove('sel'));
-            pill.classList.add('sel');
-        }
+        if (pill) { document.querySelectorAll('#c-jersey .pill').forEach(p => p.classList.remove('sel')); pill.classList.add('sel'); }
     }
-
     syncContestCheckbox('cap-3pts', capitaine.contest3pts);
     syncContestCheckbox('cap-dunk', capitaine.contestDunk);
 }
@@ -89,26 +68,18 @@ function chooseMode(m) {
     saveAll();
     document.getElementById('mode-screen').style.display = 'none';
     document.getElementById('form-screen').style.display = 'block';
-
     const badge = document.getElementById('mode-badge-wrap');
     if (m === 'equipe') {
-        badge.innerHTML = `<div class="mode-badge">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Mode Équipe — 100.– CHF
-        </div>`;
+        badge.innerHTML = `<div class="mode-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Mode Équipe — 100.– CHF</div>`;
         document.getElementById('step1-label').textContent = 'Informations du capitaine';
         document.getElementById('team-name-section').style.display = 'block';
         document.getElementById('step2-next').textContent = 'Suivant — Joueurs →';
     } else {
-        badge.innerHTML = `<div class="mode-badge solo">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Mode Solo — 15.– CHF
-        </div>`;
+        badge.innerHTML = `<div class="mode-badge solo"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mode Solo — 15.– CHF</div>`;
         document.getElementById('step1-label').textContent = 'Vos informations';
         document.getElementById('team-name-section').style.display = 'none';
         document.getElementById('step2-next').textContent = 'Résumé & Paiement →';
     }
-
     buildStepper();
     injectCapContests();
     restoreFormFields();
@@ -129,6 +100,7 @@ function resetForm() {
     remplacants.length = 0;
     cguOn = false;
     capitaine = {};
+    selectedPayment = null;
     saveAll();
     document.getElementById('cgu-chk')?.classList.remove('on');
 }
@@ -136,12 +108,7 @@ function resetForm() {
 function buildStepper() {
     const steps = mode === 'equipe' ? STEPS_EQUIPE : STEPS_SOLO;
     const nav = document.getElementById('step-nav');
-    nav.innerHTML = steps.map((s, i) => `
-        <div class="step-ind" id="si-${i}">
-            <div class="step-circle">${i + 1}</div>
-            <div class="step-lbl">${s.label}</div>
-        </div>
-    `).join('');
+    nav.innerHTML = steps.map((s, i) => `<div class="step-ind" id="si-${i}"><div class="step-circle">${i + 1}</div><div class="step-lbl">${s.label}</div></div>`).join('');
 }
 
 function updateStepper(currentIdx) {
@@ -157,19 +124,14 @@ function updateStepper(currentIdx) {
 
 function goStep(i) {
     const prevIdx = currentStepIdx();
-
     if (i > prevIdx) {
         if (i >= 1 && !validateStep1()) return;
         if (i >= 2 && !validateStep2()) return;
         if (i === 3 && mode === 'equipe' && !validateStep3()) return;
     }
-
     const panelIdx = getPanelIdx(i);
-    document.querySelectorAll('.panel').forEach((p, pi) => {
-        p.classList.toggle('active', pi === panelIdx);
-    });
+    document.querySelectorAll('.panel').forEach((p, pi) => { p.classList.toggle('active', pi === panelIdx); });
     updateStepper(i);
-
     if (panelIdx === 3) {
         buildSummary();
         document.getElementById('step4-back').onclick = () => goStep(mode === 'equipe' ? 2 : 1);
@@ -206,12 +168,8 @@ function toggleCapContest(field, el) {
 function injectCapContests() {
     const step1 = document.getElementById('step1');
     if (!step1) return;
-
-    const existing = document.getElementById('cap-contests-section');
-    if (existing) existing.remove();
-    const existingHr = document.getElementById('cap-contests-hr');
-    if (existingHr) existingHr.remove();
-
+    document.getElementById('cap-contests-section')?.remove();
+    document.getElementById('cap-contests-hr')?.remove();
     const hr = document.createElement('hr');
     hr.id = 'cap-contests-hr';
     const section = document.createElement('div');
@@ -219,9 +177,7 @@ function injectCapContests() {
     section.innerHTML = `
         <div class="contest-row">
             <div class="contest-label">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 Contests (optionnel)
             </div>
             <div class="contest-checks">
@@ -237,7 +193,6 @@ function injectCapContests() {
                 </div>
             </div>
         </div>`;
-
     const navBtns = step1.querySelector('.nav-btns');
     step1.insertBefore(hr, navBtns);
     step1.insertBefore(section, navBtns);
@@ -259,16 +214,9 @@ function validateStep1() {
     if (!birth) return showNotif('Date de naissance requise', 'error'), false;
     if (!isOldEnough(birth)) return showNotif('Tu dois avoir au moins 15 ans', 'error'), false;
     if (!sexe) return showNotif('Sélectionne un genre', 'error'), false;
-
     const cap3pts = document.getElementById('cap-3pts')?.classList.contains('on') || false;
     const capDunk = document.getElementById('cap-dunk')?.classList.contains('on') || false;
-
-    Object.assign(capitaine, {
-        firstName: first, lastName: last, email, phone, birth, sexe,
-        statut: mode === 'solo' ? 'solo' : 'capitaine',
-        contest3pts: cap3pts,
-        contestDunk: capDunk
-    });
+    Object.assign(capitaine, { firstName: first, lastName: last, email, phone, birth, sexe, statut: mode === 'solo' ? 'solo' : 'capitaine', contest3pts: cap3pts, contestDunk: capDunk });
     saveAll();
     return true;
 }
@@ -328,14 +276,8 @@ function isOldEnough(birth) {
 
 function addTitulaire() {
     if (joueurs.length >= 4) return;
-    joueurs.push({
-        id: joueurs.length + 1,
-        firstName: '', lastName: '', email: '',
-        statut: 'titulaire', birth: '', sexe: '', jerseySize: '',
-        contest3pts: false, contestDunk: false
-    });
-    saveAll();
-    renderTit();
+    joueurs.push({ id: joueurs.length + 1, firstName: '', lastName: '', email: '', statut: 'titulaire', birth: '', sexe: '', jerseySize: '', contest3pts: false, contestDunk: false });
+    saveAll(); renderTit();
 }
 
 function renderTit() {
@@ -348,14 +290,8 @@ function renderTit() {
 
 function addRemplacant() {
     if (remplacants.length >= 2) return;
-    remplacants.push({
-        id: remplacants.length + 1,
-        firstName: '', lastName: '', email: '',
-        statut: 'remplacant', birth: '', sexe: '', jerseySize: '',
-        contest3pts: false, contestDunk: false
-    });
-    saveAll();
-    renderRem();
+    remplacants.push({ id: remplacants.length + 1, firstName: '', lastName: '', email: '', statut: 'remplacant', birth: '', sexe: '', jerseySize: '', contest3pts: false, contestDunk: false });
+    saveAll(); renderRem();
 }
 
 function renderRem() {
@@ -372,9 +308,7 @@ function contestFieldsHtml(type, idx, p) {
     return `
     <div class="contest-row">
         <div class="contest-label">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             Contests (optionnel)
         </div>
         <div class="contest-checks">
@@ -401,7 +335,6 @@ function playerCard(p, idx, type) {
         ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
         : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9A50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>`;
     const displayName = p.firstName || p.lastName ? `${p.firstName} ${p.lastName}`.trim() : `Joueur ${idx + 1}`;
-
     return `
     <div class="player-card" id="${type}-card-${idx}">
         <div class="player-accordion-header" onclick="toggleCard('${type}-body-${idx}',this)">
@@ -486,6 +419,8 @@ function toggleRemSection() {
     toggle.classList.toggle('active', !isOpen);
 }
 
+// ─── Résumé ───────────────────────────────────────────────────────────────────
+
 function buildSummary() {
     const lvlEl = document.getElementById('c-level');
     const level = lvlEl.options[lvlEl.selectedIndex]?.text || '—';
@@ -497,36 +432,23 @@ function buildSummary() {
         if (p.contestDunk) tags.push(`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/></svg> Dunk`);
         return tags.length ? `<span class="contest-tag">${tags.join(' · ')}</span>` : '';
     };
-
     let allPlayers, total, totalDetail, teamName;
-
     if (mode === 'equipe') {
         allPlayers = [
             { obj: capitaine, role: 'cap', label: 'Capitaine' },
             ...joueurs.map(p => ({ obj: p, role: 'tit', label: 'Titulaire' })),
             ...remplacants.map(p => ({ obj: p, role: 'rem', label: 'Remplaçant' }))
         ];
-        total = 100;
-        totalDetail = `Équipe forfait — prix fixe`;
-        teamName = capitaine.TeamName || '—';
+        total = 100; totalDetail = 'Équipe forfait — prix fixe'; teamName = capitaine.TeamName || '—';
     } else {
         allPlayers = [{ obj: capitaine, role: 'cap', label: 'Joueur Solo' }];
-        total = 15;
-        totalDetail = `Inscription individuelle`;
-        teamName = 'Inscription Solo';
+        total = 15; totalDetail = 'Inscription individuelle'; teamName = 'Inscription Solo';
     }
 
     document.getElementById('summary').innerHTML = `
         <div class="team-hero">
-            <div class="team-avatar">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-                </svg>
-            </div>
-            <div>
-                <div class="team-title">${teamName}</div>
-                <div class="team-subtitle">Tournoi 5×5 · Juin 2026 · Plan-les-Ouates</div>
-            </div>
+            <div class="team-avatar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+            <div><div class="team-title">${teamName}</div><div class="team-subtitle">Tournoi 5×5 · Juin 2026 · Plan-les-Ouates</div></div>
         </div>
         <div class="meta-row">
             <div class="meta-chip"><strong>${level}</strong></div>
@@ -544,11 +466,9 @@ function buildSummary() {
                         <div class="player-role-badge ${role}">${label}${jerseyLabel(p)}</div>
                         ${contestLabel(p)}
                     </div>
-                    ${mode === 'solo' ? `<div class="player-price">20.–</div>` : ''}
                 </div>
             `).join('')}
-        </div>
-    `;
+        </div>`;
 
     document.getElementById('total-box').innerHTML = `
         <div class="total-left">
@@ -558,48 +478,229 @@ function buildSummary() {
         <div>
             <div class="total-amount">${total}.–</div>
             <div class="total-currency">CHF</div>
-        </div>
-    `;
+        </div>`;
+
+    renderPaymentSelector(total);
 }
+
+// ─── Sélecteur de méthode de paiement (Twint & IBAN uniquement) ───────────────
+
+function renderPaymentSelector(total) {
+    document.getElementById('payment-selector')?.remove();
+    const container = document.createElement('div');
+    container.id = 'payment-selector';
+    container.innerHTML = `
+        <div class="payment-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Mode de paiement
+        </div>
+        <div class="payment-methods">
+
+            <div class="payment-method" id="pm-twint" onclick="selectPayment('twint')">
+                <div class="pm-icon pm-icon-twint">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                </div>
+                <div class="pm-info">
+                    <div class="pm-name">Twint</div>
+                    <div class="pm-desc">Paiement instantané par application</div>
+                </div>
+                <div class="pm-check" id="pm-check-twint"></div>
+            </div>
+
+            <div class="payment-method" id="pm-iban" onclick="selectPayment('iban')">
+                <div class="pm-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="pm-info">
+                    <div class="pm-name">Virement bancaire (IBAN)</div>
+                    <div class="pm-desc">PostFinance · Confirmation sous 48h</div>
+                </div>
+                <div class="pm-check" id="pm-check-iban"></div>
+            </div>
+
+        </div>
+
+        <!-- Instructions Twint -->
+        <div class="payment-instructions" id="pi-twint" style="display:none;">
+            <div class="pi-header pi-header-twint">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                Instructions Twint
+            </div>
+            <div class="pi-body">
+                <div class="pi-step"><div class="pi-step-num">1</div><div>Ouvre ton application <strong>Twint</strong></div></div>
+                <div class="pi-step"><div class="pi-step-num">2</div><div>Envoie <strong>${total}.– CHF</strong> au numéro :</div></div>
+                <div class="pi-value-box">
+                    <span class="pi-value">079 153 20 08</span>
+                    <button class="pi-copy-btn" onclick="copyToClipboard('0791532008', this)">Copier</button>
+                </div>
+                <div class="pi-step"><div class="pi-step-num">3</div><div>Dans le message, indique ta <strong>référence d'inscription</strong> (disponible après confirmation)</div></div>
+                <div class="pi-note">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Ta place est réservée dès réception du paiement.
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions IBAN -->
+        <div class="payment-instructions" id="pi-iban" style="display:none;">
+            <div class="pi-header pi-header-iban">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Coordonnées bancaires
+            </div>
+            <div class="pi-body">
+                <div class="pi-row"><div class="pi-row-label">Bénéficiaire</div><div class="pi-row-val">Noah Bang</div></div>
+                <div class="pi-row"><div class="pi-row-label">Banque</div><div class="pi-row-val">PostFinance</div></div>
+                <div class="pi-row">
+                    <div class="pi-row-label">IBAN</div>
+                    <div class="pi-row-val pi-row-copy">
+                        <span>CH21 0900 0000 1688 3932 6</span>
+                        <button class="pi-copy-btn" onclick="copyToClipboard('CH2109000000168839326', this)">Copier</button>
+                    </div>
+                </div>
+                <div class="pi-row"><div class="pi-row-label">Montant</div><div class="pi-row-val"><strong>${total}.– CHF</strong></div></div>
+                <div class="pi-row"><div class="pi-row-label">Message</div><div class="pi-row-val pi-muted">Ton nom + référence (dispo après inscription)</div></div>
+                <div class="pi-note">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Inscription confirmée manuellement sous 48h après réception du virement.
+                </div>
+            </div>
+        </div>`;
+
+    const cguSection = document.getElementById('cgu-section');
+    if (cguSection) cguSection.parentNode.insertBefore(container, cguSection);
+    else document.querySelectorAll('.panel')[3]?.appendChild(container);
+}
+
+function selectPayment(method) {
+    selectedPayment = method;
+    ['twint', 'iban'].forEach(m => {
+        document.getElementById(`pm-${m}`)?.classList.toggle('selected', m === method);
+        const chk = document.getElementById(`pm-check-${m}`);
+        if (chk) chk.innerHTML = m === method
+            ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+            : '';
+    });
+    document.getElementById('pi-twint').style.display = method === 'twint' ? 'block' : 'none';
+    document.getElementById('pi-iban').style.display = method === 'iban' ? 'block' : 'none';
+}
+
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copié';
+        btn.style.background = '#1D9E75';
+        setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+    });
+}
+
+// ─── CGU ──────────────────────────────────────────────────────────────────────
 
 function toggleCgu() {
     cguOn = !cguOn;
     document.getElementById('cgu-chk').classList.toggle('on', cguOn);
 }
 
+// ─── Soumission ───────────────────────────────────────────────────────────────
+
 async function submitForm() {
     if (!cguOn) return showNotif("Veuillez accepter les conditions d'inscription", 'error');
+    if (!selectedPayment) return showNotif('Veuillez choisir un mode de paiement', 'error');
 
     const btn = document.querySelector('.stripe-btn');
     btn.disabled = true;
-    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Redirection vers Stripe…`;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Enregistrement…`;
 
     try {
-        const res = await fetch('http://localhost:3001/api/register', {
+        const apiBase = window.H4AC_API || 'http://localhost:3001';
+        const res = await fetch(`${apiBase}/api/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mode, capitaine, joueurs, remplacants }),
+            body: JSON.stringify({ mode, capitaine, joueurs, remplacants, paymentMethod: selectedPayment }),
         });
-
         const data = await res.json();
-
         if (!res.ok) {
             showNotif(data.error || "Erreur lors de l'inscription", 'error');
             btn.disabled = false;
-            btn.innerHTML = 'Payer maintenant';
+            btn.textContent = "Confirmer l'inscription →";
             return;
         }
-
-        
-        window.location.href = data.checkoutUrl;
-
+        showConfirmationScreen(data.referenceCode, selectedPayment);
     } catch (err) {
         console.error('Erreur réseau:', err);
         showNotif('Impossible de contacter le serveur', 'error');
         btn.disabled = false;
-        btn.innerHTML = 'Payer maintenant';
+        btn.textContent = "Confirmer l'inscription →";
     }
 }
+
+// ─── Écran de confirmation ────────────────────────────────────────────────────
+
+function showConfirmationScreen(refCode, paymentMethod) {
+    const total = mode === 'equipe' ? 100 : 15;
+    const isTwint = paymentMethod === 'twint';
+
+    const paymentBlock = isTwint ? `
+        <div class="confirm-payment-block confirm-twint">
+            <div class="cpb-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                Finalise ton paiement via Twint
+            </div>
+            <div class="cpb-steps">
+                <div class="cpb-step"><span class="cpb-num">1</span> Ouvre ton app <strong>Twint</strong></div>
+                <div class="cpb-step"><span class="cpb-num">2</span> Envoie <strong>${total}.– CHF</strong> au :</div>
+            </div>
+            <div class="cpb-value-row">
+                <span class="cpb-value">079 153 20 08</span>
+                <button class="pi-copy-btn" onclick="copyToClipboard('0791532008', this)">Copier</button>
+            </div>
+            <div class="cpb-step" style="margin-top:12px;"><span class="cpb-num">3</span> Dans le message : <strong>${refCode}</strong></div>
+            <div class="cpb-note">Ta place est réservée dès réception du paiement.</div>
+        </div>` : `
+        <div class="confirm-payment-block confirm-iban">
+            <div class="cpb-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Effectue ton virement bancaire
+            </div>
+            <div class="cpb-rows">
+                <div class="cpb-row"><span>Bénéficiaire</span><strong>Noah Bang</strong></div>
+                <div class="cpb-row"><span>Banque</span><strong>PostFinance</strong></div>
+                <div class="cpb-row">
+                    <span>IBAN</span>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <strong>CH21 0900 0000 1688 3932 6</strong>
+                        <button class="pi-copy-btn" onclick="copyToClipboard('CH2109000000168839326', this)">Copier</button>
+                    </div>
+                </div>
+                <div class="cpb-row"><span>Montant</span><strong>${total}.– CHF</strong></div>
+                <div class="cpb-row"><span>Message</span><strong>${refCode}</strong></div>
+            </div>
+            <div class="cpb-note">Confirmation de ta place sous 48h après réception du virement.</div>
+        </div>`;
+
+    document.getElementById('form-screen').innerHTML = `
+        <div class="confirm-screen">
+            <div class="confirm-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h1 class="confirm-title">Inscription enregistrée !</h1>
+            <p class="confirm-sub">Il ne reste plus qu'à finaliser le paiement pour bloquer ta place.</p>
+            <div class="confirm-ref-box">
+                <div class="confirm-ref-label">Référence d'inscription</div>
+                <div class="confirm-ref-code">${refCode}</div>
+                <div class="confirm-ref-hint">Garde-la pour tout échange avec l'organisation.</div>
+            </div>
+            ${paymentBlock}
+            <div class="confirm-footer-note">Une question ? <a href="https://h4ac.ch" style="color:#E91E8C;">h4ac.ch</a></div>
+        </div>`;
+
+    localStorage.removeItem('h4ac_mode');
+    localStorage.removeItem('h4ac_capitaine');
+    localStorage.removeItem('h4ac_joueurs');
+    localStorage.removeItem('h4ac_remplacants');
+}
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+
 function showNotif(msg, type) {
     const t = document.getElementById('toast');
     t.classList.remove('show', 'error', 'success', 'warning');
@@ -610,20 +711,18 @@ function showNotif(msg, type) {
     t._timer = setTimeout(() => t.classList.remove('show', type), 4000);
 }
 
+// ─── Init ─────────────────────────────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('c-phone')?.addEventListener('input', e => {
         let v = e.target.value.replace(/\D/g, '');
         v = v.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4');
         e.target.value = v.trim();
     });
-
     document.querySelectorAll('#step1 input, #step2 input, #step2 select').forEach(el => {
         el.addEventListener('input', saveAll);
         el.addEventListener('change', saveAll);
     });
-
     const savedMode = loadAll();
-    if (savedMode === 'equipe' || savedMode === 'solo') {
-        chooseMode(savedMode);
-    }
+    if (savedMode === 'equipe' || savedMode === 'solo') chooseMode(savedMode);
 });
