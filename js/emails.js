@@ -129,7 +129,7 @@ function buildPaymentBlock({ registration, isCapitaine }) {
           </td></tr>
         </table>
         <div style="color:${C.muted}; font-size:12px; margin-top:14px;">
-          ⏱ Ta place sera confirmée manuellement sous 48h après réception du virement.
+          Ta place sera confirmée manuellement sous 48h après réception du virement.
         </div>
       </div>`;
   }
