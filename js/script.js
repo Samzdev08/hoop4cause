@@ -481,6 +481,7 @@ function buildSummary() {
         </div>`;
 
     renderPaymentSelector(total);
+    updateSubmitBtn();
 }
 
 // ─── Sélecteur de méthode de paiement (Twint & IBAN uniquement) ───────────────
@@ -582,6 +583,7 @@ function selectPayment(method) {
     });
     document.getElementById('pi-twint').style.display = method === 'twint' ? 'block' : 'none';
     document.getElementById('pi-iban').style.display = method === 'iban' ? 'block' : 'none';
+    updateSubmitBtn();
 }
 
 function copyToClipboard(text, btn) {
@@ -593,11 +595,18 @@ function copyToClipboard(text, btn) {
     });
 }
 
-// ─── CGU ──────────────────────────────────────────────────────────────────────
+// ─── CGU & activation du bouton submit ───────────────────────────────────────
 
 function toggleCgu() {
     cguOn = !cguOn;
     document.getElementById('cgu-chk').classList.toggle('on', cguOn);
+    updateSubmitBtn();
+}
+
+function updateSubmitBtn() {
+    const btn = document.querySelector('.stripe-btn');
+    if (!btn) return;
+    btn.disabled = !(cguOn && selectedPayment);
 }
 
 // ─── Soumission ───────────────────────────────────────────────────────────────
