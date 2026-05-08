@@ -620,7 +620,7 @@ async function submitForm() {
     btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Enregistrement…`;
 
     try {
-        const apiBase = window.H4AC_API || 'http://localhost:3001';
+        const apiBase = 'https://h4ac-backend.onrender.com/api/register'  || 'http://localhost:3001';
         const res = await fetch(`${apiBase}/api/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
