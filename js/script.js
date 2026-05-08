@@ -702,7 +702,7 @@ function showConfirmationScreen(refCode, paymentMethod) {
 
             <!-- Notification de redirection -->
             <div id="redirect-notif" style="display:none; margin-top:24px; padding:12px 16px; background:#f0f0f0; border-radius:8px; text-align:center; font-size:14px; color:#555;">
-                🔄 Redirection vers l'accueil dans <strong id="redirect-countdown">3</strong> secondes…
+                Redirection vers l'accueil dans <strong id="redirect-countdown">3</strong> secondes…
             </div>
         </div>`;
 
