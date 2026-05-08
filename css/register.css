@@ -158,6 +158,282 @@
     from { opacity: 0; transform: translateY(-4px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+/* ─── ÉCRAN DE CONFIRMATION ─────────────────────────────────────────────── */
+
+.confirm-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Icône check verte avec halo */
+.confirm-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(29, 158, 117, .12);
+    border: 2px solid rgba(29, 158, 117, .35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    animation: checkPop 0.55s cubic-bezier(.34, 1.56, .64, 1) 0.1s both,
+               checkGlow 2.5s ease-in-out 0.6s infinite;
+}
+
+@keyframes checkPop {
+    0%   { opacity: 0; transform: scale(0.4); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes checkGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(29, 158, 117, .25); }
+    50%      { box-shadow: 0 0 0 12px rgba(29, 158, 117, 0); }
+}
+
+/* Titre principal */
+.confirm-title {
+    font-family: 'Barlow Condensed', Impact, sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: .5rem;
+}
+
+.confirm-sub {
+    font-size: .95rem;
+    color: rgba(255, 255, 255, .55);
+    line-height: 1.55;
+    max-width: 420px;
+    margin-bottom: 2rem;
+}
+
+/* Carte référence — la pièce maîtresse */
+.confirm-ref-box {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(233, 30, 140, .1);
+    border: 1px solid rgba(233, 30, 140, .3);
+    border-radius: 14px;
+    padding: 1.5rem 1.75rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.confirm-ref-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--accent);
+    margin-bottom: .55rem;
+}
+
+.confirm-ref-code {
+    font-family: 'Barlow Condensed', Impact, sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: .65rem;
+    user-select: all; /* tap pour tout sélectionner sur mobile */
+}
+
+.confirm-ref-hint {
+    font-size: .76rem;
+    color: rgba(255, 255, 255, .45);
+    line-height: 1.5;
+}
+
+/* Bloc paiement (Twint / IBAN) */
+.confirm-payment-block {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 14px;
+    padding: 1.5rem 1.75rem;
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.confirm-payment-block.confirm-twint {
+    border-color: rgba(233, 30, 140, .25);
+    background: rgba(233, 30, 140, .04);
+}
+
+.confirm-payment-block.confirm-iban {
+    border-color: rgba(255, 107, 0, .22);
+    background: rgba(255, 107, 0, .03);
+}
+
+.cpb-title {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-bottom: .85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+.confirm-iban .cpb-title {
+    color: #FF9A50;
+}
+
+/* Étapes Twint */
+.cpb-steps {
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+}
+
+.cpb-step {
+    display: flex;
+    align-items: flex-start;
+    gap: .65rem;
+    font-size: .9rem;
+    color: rgba(255, 255, 255, .75);
+    line-height: 1.5;
+}
+
+.cpb-step strong {
+    color: #fff;
+    font-weight: 700;
+}
+
+.cpb-num {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    background: rgba(233, 30, 140, .18);
+    border: 1px solid rgba(233, 30, 140, .35);
+    color: var(--accent);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .78rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Box numéro Twint */
+.cpb-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .85rem 1.1rem;
+    background: rgba(233, 30, 140, .12);
+    border: 1px solid rgba(233, 30, 140, .3);
+    border-radius: 10px;
+    margin: .85rem 0;
+    flex-wrap: wrap;
+}
+
+.cpb-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    color: #fff;
+}
+
+/* Lignes IBAN (label / valeur) */
+.cpb-rows {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.cpb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .65rem 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, .07);
+    font-size: .88rem;
+}
+
+.cpb-row:last-child {
+    border-bottom: none;
+}
+
+.cpb-row span:first-child {
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: rgba(255, 255, 255, .42);
+    flex-shrink: 0;
+}
+
+.cpb-row strong {
+    color: #fff;
+    font-weight: 700;
+    text-align: right;
+}
+
+.cpb-row > div {
+    text-align: right;
+    color: #fff;
+    font-weight: 700;
+}
+
+.cpb-row > div strong {
+    text-align: right;
+}
+
+/* Note bas du bloc */
+.cpb-note {
+    margin-top: 1rem;
+    padding: .75rem 1rem;
+    background: rgba(233, 30, 140, .08);
+    border: 1px solid rgba(233, 30, 140, .2);
+    border-radius: 10px;
+    font-size: .8rem;
+    color: rgba(255, 255, 255, .65);
+    line-height: 1.55;
+}
+
+.confirm-iban .cpb-note {
+    background: rgba(255, 107, 0, .08);
+    border-color: rgba(255, 107, 0, .2);
+}
+
+/* Footer du screen */
+.confirm-footer-note {
+    margin-top: .5rem;
+    font-size: .82rem;
+    color: rgba(255, 255, 255, .4);
+}
+
+.confirm-footer-note a {
+    text-decoration: none;
+    font-weight: 700;
+    transition: opacity .2s;
+}
+
+.confirm-footer-note a:hover {
+    opacity: .8;
+}
 
 .pi-header {
     display: flex;
