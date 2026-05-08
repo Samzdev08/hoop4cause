@@ -647,7 +647,6 @@ async function submitForm() {
 function showConfirmationScreen(refCode, paymentMethod) {
     const total = mode === 'equipe' ? 100 : 15;
     const isTwint = paymentMethod === 'twint';
-
     const paymentBlock = isTwint ? `
         <div class="confirm-payment-block confirm-twint">
             <div class="cpb-title">
@@ -700,12 +699,35 @@ function showConfirmationScreen(refCode, paymentMethod) {
             </div>
             ${paymentBlock}
             <div class="confirm-footer-note">Une question ? <a href="https://h4ac.ch" style="color:#E91E8C;">h4ac.ch</a></div>
+
+            <!-- Notification de redirection -->
+            <div id="redirect-notif" style="display:none; margin-top:24px; padding:12px 16px; background:#f0f0f0; border-radius:8px; text-align:center; font-size:14px; color:#555;">
+                🔄 Redirection vers l'accueil dans <strong id="redirect-countdown">3</strong> secondes…
+            </div>
         </div>`;
 
     localStorage.removeItem('h4ac_mode');
     localStorage.removeItem('h4ac_capitaine');
     localStorage.removeItem('h4ac_joueurs');
     localStorage.removeItem('h4ac_remplacants');
+
+    // Affiche la notif 3 secondes avant la redirection (à t=7s sur 10s)
+    setTimeout(() => {
+        const notif = document.getElementById('redirect-notif');
+        if (notif) notif.style.display = 'block';
+
+        let count = 3;
+        const interval = setInterval(() => {
+            count--;
+            const el = document.getElementById('redirect-countdown');
+            if (el) el.textContent = count;
+            if (count <= 0) clearInterval(interval);
+        }, 1000);
+    }, 7000);
+
+    setTimeout(() => {
+        window.location = 'index.html';
+    }, 10000);
 }
 
 // ─── Notifications ────────────────────────────────────────────────────────────
