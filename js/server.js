@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
-const { sendConfirmation } = require('./emails');
+const { sendConfirmation, sendPaymentConfirmed } = require('./emails');
 
 // ─── Supabase ─────────────────────────────────────────────────────────────────
 const supabase = createClient(
@@ -198,6 +198,55 @@ app.post('/api/test-email', async (req, res) => {
     console.error('Erreur test-email:', err);
     return res.status(500).json({ error: err.message });
   }
+});
+
+// ─── POST /api/admin/mark-paid/:ref ───────────────────────────────────────────
+
+app.post('/api/admin/mark-paid/:ref', async (req, res) => {
+  const secret = req.headers['x-admin-key'];
+  if (!secret || secret !== process.env.ADMIN_SECRET) {
+    return res.status(401).json({ error: 'Non autorisé' });
+  }
+
+  const { ref } = req.params;
+
+  const { data: reg, error: fetchError } = await supabase
+    .from('registrations')
+    .select('id, reference_code, mode, team_name, total_amount, payment_status, captain_email')
+    .eq('reference_code', ref)
+    .single();
+
+  if (fetchError || !reg) return res.status(404).json({ error: 'Inscription introuvable' });
+  if (reg.payment_status === 'paid') return res.status(409).json({ error: 'Déjà marqué comme payé' });
+
+  const { error: updateError } = await supabase
+    .from('registrations')
+    .update({ payment_status: 'paid' })
+    .eq('reference_code', ref);
+
+  if (updateError) {
+    console.error('Erreur mark-paid:', updateError);
+    return res.status(500).json({ error: 'Erreur lors de la mise à jour' });
+  }
+
+  const { data: capPlayer } = await supabase
+    .from('players')
+    .select('first_name')
+    .eq('registration_id', reg.id)
+    .in('role', ['capitaine', 'solo'])
+    .single();
+
+  const registration = {
+    ...reg,
+    captain_first_name: capPlayer?.first_name || null,
+  };
+
+  sendPaymentConfirmed(registration).catch(err =>
+    console.error('[email] Erreur email paiement confirmé:', err)
+  );
+
+  console.log(`[admin] ${ref} marqué paid — email envoyé à ${reg.captain_email}`);
+  return res.status(200).json({ success: true, reference_code: ref, email_sent_to: reg.captain_email });
 });
 
 // ─── Route test ───────────────────────────────────────────────────────────────

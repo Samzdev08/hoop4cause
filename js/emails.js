@@ -257,4 +257,58 @@ async function sendConfirmation(registration, players) {
   return { sent, failed: players.length - sent, results };
 }
 
-module.exports = { sendConfirmation };
+// ─── Email "paiement reçu" ────────────────────────────────────────────────────
+async function sendPaymentConfirmed(registration) {
+  const { reference_code, mode, team_name, total_amount, captain_email, captain_first_name } = registration;
+  const isEquipe = mode === 'equipe';
+  const subject = isEquipe
+    ? `Paiement reçu — ${team_name} est officiellement inscrite !`
+    : `Paiement reçu — Ta place est confirmée !`;
+
+  const preheader = `Réf ${reference_code} · Paiement de ${total_amount}.– CHF reçu`;
+
+  const content = `
+    <h1 style="font-size:28px; font-weight:900; margin:0 0 16px; text-transform:uppercase;">Paiement confirmé !</h1>
+    <p style="margin:0 0 16px; color:${C.muted};">Salut <strong style="color:${C.text};">${captain_first_name || 'joueur(se)'}</strong>,</p>
+    <p style="margin:0 0 24px; color:${C.muted};">
+      ${isEquipe
+        ? `Nous avons bien reçu le paiement pour l'équipe <strong style="color:${C.accent};">${team_name}</strong>.`
+        : `Nous avons bien reçu ton paiement de <strong style="color:${C.text};">${total_amount}.– CHF</strong>.`
+      }
+      <strong style="color:${C.text};"> Ta place est définitivement réservée.</strong>
+    </p>
+
+    <div style="background:${C.greenSoft}; border:1px solid rgba(29,158,117,0.35); border-radius:12px; padding:20px 24px; margin:0 0 24px;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="${C.green}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <div>
+          <div style="font-weight:700; font-size:15px; color:${C.green};">Place confirmée</div>
+          <div style="color:${C.muted}; font-size:13px; margin-top:2px;">Tournoi Hoop 4 A Cause · Juin 2026 · Plan-les-Ouates</div>
+        </div>
+      </div>
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:${C.accentSoft}; border:1px solid rgba(233,30,140,0.30); border-radius:12px; margin:0 0 24px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="font-size:12px; font-weight:700; color:${C.accent}; text-transform:uppercase; letter-spacing:1.2px; margin-bottom:8px;">Référence d'inscription</div>
+        <div style="font-size:26px; font-weight:900; letter-spacing:1px;">${reference_code}</div>
+      </td></tr>
+    </table>
+
+    <p style="color:${C.muted}; font-size:14px; margin:0;">On se retrouve sur le terrain en juin. Prépare-toi !</p>`;
+
+  const html = buildHtml({ title: subject, preheader, content });
+
+  const { data, error } = await resend.emails.send({
+    from: FROM,
+    to: captain_email,
+    subject,
+    html,
+  });
+
+  if (error) throw new Error(error.message);
+  console.log(`[email] Paiement confirmé envoyé à ${captain_email} (id: ${data.id})`);
+  return { id: data.id };
+}
+
+module.exports = { sendConfirmation, sendPaymentConfirmed };
