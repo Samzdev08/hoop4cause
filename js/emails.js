@@ -2,6 +2,7 @@ const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = 'Hoop 4 A Cause <onboarding@resend.dev>';
+const ADMIN_EMAIL = 'samtidokz@gmail.com';
 
 // ─── Couleurs H4AC ────────────────────────────────────────────────────────────
 const C = {
@@ -65,21 +66,11 @@ function buildHtml({ title, preheader, content }) {
 
 // ─── Bloc paiement selon méthode ──────────────────────────────────────────────
 function buildPaymentBlock({ registration, isCapitaine }) {
-  if (!isCapitaine) return ''; // seul le capitaine / solo reçoit les instructions
+  if (!isCapitaine) return '';
 
   const amount = registration.total_amount;
   const method = registration.payment_method;
   const ref = registration.reference_code;
-
-  if (method === 'card') {
-    // Stripe : bouton de paiement
-    return `
-      <table cellpadding="0" cellspacing="0" style="margin:24px auto;"><tr>
-        <td style="background:${C.accent}; border-radius:10px;">
-          <a href="https://h4ac.ch/inscription/${ref}" style="display:inline-block; padding:14px 36px; color:#FFF; text-decoration:none; font-weight:700; text-transform:uppercase; letter-spacing:1.2px;">Finaliser le paiement →</a>
-        </td>
-      </tr></table>`;
-  }
 
   if (method === 'twint') {
     return `
@@ -88,14 +79,8 @@ function buildPaymentBlock({ registration, isCapitaine }) {
           Paiement Twint — ${amount}.– CHF
         </div>
         <table width="100%">
-          <tr>
-            <td style="color:${C.muted}; font-size:13px; padding:6px 0; width:40%;">1. Ouvre ton app Twint</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td style="color:${C.muted}; font-size:13px; padding:6px 0;">2. Envoie <strong style="color:${C.text};">${amount}.– CHF</strong> au :</td>
-            <td></td>
-          </tr>
+          <tr><td style="color:${C.muted}; font-size:13px; padding:6px 0;">1. Ouvre ton app Twint</td></tr>
+          <tr><td style="color:${C.muted}; font-size:13px; padding:6px 0;">2. Envoie <strong style="color:${C.text};">${amount}.– CHF</strong> au :</td></tr>
         </table>
         <div style="background:${C.inner}; border-radius:8px; padding:14px 18px; margin:12px 0; font-size:22px; font-weight:900; letter-spacing:2px; text-align:center;">
           079 153 20 08
@@ -163,11 +148,10 @@ function buildContent({ registration, recipient, role }) {
       <p style="margin:0 0 16px; color:${C.muted};">Tu as été inscrit(e) comme <strong style="color:${C.accent};">${roleLabel}</strong> dans l'équipe <strong style="color:${C.accent};">${teamName}</strong>.</p>`;
   }
 
-  // Message paiement selon méthode (pour les non-capitaines, juste un message neutre)
   let paymentNote = '';
   if (!isCapitaine) {
     paymentNote = `<p style="margin:0 0 16px; color:${C.muted};">Le capitaine de l'équipe s'occupe du règlement. Tu n'as rien à faire.</p>`;
-  } else if (method === 'awaiting_manual' || method === 'twint' || method === 'iban') {
+  } else if (method === 'twint' || method === 'iban') {
     paymentNote = `<p style="margin:0 0 8px; color:${C.muted};">Ton inscription est <strong style="color:${C.text};">en attente de paiement</strong>. Suis les instructions ci-dessous pour finaliser.</p>`;
   }
 
@@ -186,7 +170,7 @@ function buildContent({ registration, recipient, role }) {
       <td style="font-size:14px; font-weight:600; padding:5px 0;">${value}</td>
     </tr></table>`;
 
-  const methodLabel = { card: 'Carte bancaire', twint: 'Twint', iban: 'Virement IBAN' };
+  const methodLabel = { twint: 'Twint', iban: 'Virement IBAN' };
 
   const recap = `
     <div style="font-size:12px; font-weight:700; color:${C.accent}; text-transform:uppercase; letter-spacing:1.2px; margin:24px 0 12px;">Récapitulatif</div>
@@ -224,10 +208,81 @@ function buildEmail({ registration, recipient, role }) {
   return { subject, html };
 }
 
+// ─── Email admin (notif interne) ──────────────────────────────────────────────
+function buildAdminEmail({ registration, players }) {
+  const { reference_code, mode, team_name, total_amount, payment_method } = registration;
+  const methodLabel = { twint: 'Twint', iban: 'Virement IBAN' };
+
+  const roleLabel = { capitaine: 'Capitaine', solo: 'Solo', titulaire: 'Titulaire', remplacant: 'Remplaçant' };
+
+  const playerRows = players.map(p => `
+    <tr style="border-bottom:1px solid ${C.border};">
+      <td style="padding:10px 14px; font-size:13px;">${p.first_name} ${p.last_name}</td>
+      <td style="padding:10px 14px; font-size:13px; color:${C.muted};">${p.email}</td>
+      <td style="padding:10px 14px; font-size:13px; color:${C.accent};">${roleLabel[p.role] || p.role}</td>
+      <td style="padding:10px 14px; font-size:13px; color:${C.muted};">${p.jersey_size || '—'}</td>
+    </tr>`).join('');
+
+  const content = `
+    <h1 style="font-size:24px; font-weight:900; margin:0 0 8px; text-transform:uppercase;">Nouvelle inscription 🏀</h1>
+    <p style="margin:0 0 24px; color:${C.muted};">Une nouvelle inscription vient d'être enregistrée.</p>
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:${C.accentSoft}; border:1px solid rgba(233,30,140,0.30); border-radius:12px; margin:0 0 24px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="font-size:12px; font-weight:700; color:${C.accent}; text-transform:uppercase; letter-spacing:1.2px; margin-bottom:8px;">Référence</div>
+        <div style="font-size:26px; font-weight:900; letter-spacing:1px;">${reference_code}</div>
+      </td></tr>
+    </table>
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:${C.inner}; border:1px solid ${C.border}; border-radius:12px; margin:0 0 24px;">
+      <tr><td style="padding:20px 24px;">
+        <table width="100%">
+          <tr>
+            <td width="45%" style="color:${C.muted}; font-size:12px; padding:5px 0; text-transform:uppercase; letter-spacing:0.6px;">Mode</td>
+            <td style="font-size:14px; font-weight:600; padding:5px 0;">${mode === 'equipe' ? 'Équipe' : 'Solo'}</td>
+          </tr>
+          ${team_name ? `<tr>
+            <td width="45%" style="color:${C.muted}; font-size:12px; padding:5px 0; text-transform:uppercase; letter-spacing:0.6px;">Équipe</td>
+            <td style="font-size:14px; font-weight:600; padding:5px 0; color:${C.accent};">${team_name}</td>
+          </tr>` : ''}
+          <tr>
+            <td width="45%" style="color:${C.muted}; font-size:12px; padding:5px 0; text-transform:uppercase; letter-spacing:0.6px;">Paiement</td>
+            <td style="font-size:14px; font-weight:600; padding:5px 0;">${methodLabel[payment_method] || payment_method}</td>
+          </tr>
+          <tr>
+            <td width="45%" style="color:${C.muted}; font-size:12px; padding:5px 0; text-transform:uppercase; letter-spacing:0.6px;">Montant</td>
+            <td style="font-size:14px; font-weight:600; padding:5px 0;">${total_amount}.– CHF</td>
+          </tr>
+          <tr>
+            <td width="45%" style="color:${C.muted}; font-size:12px; padding:5px 0; text-transform:uppercase; letter-spacing:0.6px;">Joueurs</td>
+            <td style="font-size:14px; font-weight:600; padding:5px 0;">${players.length}</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+
+    <div style="font-size:12px; font-weight:700; color:${C.accent}; text-transform:uppercase; letter-spacing:1.2px; margin:0 0 12px;">Joueurs inscrits</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:${C.inner}; border:1px solid ${C.border}; border-radius:12px; overflow:hidden;">
+      <tr style="background:rgba(255,255,255,0.06);">
+        <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Nom</th>
+        <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Email</th>
+        <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Rôle</th>
+        <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Maillot</th>
+      </tr>
+      ${playerRows}
+    </table>`;
+
+  const subject = `[H4AC] Nouvelle inscription — ${reference_code}`;
+  const preheader = `${mode === 'equipe' ? team_name : 'Solo'} · ${total_amount}.– CHF · ${methodLabel[payment_method] || payment_method}`;
+  const html = buildHtml({ title: subject, preheader, content });
+  return { subject, html };
+}
+
 // ─── Fonction principale ──────────────────────────────────────────────────────
 async function sendConfirmation(registration, players) {
   const results = [];
 
+  // Emails aux participants
   for (const player of players) {
     const recipient = { firstName: player.first_name, lastName: player.last_name };
     const { subject, html } = buildEmail({ registration, recipient, role: player.role });
@@ -250,6 +305,24 @@ async function sendConfirmation(registration, players) {
       console.error(`[email] Exception ${player.email}:`, err);
       results.push({ email: player.email, ok: false, error: err.message });
     }
+  }
+
+  // Email admin (notif interne)
+  try {
+    const { subject, html } = buildAdminEmail({ registration, players });
+    const { data, error } = await resend.emails.send({
+      from: FROM,
+      to: ADMIN_EMAIL,
+      subject,
+      html,
+    });
+    if (error) {
+      console.error('[email] Erreur notif admin:', error.message);
+    } else {
+      console.log(`[email] ✓ notif admin envoyée (id: ${data.id})`);
+    }
+  } catch (err) {
+    console.error('[email] Exception notif admin:', err);
   }
 
   const sent = results.filter(r => r.ok).length;
