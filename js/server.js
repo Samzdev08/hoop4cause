@@ -16,7 +16,13 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
+app.use(cors({
+  origin: [
+    process.env.FRONTEND_URL,
+    'https://h4ac.ch',
+    'null' // pour les fichiers HTML ouverts en local
+  ].filter(Boolean)
+}));
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
