@@ -20,7 +20,8 @@ app.use(cors({
   origin: [
     process.env.FRONTEND_URL,
     'https://h4ac.ch',
-    'null' // pour les fichiers HTML ouverts en local
+    'http://127.0.0.1:5501',
+    'http://localhost:5501'
   ].filter(Boolean)
 }));
 
