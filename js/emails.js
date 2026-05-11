@@ -1,7 +1,7 @@
 const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = 'Hoop 4 A Cause <onboarding@resend.dev>';
+const FROM = 'Hoop 4 A Cause <noreply@h4ac.ch>';
 const ADMIN_EMAIL = 'samtidokz@gmail.com';
 
 // ─── Couleurs H4AC ────────────────────────────────────────────────────────────
