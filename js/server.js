@@ -217,6 +217,9 @@ app.post('/api/admin/mark-paid/:ref', async (req, res) => {
 
   const { ref } = req.params;
 
+  console.log('HEADER:', req.headers['x-admin-key']);
+  console.log('ENV:', process.env.ADMIN_SECRET);
+
   const { data: reg, error: fetchError } = await supabase
     .from('registrations')
     .select('id, reference_code, mode, team_name, total_amount, payment_status, captain_email')
