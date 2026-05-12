@@ -259,7 +259,35 @@ app.post('/api/admin/mark-paid/:ref', async (req, res) => {
   return res.status(200).json({ success: true, reference_code: ref, email_sent_to: reg.captain_email });
 });
 
-// ─── Route test ───────────────────────────────────────────────────────────────
+// ─── GET /api/admin/registrations ────────────────────────────────────────────
+app.get('/api/admin/registrations', async (req, res) => {
+  const secret = req.headers['x-admin-key'];
+  if (!secret || secret !== process.env.ADMIN_SECRET)
+    return res.status(401).json({ error: 'Non autorisé' });
+
+  const { data, error } = await supabase
+    .from('registrations')
+    .select('id,reference_code,mode,team_name,total_amount,payment_status,payment_method,captain_email,created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json(data);
+});
+
+// ─── GET /api/admin/players ───────────────────────────────────────────────────
+app.get('/api/admin/players', async (req, res) => {
+  const secret = req.headers['x-admin-key'];
+  if (!secret || secret !== process.env.ADMIN_SECRET)
+    return res.status(401).json({ error: 'Non autorisé' });
+
+  const { data, error } = await supabase
+    .from('players')
+    .select('id,registration_id,first_name,last_name,email,role,sexe,birth,level,jersey_size,contest_3pts,contest_dunk,phone')
+    .order('id', { ascending: true });
+
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json(data);
+});
 
 app.get('/', (req, res) => res.json({ message: '🏀 H4AC API works' }));
 
