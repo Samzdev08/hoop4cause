@@ -40,7 +40,7 @@ function buildHtml({ title, preheader, content }) {
         <tr><td style="background:${C.accent}; padding:24px 32px;">
           <table width="100%"><tr>
             <td style="color:#FFF; font-size:22px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase;">HOOP 4 A CAUSE</td>
-            <td align="right" style="color:#FFF; font-size:11px; opacity:0.85; text-transform:uppercase;">Tournoi 5×5 · Juin 2026</td>
+            <td align="right" style="color:#FFF; font-size:11px; opacity:0.85; text-transform:uppercase;">Tournoi 5c5 · Juin 2026</td>
           </tr></table>
         </td></tr>
 
