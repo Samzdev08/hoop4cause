@@ -178,7 +178,7 @@ function buildContent({ registration, recipient, role }) {
       <tr><td style="padding:20px 24px;">
         ${recapRow('Mode', registration.mode === 'equipe' ? 'Équipe' : 'Solo')}
         ${teamName ? recapRow('Équipe', teamName) : ''}
-        ${recapRow('Format', '5×5 · Mixte')}
+        ${recapRow('Format', '5c5 · Mixte')}
         ${recapRow('Date', 'Juin 2026')}
         ${recapRow('Lieu', 'Plan-les-Ouates, Genève')}
         ${isCapitaine ? recapRow('Total', `${registration.total_amount}.– CHF`) : ''}

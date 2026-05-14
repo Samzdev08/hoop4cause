@@ -448,11 +448,11 @@ function buildSummary() {
     document.getElementById('summary').innerHTML = `
         <div class="team-hero">
             <div class="team-avatar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E91E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
-            <div><div class="team-title">${teamName}</div><div class="team-subtitle">Tournoi 5×5 · Juin 2026 · Plan-les-Ouates</div></div>
+            <div><div class="team-title">${teamName}</div><div class="team-subtitle">Tournoi 5c5 · Juin 2026 · Plan-les-Ouates</div></div>
         </div>
         <div class="meta-row">
             <div class="meta-chip"><strong>${level}</strong></div>
-            <div class="meta-chip">Format <strong>5×5</strong></div>
+            <div class="meta-chip">Format <strong>5c5</strong></div>
             <div class="meta-chip"><strong>${allPlayers.length}</strong> joueur${allPlayers.length > 1 ? 's' : ''}</div>
             <div class="meta-chip">Mode <strong>${mode === 'equipe' ? 'Équipe' : 'Solo'}</strong></div>
         </div>
