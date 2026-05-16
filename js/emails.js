@@ -279,10 +279,14 @@ function buildAdminEmail({ registration, players }) {
 }
 
 // ─── Fonction principale ──────────────────────────────────────────────────────
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+// ─── Fonction principale ──────────────────────────────────────────────────────
 async function sendConfirmation(registration, players) {
   const results = [];
 
-  // Emails aux participants
+  // Emails aux participants — 1 par 1 avec 250ms entre chaque
   for (const player of players) {
     const recipient = { firstName: player.first_name, lastName: player.last_name };
     const { subject, html } = buildEmail({ registration, recipient, role: player.role });
@@ -305,9 +309,12 @@ async function sendConfirmation(registration, players) {
       console.error(`[email] Exception ${player.email}:`, err);
       results.push({ email: player.email, ok: false, error: err.message });
     }
+
+    await delay(250); // ← max 4 req/sec, sous la limite Resend
   }
 
-  // Email admin (notif interne)
+  // Email admin — après un délai supplémentaire
+  await delay(250);
   try {
     const { subject, html } = buildAdminEmail({ registration, players });
     const { data, error } = await resend.emails.send({
@@ -345,9 +352,9 @@ async function sendPaymentConfirmed(registration) {
     <p style="margin:0 0 16px; color:${C.muted};">Salut <strong style="color:${C.text};">${captain_first_name || 'joueur(se)'}</strong>,</p>
     <p style="margin:0 0 24px; color:${C.muted};">
       ${isEquipe
-        ? `Nous avons bien reçu le paiement pour l'équipe <strong style="color:${C.accent};">${team_name}</strong>.`
-        : `Nous avons bien reçu ton paiement de <strong style="color:${C.text};">${total_amount}.– CHF</strong>.`
-      }
+      ? `Nous avons bien reçu le paiement pour l'équipe <strong style="color:${C.accent};">${team_name}</strong>.`
+      : `Nous avons bien reçu ton paiement de <strong style="color:${C.text};">${total_amount}.– CHF</strong>.`
+    }
       <strong style="color:${C.text};"> Ta place est définitivement réservée.</strong>
     </p>
 
