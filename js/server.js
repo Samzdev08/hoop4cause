@@ -181,30 +181,33 @@ app.get('/api/registration/:ref', async (req, res) => {
   return res.status(200).json(data);
 });
 
-// ─── POST /api/test-email ─────────────────────────────────────────────────────
+// ─── POST /api/admin/resend/:ref ──────────────────────────────────────────────
+app.post('/api/admin/resend/:ref', async (req, res) => {
+  const secret = req.headers['x-admin-key'];
+  if (!secret || secret !== process.env.ADMIN_SECRET)
+    return res.status(401).json({ error: 'Non autorisé' });
 
-app.post('/api/test-email', async (req, res) => {
-  const { to, mode = 'equipe', paymentMethod = 'twint' } = req.body || {};
-  if (!to) return res.status(400).json({ error: 'Champ "to" requis' });
+  const { ref } = req.params;
 
-  const registration = {
-    reference_code: 'H4AC-TEST01',
-    mode,
-    team_name: mode === 'equipe' ? 'Plan-les-Bouchers' : null,
-    total_amount: mode === 'equipe' ? 100 : 15,
-    payment_method: paymentMethod,
-  };
-  const players = mode === 'equipe'
-    ? [{ first_name: 'Sam', last_name: 'Test', email: to, role: 'capitaine' }]
-    : [{ first_name: 'Sam', last_name: 'Test', email: to, role: 'solo' }];
+  const { data: reg, error: fetchError } = await supabase
+    .from('registrations')
+    .select('*')
+    .eq('reference_code', ref)
+    .single();
 
-  try {
-    const result = await sendConfirmation(registration, players);
-    return res.status(200).json({ success: true, ...result });
-  } catch (err) {
-    console.error('Erreur test-email:', err);
-    return res.status(500).json({ error: err.message });
-  }
+  if (fetchError || !reg) return res.status(404).json({ error: 'Inscription introuvable' });
+
+  const { data: players, error: playersError } = await supabase
+    .from('players')
+    .select('*')
+    .eq('registration_id', reg.id);
+
+  if (playersError || !players) return res.status(500).json({ error: 'Erreur récupération joueurs' });
+
+  await sendConfirmation(reg, players);
+
+  console.log(`[admin] Resend ${ref} → ${players.map(p => p.email).join(', ')}`);
+  return res.status(200).json({ success: true, sent_to: players.map(p => p.email) });
 });
 
 // ─── POST /api/admin/mark-paid/:ref ───────────────────────────────────────────
