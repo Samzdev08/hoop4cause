@@ -267,7 +267,7 @@ function buildAdminEmail({ registration, players }) {
         <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Nom</th>
         <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Email</th>
         <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Rôle</th>
-        <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">Maillot</th>
+        <th style="padding:10px 14px; text-align:left; font-size:11px; color:${C.muted}; text-transform:uppercase; letter-spacing:0.6px;">t-shirt</th>
       </tr>
       ${playerRows}
     </table>`;

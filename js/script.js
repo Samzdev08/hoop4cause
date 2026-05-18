@@ -225,7 +225,7 @@ function validateStep2() {
     const level = document.getElementById('c-level')?.value;
     const jersey = document.querySelector('#c-jersey .pill.sel')?.dataset?.v || null;
     if (!level) return showNotif('Sélectionne ton niveau', 'error'), false;
-    if (!jersey) return showNotif('Choisis une taille de maillot', 'error'), false;
+    if (!jersey) return showNotif('Choisis une taille de t-shirt', 'error'), false;
     capitaine.level = level;
     capitaine.jerseySize = jersey;
     if (mode === 'equipe') {
@@ -250,7 +250,7 @@ function validateStep3() {
         if (!j.sexe) return showNotif(`Titulaire ${i + 1} — Genre requis`, 'error'), false;
         if (!j.birth) return showNotif(`Titulaire ${i + 1} — Date de naissance requise`, 'error'), false;
         if (!isOldEnough(j.birth)) return showNotif(`Titulaire ${i + 1} — Doit avoir au moins 15 ans`, 'error'), false;
-        if (!j.jerseySize) return showNotif(`Titulaire ${i + 1} — Taille maillot requise`, 'error'), false;
+        if (!j.jerseySize) return showNotif(`Titulaire ${i + 1} — Taille t-shirt requise`, 'error'), false;
     }
     for (let i = 0; i < remplacants.length; i++) {
         const r = remplacants[i];
@@ -260,7 +260,7 @@ function validateStep3() {
         if (!r.sexe) return showNotif(`Remplaçant ${i + 1} — Genre requis`, 'error'), false;
         if (!r.birth) return showNotif(`Remplaçant ${i + 1} — Date de naissance requise`, 'error'), false;
         if (!isOldEnough(r.birth)) return showNotif(`Remplaçant ${i + 1} — Doit avoir au moins 15 ans`, 'error'), false;
-        if (!r.jerseySize) return showNotif(`Remplaçant ${i + 1} — Taille maillot requise`, 'error'), false;
+        if (!r.jerseySize) return showNotif(`Remplaçant ${i + 1} — Taille t-shirt requise`, 'error'), false;
     }
     return true;
 }
@@ -366,7 +366,7 @@ function playerCard(p, idx, type) {
                     </div>
                 </div>
                 <div class="field">
-                    <label>Taille maillot</label>
+                    <label>Taille t-shirt</label>
                     <div class="pills">
                         ${['S', 'M', 'L', 'XL', 'XXL'].map(s => `<div class="pill ${p.jerseySize === s ? 'sel' : ''}" onclick="${updateFn}(${idx},'jerseySize','${s}');this.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');updateCardHeader('${type}',${idx})">${s}</div>`).join('')}
                     </div>
@@ -425,7 +425,7 @@ function buildSummary() {
     const lvlEl = document.getElementById('c-level');
     const level = lvlEl.options[lvlEl.selectedIndex]?.text || '—';
     const initials = p => ((p.firstName?.[0] || '') + (p.lastName?.[0] || '')).toUpperCase() || '?';
-    const jerseyLabel = p => p.jerseySize ? ` · Maillot ${p.jerseySize}` : '';
+    const jerseyLabel = p => p.jerseySize ? ` · t-shirt ${p.jerseySize}` : '';
     const contestLabel = p => {
         const tags = [];
         if (p.contest3pts) tags.push(`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 3-pts`);

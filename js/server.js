@@ -51,7 +51,7 @@ function validatePayload(body) {
     if (!emailRx.test(p.email)) return `${label} — Email invalide`;
     if (!p.birth) return `${label} — Date de naissance manquante`;
     if (!['male', 'female', 'other'].includes(p.sexe)) return `${label} — Genre invalide`;
-    if (!['S', 'M', 'L', 'XL', 'XXL'].includes(p.jerseySize)) return `${label} — Taille maillot invalide`;
+    if (!['S', 'M', 'L', 'XL', 'XXL'].includes(p.jerseySize)) return `${label} — Taille t-shirt invalide`;
     return null;
   };
 
