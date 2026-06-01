@@ -1110,12 +1110,12 @@ header, nav, .about, .format, .contests,
 
 .p1:hover { box-shadow: 0 16px 48px rgba(255,215,0,.16); }
 
-.p2, .p3 {
+.p2 {
     background: rgba(255,255,255,.04);
     border: 1px solid rgba(255,255,255,.08);
 }
 
-.p2:hover, .p3:hover { box-shadow: 0 16px 40px rgba(0,0,0,.3); }
+.p2:hover { box-shadow: 0 16px 40px rgba(0,0,0,.3); }
 
 .pcrown { font-size: 2.5rem; margin-bottom: .25rem; }
 
@@ -1609,7 +1609,7 @@ footer {
     .format-grid, .insc-grid, .contests-grid { grid-template-columns: 1fr; }
 
     .prize-podium { flex-direction: column; align-items: center; }
-    .p1, .p2, .p3 { width: 100%; max-width: 260px; }
+    .p1, .p2 { width: 100%; max-width: 260px; }
 
     .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
 
