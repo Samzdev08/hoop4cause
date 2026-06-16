@@ -261,6 +261,7 @@ function validateStep3() {
     if (joueurs.length < 4) return showNotif(`Il manque ${4 - joueurs.length} titulaire(s)`, 'error'), false;
     const nameRx = /^[a-zA-ZÀ-ÿ\s-]{2,50}$/;
     const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     for (let i = 0; i < joueurs.length; i++) {
         const j = joueurs[i];
         if (!j.firstName || !nameRx.test(j.firstName)) return showNotif(`Titulaire ${i + 1} — Prénom invalide`, 'error'), false;
@@ -271,6 +272,7 @@ function validateStep3() {
         if (!isOldEnough(j.birth)) return showNotif(`Titulaire ${i + 1} — Doit avoir au moins 15 ans`, 'error'), false;
         if (!j.jerseySize) return showNotif(`Titulaire ${i + 1} — Taille t-shirt requise`, 'error'), false;
     }
+
     for (let i = 0; i < remplacants.length; i++) {
         const r = remplacants[i];
         if (!r.firstName || !nameRx.test(r.firstName)) return showNotif(`Remplaçant ${i + 1} — Prénom invalide`, 'error'), false;
@@ -281,6 +283,23 @@ function validateStep3() {
         if (!isOldEnough(r.birth)) return showNotif(`Remplaçant ${i + 1} — Doit avoir au moins 15 ans`, 'error'), false;
         if (!r.jerseySize) return showNotif(`Remplaçant ${i + 1} — Taille t-shirt requise`, 'error'), false;
     }
+
+    // Vérifier les emails en double dans l'équipe (capitaine inclus)
+    const allEmails = [
+        { email: capitaine.email, label: 'Capitaine' },
+        ...joueurs.map((j, i) => ({ email: j.email, label: `Titulaire ${i + 1}` })),
+        ...remplacants.map((r, i) => ({ email: r.email, label: `Remplaçant ${i + 1}` }))
+    ];
+
+    const seen = new Map(); // email normalisé → label du premier porteur
+    for (const { email, label } of allEmails) {
+        const norm = normalizeEmail(email);
+        if (seen.has(norm)) {
+            return showNotif(`Email en double : ${label} a le même email que ${seen.get(norm)}`, 'error'), false;
+        }
+        seen.set(norm, label);
+    }
+
     return true;
 }
 
