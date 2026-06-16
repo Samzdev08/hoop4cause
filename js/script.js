@@ -94,6 +94,25 @@ function backToMode() {
     mode = null;
     resetForm();
 }
+function normalizeEmail(email) {
+  if (!email) return '';
+  const lower = email.toLowerCase().trim();
+  const [localRaw, domain] = lower.split('@');
+  if (!domain) return lower;
+ 
+  // Supprimer l'alias +tag
+  let local = localRaw.split('+')[0];
+ 
+  // Gmail : supprimer les points
+  if (domain === 'gmail.com' || domain === 'googlemail.com') {
+    local = local.replace(/\./g, '');
+  }
+ 
+  // Supprimer les chiffres en fin de partie locale
+  local = local.replace(/\d+$/, '');
+ 
+  return `${local}@${domain}`;
+}
 
 function resetForm() {
     joueurs.length = 0;
@@ -201,7 +220,7 @@ function injectCapContests() {
 function validateStep1() {
     const first = document.getElementById('c-first')?.value.trim();
     const last = document.getElementById('c-last')?.value.trim();
-    const email = document.getElementById('c-email')?.value.trim();
+    const email = normalizeEmail(document.getElementById('c-email')?.value.trim());
     const phone = document.getElementById('c-phone')?.value.trim();
     const birth = document.getElementById('c-birth')?.value;
     const sexe = document.querySelector('#c-gender .pill.sel')?.dataset?.v || null;

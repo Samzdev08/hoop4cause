@@ -33,6 +33,26 @@ function genReference() {
   for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
   return `H4AC-${code}`;
 }
+function normalizeEmail(email) {
+  if (!email) return '';
+  const lower = email.toLowerCase().trim();
+  const [localRaw, domain] = lower.split('@');
+  if (!domain) return lower;
+ 
+  // Supprimer l'alias +tag
+  let local = localRaw.split('+')[0];
+ 
+  // Gmail : supprimer les points
+  if (domain === 'gmail.com' || domain === 'googlemail.com') {
+    local = local.replace(/\./g, '');
+  }
+ 
+  // Supprimer les chiffres en fin de partie locale
+  local = local.replace(/\d+$/, '');
+ 
+  return `${local}@${domain}`;
+}
+
 
 function validatePayload(body) {
   const { mode, capitaine, joueurs = [], remplacants = [], paymentMethod } = body || {};
@@ -124,6 +144,22 @@ app.post('/api/register', async (req, res) => {
 
     if (dbError) {
       console.error('Supabase RPC error:', dbError);
+
+      if (dbError.message?.includes('CAPACITY_EXCEEDED')) {
+        return res.status(409).json({
+          error: 'Le tournoi est complet. Plus aucune inscription possible.',
+        });
+      }
+
+    
+      if (dbError.message?.includes('DUPLICATE_EMAIL')) {
+        const emailMatch = dbError.message.match(/DUPLICATE_EMAIL:(.+)/);
+        const emailHint = emailMatch ? ` (${emailMatch[1]})` : '';
+        return res.status(409).json({
+          error: `Un joueur avec cet email est déjà inscrit${emailHint}. Chaque personne ne peut participer qu'une seule fois.`,
+        });
+      }
+
       return res.status(500).json({ error: 'Erreur lors de la sauvegarde' });
     }
 
