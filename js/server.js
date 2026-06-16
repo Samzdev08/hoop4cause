@@ -39,18 +39,18 @@ function normalizeEmail(email) {
   const lower = email.toLowerCase().trim();
   const [localRaw, domain] = lower.split('@');
   if (!domain) return lower;
- 
+
   // Supprimer l'alias +tag
   let local = localRaw.split('+')[0];
- 
+
   // Gmail : supprimer les points
   if (domain === 'gmail.com' || domain === 'googlemail.com') {
     local = local.replace(/\./g, '');
   }
- 
+
   // Supprimer les chiffres en fin de partie locale
   local = local.replace(/\d+$/, '');
- 
+
   return `${local}@${domain}`;
 }
 
@@ -170,12 +170,12 @@ app.post('/api/register', async (req, res) => {
         });
       }
 
-    
+
       if (dbError.message?.includes('DUPLICATE_EMAIL')) {
         const emailMatch = dbError.message.match(/DUPLICATE_EMAIL:(.+)/);
         const emailHint = emailMatch ? ` (${emailMatch[1]})` : '';
         return res.status(409).json({
-          error: `Un joueur avec cet email est déjà inscrit${emailHint}. Chaque personne ne peut participer qu'une seule fois.`,
+          error: `Un joueur avec cet email est déjà inscrit${emailHint}. Chaque personne ne peut participer qu'une seule fois, et le même email ne peut pas être utilisé pour plusieurs joueurs de la même équipe.`,
         });
       }
 

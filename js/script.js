@@ -95,23 +95,23 @@ function backToMode() {
     resetForm();
 }
 function normalizeEmail(email) {
-  if (!email) return '';
-  const lower = email.toLowerCase().trim();
-  const [localRaw, domain] = lower.split('@');
-  if (!domain) return lower;
- 
-  // Supprimer l'alias +tag
-  let local = localRaw.split('+')[0];
- 
-  // Gmail : supprimer les points
-  if (domain === 'gmail.com' || domain === 'googlemail.com') {
-    local = local.replace(/\./g, '');
-  }
- 
-  // Supprimer les chiffres en fin de partie locale
-  local = local.replace(/\d+$/, '');
- 
-  return `${local}@${domain}`;
+    if (!email) return '';
+    const lower = email.toLowerCase().trim();
+    const [localRaw, domain] = lower.split('@');
+    if (!domain) return lower;
+
+    // Supprimer l'alias +tag
+    let local = localRaw.split('+')[0];
+
+    // Gmail : supprimer les points
+    if (domain === 'gmail.com' || domain === 'googlemail.com') {
+        local = local.replace(/\./g, '');
+    }
+
+    // Supprimer les chiffres en fin de partie locale
+    local = local.replace(/\d+$/, '');
+
+    return `${local}@${domain}`;
 }
 
 function resetForm() {
@@ -634,7 +634,24 @@ async function submitForm() {
     if (!cguOn) return showNotif("Veuillez accepter les conditions d'inscription", 'error');
     if (!selectedPayment) return showNotif('Veuillez choisir un mode de paiement', 'error');
 
-    const btn = document.querySelector('.stripe-btn');
+    const btn = document.querySelector('.stripe-btn'); // ← monté ici
+
+    // Vérifier les emails en double dans la même équipe
+    const allEmails = [
+        capitaine.email,
+        ...joueurs.map(j => j.email),
+        ...remplacants.map(r => r.email)
+    ].map(e => normalizeEmail(e));
+
+    const emailSet = new Set();
+    for (const email of allEmails) {
+        if (emailSet.has(email)) {
+            showNotif(`L'email ${email} est utilisé plusieurs fois dans l'équipe`, 'error');
+            return; // btn pas encore désactivé donc pas besoin de le réactiver
+        }
+        emailSet.add(email);
+    }
+
     btn.disabled = true;
     btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Enregistrement…`;
 
