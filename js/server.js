@@ -3,7 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
-const { sendConfirmation, sendPaymentConfirmed } = require('./emails');
+// En haut, mettre à jour l'import
+const { sendConfirmation, sendPaymentConfirmed, sendDoubleInscriptionWarning } = require('./emails');
 
 // ─── Supabase ─────────────────────────────────────────────────────────────────
 const supabase = createClient(
@@ -118,6 +119,24 @@ function buildPlayers(mode, capitaine, joueurs, remplacants) {
   }
   return players;
 }
+
+// ─── POST /api/admin/warn-duplicate/:email ────────────────────────────────────
+app.post('/api/admin/warn-duplicate/:email', async (req, res) => {
+  const secret = req.headers['x-admin-key'];
+  if (!secret || secret !== process.env.ADMIN_SECRET)
+    return res.status(401).json({ error: 'Non autorisé' });
+
+  const { email } = req.params;
+
+  try {
+    const result = await sendDoubleInscriptionWarning(email);
+    console.log(`[admin] Avertissement double inscription → ${email}`);
+    return res.status(200).json({ success: true, email_sent_to: email, id: result.id });
+  } catch (err) {
+    console.error('[admin] Erreur envoi avertissement:', err);
+    return res.status(500).json({ error: err.message });
+  }
+});
 
 // ─── POST /api/register ───────────────────────────────────────────────────────
 

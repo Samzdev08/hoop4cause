@@ -207,6 +207,50 @@ function buildEmail({ registration, recipient, role }) {
   const html = buildHtml({ title: subject, preheader, content });
   return { subject, html };
 }
+async function sendDoubleInscriptionWarning(email) {
+  const subject = `Hoop 4 A Cause — Inscriptions multiples détectées`;
+  const preheader = `Ton inscription a été partiellement annulée`;
+
+  const content = `
+    <h1 style="font-size:28px; font-weight:900; margin:0 0 16px; text-transform:uppercase;">Inscriptions en double</h1>
+    <p style="margin:0 0 16px; color:${C.muted};">Bonjour,</p>
+    <p style="margin:0 0 16px; color:${C.muted};">
+      Nous avons détecté plusieurs inscriptions créées avec des adresses email différentes
+      mais correspondant à la même personne 
+      (<strong style="color:${C.text};">iam.valley1@gmail.com</strong>, 
+      <strong style="color:${C.text};">iam.valley2@gmail.com</strong>, 
+      <strong style="color:${C.text};">iam.valley8@gmail.com</strong>…).
+    </p>
+    <div style="background:${C.accentSoft}; border:1px solid rgba(233,30,140,0.30); border-radius:12px; padding:20px 24px; margin:24px 0;">
+      <div style="font-size:12px; font-weight:700; color:${C.accent}; text-transform:uppercase; letter-spacing:1.2px; margin-bottom:10px;">Règlement du tournoi</div>
+      <p style="margin:0; color:${C.muted}; font-size:14px;">
+        Chaque personne ne peut s'inscrire <strong style="color:${C.text};">qu'une seule fois</strong>, 
+        dans une seule équipe. Il n'est pas autorisé de créer plusieurs équipes ou 
+        de contourner cette règle via des adresses email différentes.
+      </p>
+    </div>
+    <p style="margin:0 0 16px; color:${C.muted};">
+      Les inscriptions en double ont été <strong style="color:${C.text};">annulées</strong>. 
+      Seule la première inscription enregistrée est conservée.
+    </p>
+    <p style="margin:0; color:${C.muted};">
+      Pour toute question, contacte-nous directement via 
+      <a href="https://h4ac.ch" style="color:${C.accent}; text-decoration:none;">h4ac.ch</a>.
+    </p>`;
+
+  const html = buildHtml({ title: subject, preheader, content });
+
+  const { data, error } = await resend.emails.send({
+    from: FROM,
+    to: email,
+    subject,
+    html,
+  });
+
+  if (error) throw new Error(error.message);
+  console.log(`[email] Avertissement double inscription envoyé à ${email} (id: ${data.id})`);
+  return { id: data.id };
+}
 
 // ─── Email admin (notif interne) ──────────────────────────────────────────────
 function buildAdminEmail({ registration, players }) {
@@ -391,4 +435,4 @@ async function sendPaymentConfirmed(registration) {
   return { id: data.id };
 }
 
-module.exports = { sendConfirmation, sendPaymentConfirmed };
+module.exports = { sendConfirmation, sendPaymentConfirmed, sendDoubleInscriptionWarning };
