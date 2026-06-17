@@ -54,7 +54,6 @@ function restoreFormFields() {
         const pill = document.querySelector(`#c-jersey .pill[data-v="${capitaine.jerseySize}"]`);
         if (pill) { document.querySelectorAll('#c-jersey .pill').forEach(p => p.classList.remove('sel')); pill.classList.add('sel'); }
     }
-    syncContestCheckbox('cap-3pts', capitaine.contest3pts);
     syncContestCheckbox('cap-dunk', capitaine.contestDunk);
 }
 
@@ -200,11 +199,6 @@ function injectCapContests() {
                 Contests (optionnel)
             </div>
             <div class="contest-checks">
-                <div class="contest-check" onclick="toggleCapContest('contest3pts',document.getElementById('cap-3pts'))">
-                    <div class="chk-box" id="cap-3pts"></div>
-                    <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                    <span>3-pts Contest</span>
-                </div>
                 <div class="contest-check" onclick="toggleCapContest('contestDunk',document.getElementById('cap-dunk'))">
                     <div class="chk-box" id="cap-dunk"></div>
                     <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/></svg>
@@ -233,9 +227,8 @@ function validateStep1() {
     if (!birth) return showNotif('Date de naissance requise', 'error'), false;
     if (!isOldEnough(birth)) return showNotif('Tu dois avoir au moins 15 ans', 'error'), false;
     if (!sexe) return showNotif('Sélectionne un genre', 'error'), false;
-    const cap3pts = document.getElementById('cap-3pts')?.classList.contains('on') || false;
     const capDunk = document.getElementById('cap-dunk')?.classList.contains('on') || false;
-    Object.assign(capitaine, { firstName: first, lastName: last, email, phone, birth, sexe, statut: mode === 'solo' ? 'solo' : 'capitaine', contest3pts: cap3pts, contestDunk: capDunk });
+    Object.assign(capitaine, { firstName: first, lastName: last, email, phone, birth, sexe, statut: mode === 'solo' ? 'solo' : 'capitaine', contest3pts: null, contestDunk: capDunk });
     saveAll();
     return true;
 }
@@ -314,7 +307,7 @@ function isOldEnough(birth) {
 
 function addTitulaire() {
     if (joueurs.length >= 4) return;
-    joueurs.push({ id: joueurs.length + 1, firstName: '', lastName: '', email: '', statut: 'titulaire', birth: '', sexe: '', jerseySize: '', contest3pts: false, contestDunk: false });
+    joueurs.push({ id: joueurs.length + 1, firstName: '', lastName: '', email: '', statut: 'titulaire', birth: '', sexe: '', jerseySize: '', contest3pts: null, contestDunk: false });
     saveAll(); renderTit();
 }
 
@@ -328,7 +321,7 @@ function renderTit() {
 
 function addRemplacant() {
     if (remplacants.length >= 2) return;
-    remplacants.push({ id: remplacants.length + 1, firstName: '', lastName: '', email: '', statut: 'remplacant', birth: '', sexe: '', jerseySize: '', contest3pts: false, contestDunk: false });
+    remplacants.push({ id: remplacants.length + 1, firstName: '', lastName: '', email: '', statut: 'remplacant', birth: '', sexe: '', jerseySize: '', contest3pts: null, contestDunk: false });
     saveAll(); renderRem();
 }
 
@@ -350,11 +343,6 @@ function contestFieldsHtml(type, idx, p) {
             Contests (optionnel)
         </div>
         <div class="contest-checks">
-            <div class="contest-check" onclick="togglePlayerContest('${type}',${idx},'contest3pts',this)">
-                <div class="chk-box ${p.contest3pts ? 'on' : ''}"></div>
-                <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                <span>3-pts Contest</span>
-            </div>
             <div class="contest-check" onclick="togglePlayerContest('${type}',${idx},'contestDunk',this)">
                 <div class="chk-box ${p.contestDunk ? 'on' : ''}"></div>
                 <svg class="contest-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/></svg>
@@ -466,7 +454,6 @@ function buildSummary() {
     const jerseyLabel = p => p.jerseySize ? ` · t-shirt ${p.jerseySize}` : '';
     const contestLabel = p => {
         const tags = [];
-        if (p.contest3pts) tags.push(`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 3-pts`);
         if (p.contestDunk) tags.push(`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c3.54 3.54 2.1 9.64 0 14.14"/><path d="M19.07 4.93c-3.54 3.54-2.1 9.64 0 14.14"/><path d="M2 12h20"/></svg> Dunk`);
         return tags.length ? `<span class="contest-tag">${tags.join(' · ')}</span>` : '';
     };
