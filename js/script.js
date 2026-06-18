@@ -556,8 +556,8 @@ function renderPaymentSelector(total) {
                 <div class="pi-step"><div class="pi-step-num">1</div><div>Ouvre ton application <strong>Twint</strong></div></div>
                 <div class="pi-step"><div class="pi-step-num">2</div><div>Envoie <strong>${total}.– CHF</strong> au numéro :</div></div>
                 <div class="pi-value-box">
-                    <span class="pi-value">078 610 03 19</span>
-                    <button class="pi-copy-btn" onclick="copyToClipboard('0786100319', this)">Copier</button>
+                    <span class="pi-value">079 282 40 58</span>
+                    <button class="pi-copy-btn" onclick="copyToClipboard('0792824058', this)">Copier</button>
                 </div>
                 <div class="pi-step"><div class="pi-step-num">3</div><div>Dans le message, indique ta <strong>référence d'inscription</strong> (disponible après confirmation)</div></div>
                 <div class="pi-note">
@@ -700,8 +700,8 @@ function showConfirmationScreen(refCode, paymentMethod) {
                 <div class="cpb-step"><span class="cpb-num">2</span> Envoie <strong>${total}.– CHF</strong> au :</div>
             </div>
             <div class="cpb-value-row">
-                <span class="cpb-value">078 610 03 19</span>
-                <button class="pi-copy-btn" onclick="copyToClipboard('0786100319', this)">Copier</button>
+                <span class="cpb-value">079 282 40 58</span>
+                <button class="pi-copy-btn" onclick="copyToClipboard('0792824058', this)">Copier</button>
             </div>
             <div class="cpb-step" style="margin-top:12px;"><span class="cpb-num">3</span> Dans le message : <strong>${refCode}</strong></div>
             <div class="cpb-note">Ta place est réservée dès réception du paiement.</div>
